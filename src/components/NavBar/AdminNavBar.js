@@ -1,7 +1,7 @@
 import { Navbar, Nav } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useContext } from 'react';
-import { UserContext } from '../App';
+import { UserContext } from '../../App';
 
 const AdminNavBar = () => {
     const {userDispatch} = useContext(UserContext)

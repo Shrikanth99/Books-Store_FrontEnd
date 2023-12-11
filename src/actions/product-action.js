@@ -63,9 +63,9 @@ export const startRemoveCart = (id,toggleSet) =>{
                     'Authorization': localStorage.getItem('token')
                 }
         })
-        console.log("nishan",response.data)
         toast.success("Product removed from the cart successfully")
         toggleSet()
+        dispatch(removeCart(response.data.products[0].productId))
     }
     catch(e){
         console.log(e)
@@ -73,13 +73,7 @@ export const startRemoveCart = (id,toggleSet) =>{
 }
 }
 
-// export const startSetCart = () =>{
-//     return async(dispatch) =>{
-//         try{
+const removeCart = (id) =>{
+    return ({type:'REMOVE_CART',payload:id})
+}
 
-//         }
-//         catch(e){
-//             console.log(e)
-//         }
-//     }
-// }

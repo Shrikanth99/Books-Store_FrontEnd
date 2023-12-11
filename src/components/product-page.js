@@ -1,6 +1,6 @@
 // ProductPage.js
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Container, Row, Col, Image, Button, Carousel } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -22,7 +22,7 @@ const ProductPage = () => {
   if(index!==-1 && !toggle){
     setToggle(true)
   }
-  console.log("nishan",cart)
+  console.log("nishan",index)
 
   const toggleSet = () => {
     setToggle(!toggle)

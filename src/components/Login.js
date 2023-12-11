@@ -4,6 +4,7 @@ import axios from '../config/axios';
 import { useContext } from 'react'
 import { UserContext } from '../App';
 import { useNavigate } from 'react-router-dom';
+import toast, {Toaster} from 'react-hot-toast';
 const LoginForm = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -50,6 +51,7 @@ const LoginForm = () => {
                 })
                 userDispatch({ type: 'USER_LOGIN', payload: profile.data })
                 navigate('/', { state: { msg: 'Login Successful' } })
+                toast.success('Logged in successfully')
             }
             catch (e) {
                 setServerFormErrors(e.response.data.errors)
@@ -108,6 +110,7 @@ const LoginForm = () => {
                             <Button variant="primary" type="submit" className="w-100 mt-3">
                                 Login
                             </Button>
+                            <Toaster />
                         </Form>
                     </Card.Body>
                 </Card>
