@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
-import { Card, Form, Button, Container, Col, Row } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { Card, Form, Button, Container, Col, Row, Tab } from 'react-bootstrap';
 import axios from '../config/axios';
 import { useContext } from 'react'
 import { UserContext } from '../App';
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
+
+
 const LoginForm = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -12,6 +16,7 @@ const LoginForm = () => {
     const errors = {}
     const { userDispatch } = useContext(UserContext)
     const navigate = useNavigate()
+    const notify = (msg) => toast.error(msg)
     const runValidations = () => {
         if (email.length === 0) {
             errors.email = 'email is required'
@@ -30,6 +35,7 @@ const LoginForm = () => {
             setPassword(value)
         }
     };
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -50,6 +56,7 @@ const LoginForm = () => {
                 })
                 userDispatch({ type: 'USER_LOGIN', payload: profile.data })
                 navigate('/', { state: { msg: 'Login Successful' } })
+                
             }
             catch (e) {
                 setServerFormErrors(e.response.data.errors)
@@ -61,8 +68,17 @@ const LoginForm = () => {
 
     };
 
+    useEffect(() => {
+        const loginErr = serverFormErrors.find((err) => err.msg )
+        console.log('lE',loginErr)
+        if(loginErr){
+            notify(loginErr.msg)
+        }
+    },[serverFormErrors])
+
     return (
         <div>
+            <ToastContainer />
             {serverFormErrors.length > 0 && (
                 <div className="alert alert-danger">
                     {serverFormErrors.map(ele => (

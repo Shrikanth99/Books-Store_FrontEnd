@@ -41,7 +41,7 @@ const App = () =>{
     }
   },[])
 
-  
+  console.log('us',userState)
 
   return (
     <UserContext.Provider value={{userState,userDispatch}}>
