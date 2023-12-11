@@ -1,0 +1,119 @@
+import React, { useState } from 'react';
+import { Card, Form, Button, Container, Col, Row } from 'react-bootstrap';
+import axios from '../config/axios';
+import { useContext } from 'react'
+import { UserContext } from '../App';
+import { useNavigate } from 'react-router-dom';
+const LoginForm = () => {
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [formErrors, setFormErrors] = useState({})
+    const [serverFormErrors, setServerFormErrors] = useState([])
+    const errors = {}
+    const { userDispatch } = useContext(UserContext)
+    const navigate = useNavigate()
+    const runValidations = () => {
+        if (email.length === 0) {
+            errors.email = 'email is required'
+        }
+        if (password.length === 0) {
+            errors.password = 'password is required'
+        }
+    }
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        if (name == 'email') {
+            setEmail(value)
+        }
+        else if (name === 'password') {
+            setPassword(value)
+        }
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        runValidations()
+        if (Object.keys(errors).length == 0) {
+            const formData = {
+                email,
+                password
+            }
+            setFormErrors({})
+            try {
+                const response = await axios.post('/api/login', formData)
+                localStorage.setItem('token', response.data.token)
+                const profile = await axios.get('/api/users/profile', {
+                    headers: {
+                        'Authorization': localStorage.getItem('token')
+                    }
+                })
+                userDispatch({ type: 'USER_LOGIN', payload: profile.data })
+                navigate('/', { state: { msg: 'Login Successful' } })
+            }
+            catch (e) {
+                setServerFormErrors(e.response.data.errors)
+            }
+        }
+        else {
+            setFormErrors(errors)
+        }
+
+    };
+
+    return (
+        <div>
+            {serverFormErrors.length > 0 && (
+                <div className="alert alert-danger">
+                    {serverFormErrors.map(ele => (
+                        <li key={ele.msg}>{ele.msg}</li>
+                    ))}
+                </div>
+            )}
+            <Container className="d-flex justify-content-center align-items-center" style={{ height: '80vh' }}>
+                <Card style={{ width: '400px', borderRadius: '15px' }}>
+                    <Card.Body>
+                        <Card.Title className="text-center mb-4">Welcome Back!</Card.Title>
+                        <Form onSubmit={handleSubmit}>
+                            <Form.Group controlId="formEmail">
+                                <Form.Label>Email address</Form.Label>
+                                <Form.Control
+                                    type="email"
+                                    placeholder="Enter email"
+                                    name="email"
+                                    value={email}
+                                    onChange={handleChange}
+                                    required
+                                />
+                                {formErrors.email && (
+                                    <div className='invalid-feedback'>{formErrors.email}</div>
+                                )}
+                            </Form.Group>
+
+                            <Form.Group controlId="formPassword">
+                                <Form.Label>Password</Form.Label>
+                                <Form.Control
+                                    type="password"
+                                    placeholder="Password"
+                                    name="password"
+                                    value={password}
+                                    onChange={handleChange}
+                                    required
+                                />
+                                {formErrors.password && (
+                                    <div className='invalid-feedback'>{formErrors.password}</div>
+                                )}
+                            </Form.Group>
+
+                            <Button variant="primary" type="submit" className="w-100 mt-3">
+                                Login
+                            </Button>
+                        </Form>
+                    </Card.Body>
+                </Card>
+            </Container>
+        </div>
+    );
+};
+
+export default LoginForm;
