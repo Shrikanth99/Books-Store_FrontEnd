@@ -9,6 +9,7 @@ const AdminNavBar = () => {
         localStorage.removeItem('token')
         userDispatch({type:'LOGOUT_USER'})
     }
+    console.log(userDispatch);
     return (
         <Navbar bg="light" expand="md">
             <Navbar.Brand as={Link} to="/">My App</Navbar.Brand>
