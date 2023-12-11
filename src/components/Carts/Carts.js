@@ -15,6 +15,7 @@ import {
     MDBTooltip,
     MDBTypography,
 } from "mdb-react-ui-kit";
+
 import '../../styles/cart.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -25,7 +26,7 @@ import { faMinus } from '@fortawesome/free-solid-svg-icons';
 
 
 export default function Cart() {
-
+   
     return (
         <section className="h-100 gradient-custom">
             <MDBContainer className="py-5 h-100">

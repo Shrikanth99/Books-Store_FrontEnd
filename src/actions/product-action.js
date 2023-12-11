@@ -43,10 +43,11 @@ export const startSetCart = () =>{
                     'Authorization': localStorage.getItem('token')
                 }
             })
+            console.log('cart list',response.data)
             dispatch(setCart(response.data.products))
         }
         catch(e){
-            console.log(e)
+            console.log('pc',e)
         }
     }
 }

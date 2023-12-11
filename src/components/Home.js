@@ -2,11 +2,23 @@ import { Carousel } from 'react-bootstrap'
 import img1 from '../images/79_inr.jpg'
 import img2 from '../images/83_inr.jpg'
 import img3 from '../images/85_inr.jpg'
+import { Toaster, toast } from 'react-hot-toast'
+import { useLocation } from 'react-router-dom'
+import { useEffect } from 'react'
 
 const Home = () => {
 
+    const location = useLocation()
+
+    useEffect(() =>{
+        if(location.state?.msg){
+            toast.success('Logged In')
+        }
+    },[])
+
     return (
         <div>
+            <Toaster/>
             <Carousel>
                 <Carousel.Item>
                     <img
