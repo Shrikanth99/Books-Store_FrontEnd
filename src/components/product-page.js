@@ -18,10 +18,12 @@ const ProductPage = () => {
   const cart = useSelector(state => {
     return state.products.cart
   })
-  const index = cart.findIndex(product => product.productId === id)
+  console.log('satwik',cart)
+  const index = cart.findIndex(product => product.productId._id == id)
   if(index!==-1 && !toggle){
     setToggle(true)
-  }
+  } 
+
   console.log("nishan",index)
 
   const toggleSet = () => {
@@ -34,6 +36,7 @@ console.log(toggle)
     }
     else {
       dispatch(startRemoveCart(id, toggleSet))
+      // console.log("I am working")
     }
 
   }

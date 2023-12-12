@@ -9,7 +9,7 @@ export const productsReducer = (state = initialState, action) =>{
             return {...state,cart:action.payload}
         }
         case 'REMOVE_CART':{
-            return {...state,cart: state.cart.filter(ele=>ele.productId != action.payload)}
+            return {...state,cart: state.cart.filter(ele=>ele.productId._id != action.payload)}
         }
         default:{
             return {...state}
