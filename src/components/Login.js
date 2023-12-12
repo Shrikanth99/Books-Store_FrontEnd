@@ -70,7 +70,7 @@ const LoginForm = () => {
 
     useEffect(() => {
         const loginErr = serverFormErrors.find((err) => err.msg )
-        console.log('lE',loginErr)
+        //console.log('lE',loginErr)
         if(loginErr){
             notify(loginErr.msg)
         }

@@ -5,6 +5,8 @@ import { useSelector } from 'react-redux';
 import { UserContext } from '../../App';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+import {toast, Toaster } from 'react-hot-toast';
+
 
 const UserNavBar = () => {
     const { userDispatch } = useContext(UserContext)
@@ -12,9 +14,13 @@ const UserNavBar = () => {
     const handleLogout = () => {
         localStorage.removeItem('token')
         userDispatch({ type: 'LOGOUT_USER' })
+        toast.success('Logged out')
+
     }
     return (
-        <Navbar bg="light" expand="md">
+        <div>
+            <Toaster/>
+            <Navbar bg="light" expand="md">
             <Navbar.Brand as={Link} to="/">My App</Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
@@ -30,6 +36,8 @@ const UserNavBar = () => {
                 </Nav>
             </Navbar.Collapse>
         </Navbar>
+        </div>
+        
     )
 }
 

@@ -1,7 +1,7 @@
 import { Navbar, Nav } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useContext } from 'react';
-import { UserContext } from '../App';
+import { UserContext } from '../../App';
 import {toast, Toaster } from 'react-hot-toast';
 
 const AdminNavBar = () => {
@@ -11,7 +11,7 @@ const AdminNavBar = () => {
         userDispatch({type:'LOGOUT_USER'})
         toast.success('Logged out successfully')
     }
-    console.log(userDispatch);
+    //console.log(userDispatch);
     return (
         <Navbar bg="light" expand="md">
             <Navbar.Brand as={Link} to="/">My App</Navbar.Brand>

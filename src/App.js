@@ -15,6 +15,8 @@ import Product from './components/products.js';
 import ProductPage from './components/product-page.js';
 import ProductAdd from './components/product-add.js';
 import Carts from './components/Carts/Carts.js';
+import MyAccount from './components/My-Account/MyAccount.js';
+import AddressForm from './components/AddressForm/AddressForm.js';
 
 export const UserContext = createContext()
 const App = () =>{
@@ -58,6 +60,8 @@ const App = () =>{
         <Route path='/product/:id' element={<ProductPage />} />
         <Route path='/products/add' element={<ProductAdd/>} />
         <Route path='/myCart' element={<Carts/>} />
+        <Route path='/account' element={<MyAccount/>} />
+        {/* <Route path='/addresses' element={<AddressForm/>} /> */}
       </Routes>
     </BrowserRouter>
     </UserContext.Provider>
