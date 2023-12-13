@@ -112,7 +112,11 @@ export const startRemoveCart = (id,toggleSet) =>{
                 }
         })
         toast.success("Product removed from the cart successfully")
-        toggleSet()
+        console.log('checking',toggleSet)
+        if(toggleSet){
+            toggleSet()
+        }
+        
         // dispatch(removeCart(response.data.products[0].productId))
         dispatch(removeCart(id))
         console.log('deleting',response.data)
@@ -125,6 +129,7 @@ export const startRemoveCart = (id,toggleSet) =>{
 }
 
 const removeCart = (id) =>{
+    console.log('I am there')
     return ({type:'REMOVE_CART',payload:id})
 }
 
