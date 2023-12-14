@@ -17,6 +17,7 @@ import {
 } from "mdb-react-ui-kit";
 
 import '../../styles/cart.css'
+import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
@@ -24,18 +25,29 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { faMinus } from '@fortawesome/free-solid-svg-icons';
 import { useSelector } from 'react-redux'
 import { useDispatch } from "react-redux";
-import { startIncCartQuantity } from "../../actions/product-action";
+import { startIncCartQuantity, startRemoveCart } from "../../actions/product-action";
 import { startRemCartQuantity } from "../../actions/product-action";
+import { startCreateWishlist } from "../../actions/wishlist-action";
 
 export default function Cart() {
     const dispatch = useDispatch()
     const carts = useSelector(state => state.products.cart)
     console.log('carts', carts)
-    const handleIncrement = (id) =>{
-        dispatch(startIncCartQuantity(id))   
+    // const totalPrice = carts.reduce(product=>{
+    //     console.log('ki',product)
+    // },{})
+    const handleIncrement = (id) => {
+        dispatch(startIncCartQuantity(id))
     }
-    const handleDecrement = (id) =>{
+    const handleDecrement = (id) => {
         dispatch(startRemCartQuantity(id))
+    }
+    const handleRemoveItem = (id) =>{
+        dispatch(startRemoveCart(id))
+    }
+
+    const handleWishlist = (id) =>{
+        dispatch(startCreateWishlist(id))
     }
     return (
         <section className="h-100 gradient-custom">
@@ -56,17 +68,17 @@ export default function Cart() {
 
                                             <MDBRow>
                                                 <MDBCol lg="3" md="12" className="mb-4 mb-lg-0">
-                                                    <MDBRipple rippleTag="div" rippleColor="light"
-                                                        className="bg-image rounded hover-zoom hover-overlay">
-                                                        <img
-                                                            src={product.productId.image[0].url}
-                                                            className="w-100"
-                                                        />
-                                                        <a href="#!">
-                                                            <div className="mask" style={{ backgroundColor: "rgba(251, 251, 251, 0.2)", }}>
-                                                            </div>
-                                                        </a>
-                                                    </MDBRipple>
+
+
+                                                    <img
+                                                        src={product.productId.image[0].url}
+                                                        className="w-100"
+                                                    />
+                                                    <a href="#!">
+                                                        <div className="mask" style={{ backgroundColor: "rgba(251, 251, 251, 0.2)", }}>
+                                                        </div>
+                                                    </a>
+
                                                 </MDBCol>
 
                                                 <MDBCol lg="5" md="6" className=" mb-4 mb-lg-0">
@@ -76,33 +88,35 @@ export default function Cart() {
                                                     {/* <p>Color: blue</p>
                                         <p>Size: M</p> */}
 
-                                                    <MDBTooltip wrapperProps={{ size: "sm" }} wrapperClass="me-1 mb-2"
-                                                        title="Remove item">
-                                                        {/* <MDBIcon fas icon="trash" /> */}
-                                                        <FontAwesomeIcon icon={faTrash} className="me-2" />
-                                                    </MDBTooltip>
+                                                    <div style={{ backgroundColor: '#0d6efd', padding: '5px', display: 'inline-block', margin: '5px' }} title="Remove Item" 
+                                                        onClick={()=>{handleRemoveItem(product.productId._id)}}
+                                                    >
+                                                        <FontAwesomeIcon icon={faTrash} className="me-2 fa-lg" />
+                                                    </div>
 
-                                                    <MDBTooltip wrapperProps={{ size: "sm", color: "danger" }} wrapperClass="me-1 mb-2"
-                                                        title="Move to the wish list">
-                                                        {/* <MDBIcon fas icon="heart" /> */}
-                                                        <FontAwesomeIcon icon={faHeart} className="me-2" />
-                                                    </MDBTooltip>
+                                                    {/* <MDBTooltip wrapperProps={{ size: "sm", color: "danger" }} wrapperClass="me-1 mb-2"
+                                                        title="Move to the wish list"> */}
+                                                    {/* <MDBIcon fas icon="heart" /> */}
+                                                    <div style={{ backgroundColor: 'red', padding: '5px', display: 'inline-block' }} onClick={()=>{handleWishlist(product.productId._id)}}>
+                                                        <FontAwesomeIcon icon={faHeart} className="me-2 fa-lg" />
+                                                    </div>
+                                                    {/* <FontAwesomeIcon icon={faHeart} className="me-2 fa-lg" /> */}
+                                                    {/* </MDBTooltip> */}
                                                 </MDBCol>
                                                 <MDBCol lg="4" md="6" className="mb-4 mb-lg-0">
                                                     <div className="d-flex mb-4" style={{ maxWidth: "300px" }}>
-                                                        <MDBBtn className="px-3 me-2" onClick={()=>{handleDecrement(product.productId._id)}}>
+                                                        <Button variant="primary" onClick={() => { handleDecrement(product.productId._id) }}>
                                                             <FontAwesomeIcon icon={faMinus} className="me-2" />
-                                                        </MDBBtn>
+                                                        </Button>
 
                                                         <MDBInput value={product.quantity} min={0} type="text" label="Quantity" />
-
-                                                        <MDBBtn className="px-3 ms-2" onClick={()=>{handleIncrement(product.productId._id)}}>
+                                                        <Button variant="primary" onClick={()=>{handleIncrement(product.productId._id)}}>
                                                             <FontAwesomeIcon icon={faPlus} className="me-2" />
-                                                        </MDBBtn>
+                                                        </Button>
                                                     </div>
 
                                                     <p className="text-start text-md-center">
-                                                        <strong>₹{product.productId.price}</strong>
+                                                        <strong>₹{product.productId.price*product.quantity}</strong>
                                                     </p>
                                                 </MDBCol>
                                             </MDBRow>
@@ -227,9 +241,9 @@ export default function Cart() {
                                     </MDBListGroupItem>
                                 </MDBListGroup>
 
-                                <MDBBtn block size="lg">
-                                    Go to checkout
-                                </MDBBtn>
+                               <Button variant="primary">
+                                    Go to Checkout
+                               </Button>
                             </MDBCardBody>
                         </MDBCard>
                     </MDBCol>

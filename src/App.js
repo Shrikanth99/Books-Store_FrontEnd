@@ -22,6 +22,8 @@ import { useSelector } from 'react-redux';
 import AddressForm from './components/AddressForm/AddressForm.js';
 import MyProfile from './components/My-Account/MyProfile.js';
 import MyOrders from './components/My-Account/MyOrders.js';
+import Wishlist from './components/Wishlist/Wishlist.js';
+import { startSetWishlist } from './actions/wishlist-action.js';
 
 export const UserContext = createContext()
 const App = () =>{
@@ -46,6 +48,7 @@ const App = () =>{
         })
         userDispatch({type:'USER_LOGIN',payload:profile.data})
         dispatch(startSetCart())
+        dispatch(startSetWishlist())
         }
         catch(e){
           alert(e)
@@ -55,7 +58,6 @@ const App = () =>{
     }
   },[])
 
-  console.log('us',userState)
 
   return (
     <UserContext.Provider value={{userState,userDispatch}}>
@@ -79,6 +81,9 @@ const App = () =>{
             </>
         </Route>
         
+        <Route path='/account' element={<MyAccount/>} />
+        <Route path='/wishlist' element={<Wishlist />} />
+        {/* <Route path='/addresses' element={<AddressForm/>} /> */}
       </Routes>
     </UserContext.Provider>
   )
