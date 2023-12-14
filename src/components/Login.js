@@ -63,8 +63,11 @@ const LoginForm = () => {
                     }
                 })
                 userDispatch({ type: 'USER_LOGIN', payload: profile.data })
-                dispatch(startSetWishlist())
-                dispatch(startSetCart())
+                if(profile.data.role === 'user'){
+
+                    dispatch(startSetWishlist())
+                    dispatch(startSetCart())
+                }
                 navigate('/', { state: { msg: 'Login Successful' } })
                 
             }

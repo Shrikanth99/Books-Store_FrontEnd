@@ -36,7 +36,10 @@ export const startRemoveWishlist = (id,toggleSet) =>{
 
             })
             toast.success('Product removed from the wishlist')
-            toggleSet()
+            if(toggleSet){
+
+                toggleSet()
+            }
            dispatch(removeWishlist(id))
 
         }

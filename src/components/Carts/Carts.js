@@ -33,6 +33,9 @@ export default function Cart() {
     const dispatch = useDispatch()
     const carts = useSelector(state => state.products.cart)
     console.log('carts', carts)
+    // const totalPrice = carts.reduce(product=>{
+    //     console.log('ki',product)
+    // },{})
     const handleIncrement = (id) => {
         dispatch(startIncCartQuantity(id))
     }
@@ -113,7 +116,7 @@ export default function Cart() {
                                                     </div>
 
                                                     <p className="text-start text-md-center">
-                                                        <strong>₹{product.productId.price}</strong>
+                                                        <strong>₹{product.productId.price*product.quantity}</strong>
                                                     </p>
                                                 </MDBCol>
                                             </MDBRow>
