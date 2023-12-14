@@ -19,16 +19,25 @@ const MyAccount = () => {
     const [addressForm,setAddressForm] = useState(false)
     const [editAddressForm,setEditAddressForm] = useState(false)
     const [profileToggle,setProfileToggle] = useState(false)
+    const [myOrder, setMyOrder ] = useState(false)
   //console.log('after refresh',id)
   
     const handleShowAdd  = () => {
       setShowAdd(true)
       setProfileToggle(false)
+      setMyOrder(false)
       console.log('sad',showAdd)
   }
   const handleShowProfile = () =>{
     setProfileToggle(true)
     setShowAdd(false)
+    setMyOrder(false)
+  }
+
+  const handleOrder = () => {
+    setMyOrder(true)
+    setShowAdd(false)
+    setProfileToggle(false)
   }
 
   useEffect(() => {
@@ -45,13 +54,14 @@ const MyAccount = () => {
       <Card style={{ width: '18rem' }}>
       <ListGroup variant="flush">
         <ListGroup.Item onClick={handleShowProfile} ><Link to='/account/my-profile' >My-Profile</Link></ListGroup.Item>
-        <ListGroup.Item  ><Link to='/account/my-orders' >My-Orders</Link></ListGroup.Item>
+        <ListGroup.Item onClick={handleOrder} ><Link to='/account/my-orders' >My-Orders</Link></ListGroup.Item>
         <ListGroup.Item  onClick={handleShowAdd}  >
         <Card.Link ><Link to='/account/address' >Saved-Address</Link></Card.Link>
         </ListGroup.Item>
       </ListGroup>
     </Card>
     {profileToggle && <MyProfile />}
+    { myOrder && <MyOrders/> }
     { showAdd && <ShowAddress  /> }
     { addressForm && <AddressForm/> }
     
