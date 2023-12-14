@@ -1,19 +1,24 @@
 import { Navbar, Nav } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useContext } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { UserContext } from '../../App';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import {toast, Toaster } from 'react-hot-toast';
+import { setClearCart } from '../../actions/product-action';
+import { setClearWishlist } from '../../actions/wishlist-action';
 
 
 const UserNavBar = () => {
+    const dispatch = useDispatch()
     const { userDispatch } = useContext(UserContext)
     const carts = useSelector(state=>state.products.cart)
     const handleLogout = () => {
         localStorage.removeItem('token')
         userDispatch({ type: 'LOGOUT_USER' })
+        dispatch(setClearCart())
+        dispatch(setClearWishlist())
         toast.success('Logged out')
 
     }
@@ -33,6 +38,7 @@ const UserNavBar = () => {
                         <FontAwesomeIcon icon={faShoppingCart} />
                         <span className="cart-count">{carts?.length}</span>
                     </Nav.Link>
+                    <Nav.Link as={Link} to="/wishlist">Wishlist</Nav.Link>
                 </Nav>
             </Navbar.Collapse>
         </Navbar>

@@ -17,6 +17,8 @@ import ProductAdd from './components/product-add.js';
 import Carts from './components/Carts/Carts.js';
 import MyAccount from './components/My-Account/MyAccount.js';
 import AddressForm from './components/AddressForm/AddressForm.js';
+import Wishlist from './components/Wishlist/Wishlist.js';
+import { startSetWishlist } from './actions/wishlist-action.js';
 
 export const UserContext = createContext()
 const App = () =>{
@@ -36,6 +38,7 @@ const App = () =>{
         })
         userDispatch({type:'USER_LOGIN',payload:profile.data})
         dispatch(startSetCart())
+        dispatch(startSetWishlist())
         }
         catch(e){
           alert(e.message)
@@ -45,7 +48,6 @@ const App = () =>{
     }
   },[])
 
-  console.log('us',userState)
 
   return (
     <UserContext.Provider value={{userState,userDispatch}}>
@@ -61,6 +63,7 @@ const App = () =>{
         <Route path='/products/add' element={<ProductAdd/>} />
         <Route path='/myCart' element={<Carts/>} />
         <Route path='/account' element={<MyAccount/>} />
+        <Route path='/wishlist' element={<Wishlist />} />
         {/* <Route path='/addresses' element={<AddressForm/>} /> */}
       </Routes>
     </BrowserRouter>

@@ -3,9 +3,12 @@ import { Card, Form, Button, Container, Col, Row, Tab } from 'react-bootstrap';
 import axios from '../config/axios';
 import { useContext } from 'react'
 import { UserContext } from '../App';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import { useDispatch } from 'react-redux';
+import { startSetWishlist } from '../actions/wishlist-action';
+import { startSetCart } from '../actions/product-action';
 
 
 const LoginForm = () => {
@@ -14,8 +17,13 @@ const LoginForm = () => {
     const [formErrors, setFormErrors] = useState({})
     const [serverFormErrors, setServerFormErrors] = useState([])
     const errors = {}
+    const dispatch = useDispatch()
     const { userDispatch } = useContext(UserContext)
     const navigate = useNavigate()
+    const location = useLocation()
+    if(location.state?.msg){
+        toast.success(location.state.msg)
+    }
     const notify = (msg) => toast.error(msg)
     const runValidations = () => {
         if (email.length === 0) {
@@ -55,6 +63,8 @@ const LoginForm = () => {
                     }
                 })
                 userDispatch({ type: 'USER_LOGIN', payload: profile.data })
+                dispatch(startSetWishlist())
+                dispatch(startSetCart())
                 navigate('/', { state: { msg: 'Login Successful' } })
                 
             }

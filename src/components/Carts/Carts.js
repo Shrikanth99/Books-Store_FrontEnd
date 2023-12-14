@@ -27,6 +27,7 @@ import { useSelector } from 'react-redux'
 import { useDispatch } from "react-redux";
 import { startIncCartQuantity, startRemoveCart } from "../../actions/product-action";
 import { startRemCartQuantity } from "../../actions/product-action";
+import { startCreateWishlist } from "../../actions/wishlist-action";
 
 export default function Cart() {
     const dispatch = useDispatch()
@@ -40,6 +41,10 @@ export default function Cart() {
     }
     const handleRemoveItem = (id) =>{
         dispatch(startRemoveCart(id))
+    }
+
+    const handleWishlist = (id) =>{
+        dispatch(startCreateWishlist(id))
     }
     return (
         <section className="h-100 gradient-custom">
@@ -89,7 +94,7 @@ export default function Cart() {
                                                     {/* <MDBTooltip wrapperProps={{ size: "sm", color: "danger" }} wrapperClass="me-1 mb-2"
                                                         title="Move to the wish list"> */}
                                                     {/* <MDBIcon fas icon="heart" /> */}
-                                                    <div style={{ backgroundColor: 'red', padding: '5px', display: 'inline-block' }}>
+                                                    <div style={{ backgroundColor: 'red', padding: '5px', display: 'inline-block' }} onClick={()=>{handleWishlist(product.productId._id)}}>
                                                         <FontAwesomeIcon icon={faHeart} className="me-2 fa-lg" />
                                                     </div>
                                                     {/* <FontAwesomeIcon icon={faHeart} className="me-2 fa-lg" /> */}
