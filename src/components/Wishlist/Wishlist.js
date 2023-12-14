@@ -30,7 +30,7 @@ const WishList = () => {
                     <Card.Img variant="top" src={item.image[0].url} />
                     <Card.Body>
                         <Card.Title>{item.title}</Card.Title>
-                        <Card.Text>Price: ${item.price}</Card.Text>
+                        <Card.Text>Price: ₹{item.price}</Card.Text>
                         <Button variant="danger" onClick={() => handleWishlist(item._id)}>Remove from Wishlist</Button>
                     </Card.Body>
                 </Card>

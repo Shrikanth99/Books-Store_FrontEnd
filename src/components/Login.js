@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Form, Button, Container, Col, Row, Tab } from 'react-bootstrap';
+import { Card, Form, Button, Container } from 'react-bootstrap';
 import axios from '../config/axios';
 import { useContext } from 'react'
 import { UserContext } from '../App';
@@ -48,7 +48,7 @@ const LoginForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         runValidations()
-        if (Object.keys(errors).length == 0) {
+        if (Object.keys(errors).length === 0) {
             const formData = {
                 email,
                 password

@@ -33,9 +33,16 @@ export default function Cart() {
     const dispatch = useDispatch()
     const carts = useSelector(state => state.products.cart)
     console.log('carts', carts)
-    // const totalPrice = carts.reduce(product=>{
-    //     console.log('ki',product)
-    // },{})
+    const totalPrice = carts.reduce((acc,curr)=>{
+        return acc + curr.productId.price * curr.quantity
+    },0)
+    let shippingPrice
+    if(totalPrice > 1000){
+        shippingPrice = 0
+    }
+    else{
+        shippingPrice = 100
+    }
     const handleIncrement = (id) => {
         dispatch(startIncCartQuantity(id))
     }
@@ -124,59 +131,6 @@ export default function Cart() {
                                         </div>
                                     )
                                 })}
-
-
-
-
-                                {/* <MDBRow>
-                                    <MDBCol lg="3" md="12" className="mb-4 mb-lg-0">
-                                        <MDBRipple rippleTag="div" rippleColor="light"
-                                            className="bg-image rounded hover-zoom hover-overlay">
-                                            <img
-                                                src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Vertical/13a.webp"
-                                                className="w-100" />
-                                            <a href="#!">
-                                                <div className="mask" style={{ backgroundColor: "rgba(251, 251, 251, 0.2)", }}>
-                                                </div>
-                                            </a>
-                                        </MDBRipple>
-                                    </MDBCol> */}
-
-                                {/* <MDBCol lg="5" md="6" className=" mb-4 mb-lg-0">
-                                        <p>
-                                            <strong>Red hoodie</strong>
-                                        </p>
-                                        <p>Color: red</p>
-                                        <p>Size: M</p>
-
-                                        <MDBTooltip wrapperProps={{ size: "sm" }} wrapperClass="me-1 mb-2"
-                                            title="Remove item">
-                                            <MDBIcon fas icon="trash" />
-                                        </MDBTooltip>
-
-                                        <MDBTooltip wrapperProps={{ size: "sm", color: "danger" }} wrapperClass="me-1 mb-2"
-                                            title="Move to the wish list">
-                                            <MDBIcon fas icon="heart" />
-                                        </MDBTooltip>
-                                    </MDBCol>
-                                    <MDBCol lg="4" md="6" className="mb-4 mb-lg-0">
-                                        <div className="d-flex mb-4" style={{ maxWidth: "300px" }}>
-                                            <MDBBtn className="px-3 me-2">
-                                                <MDBIcon fas icon="minus" />
-                                            </MDBBtn>
-
-                                            <MDBInput defaultValue={1} min={0} type="number" label="Quantity" />
-
-                                            <MDBBtn className="px-3 ms-2">
-                                                <MDBIcon fas icon="plus" />
-                                            </MDBBtn>
-                                        </div>
-
-                                        <p className="text-start text-md-center">
-                                            <strong>$17.99</strong>
-                                        </p>
-                                //     </MDBCol> */}
-                                {/* // </MDBRow> */}
                             </MDBCardBody>
                         </MDBCard>
 
@@ -221,22 +175,22 @@ export default function Cart() {
                                     <MDBListGroupItem
                                         className="d-flex justify-content-between align-items-center border-0 px-0 pb-0">
                                         Products
-                                        <span>$53.98</span>
+                                        <span>₹{totalPrice}</span>
                                     </MDBListGroupItem>
                                     <MDBListGroupItem className="d-flex justify-content-between align-items-center px-0">
                                         Shipping
-                                        <span>Gratis</span>
+                                        <span>{shippingPrice}</span>
                                     </MDBListGroupItem>
                                     <MDBListGroupItem
                                         className="d-flex justify-content-between align-items-center border-0 px-0 mb-3">
                                         <div>
                                             <strong>Total amount</strong>
                                             <strong>
-                                                <p className="mb-0">(including VAT)</p>
+                                                <p className="mb-0">(including GST)</p>
                                             </strong>
                                         </div>
                                         <span>
-                                            <strong>$53.98</strong>
+                                            <strong>{totalPrice+shippingPrice}</strong>
                                         </span>
                                     </MDBListGroupItem>
                                 </MDBListGroup>
