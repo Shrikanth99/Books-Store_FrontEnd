@@ -6,14 +6,19 @@ import { UserContext } from '../../App';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import {toast, Toaster } from 'react-hot-toast';
+import { useDispatch } from 'react-redux';
+import { setEmptyAddress } from '../../actions/address-action';
 
 
 const UserNavBar = () => {
+    const dispatch = useDispatch()
+
     const { userDispatch } = useContext(UserContext)
     const carts = useSelector(state=>state.products.cart)
     const handleLogout = () => {
         localStorage.removeItem('token')
         userDispatch({ type: 'LOGOUT_USER' })
+        dispatch(setEmptyAddress())
         toast.success('Logged out')
 
     }

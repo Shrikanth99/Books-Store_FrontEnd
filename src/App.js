@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {BrowserRouter,Routes,Route} from 'react-router-dom'
+import {Routes,Route} from 'react-router-dom'
 import { createContext,useReducer,useEffect} from 'react';
 import {useDispatch} from 'react-redux'
 import axios from './config/axios';
@@ -16,15 +16,25 @@ import ProductPage from './components/product-page.js';
 import ProductAdd from './components/product-add.js';
 import Carts from './components/Carts/Carts.js';
 import MyAccount from './components/My-Account/MyAccount.js';
+import ShowAddress from './components/AddressForm/ShowAddress.js';
+import {startGetUserAddress} from './actions/address-action.js'
+import { useSelector } from 'react-redux';
 import AddressForm from './components/AddressForm/AddressForm.js';
+import MyProfile from './components/My-Account/MyProfile.js';
+import MyOrders from './components/My-Account/MyOrders.js';
 
 export const UserContext = createContext()
 const App = () =>{
+
+  const {addres} = useSelector(state => state.address )
+
   const [userState,userDispatch] = useReducer(userReducer,{user:{},isLoggedIn:false})
   const dispatch = useDispatch()
   useEffect(()=>{
     dispatch(startGetProduct())
+   
   },[])
+
   useEffect(()=>{
     if(localStorage.getItem('token')){
       (async()=>{
@@ -38,7 +48,7 @@ const App = () =>{
         dispatch(startSetCart())
         }
         catch(e){
-          alert(e.message)
+          alert(e)
         }
       })()
      
@@ -49,7 +59,6 @@ const App = () =>{
 
   return (
     <UserContext.Provider value={{userState,userDispatch}}>
-    <BrowserRouter>
       {userState.isLoggedIn ? userState.user.role === 'admin' && <AdminNavBar/> || userState.user.role === 'user' && <UserNavBar /> : <NavBar />}
 
       <Routes>
@@ -60,10 +69,17 @@ const App = () =>{
         <Route path='/product/:id' element={<ProductPage />} />
         <Route path='/products/add' element={<ProductAdd/>} />
         <Route path='/myCart' element={<Carts/>} />
-        <Route path='/account' element={<MyAccount/>} />
-        {/* <Route path='/addresses' element={<AddressForm/>} /> */}
+        <Route path='/account' element={<MyAccount/>} >
+            <>
+              <Route path='/account/my-orders' element={<MyOrders/>} />
+              <Route path='/account/my-profile' element={<MyProfile/>} />
+              <Route path='/account/address' element={<ShowAddress/>} />
+              <Route path='/account/addressForm' element={<AddressForm/>} />
+              <Route path='/account/addressForm/:id'  element={<AddressForm/>}/>
+            </>
+        </Route>
+        
       </Routes>
-    </BrowserRouter>
     </UserContext.Provider>
   )
 }

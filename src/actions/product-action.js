@@ -26,7 +26,6 @@ export const startCreateCart = (id,toggleSet) =>{
                 }
             })
             toast.success("Product added to the cart successfully")
-            console.log("response",response.data.products)
             toggleSet()
             dispatch(setCart(response.data.products))
         }
@@ -44,7 +43,7 @@ export const startSetCart = () =>{
                     'Authorization': localStorage.getItem('token')
                 }
             })
-            console.log('cart list',response.data)
+            //console.log('cart list',response.data)
             if(response.data.length===0){
                 dispatch(setCart(response.data))
             }
@@ -99,7 +98,6 @@ export const startRemCartQuantity = (id) =>{
 }
 
 const setCart = (products) =>{
-    console.log('ids',products)
     return ({type:'SET_CARTS',payload:products})
 }
 

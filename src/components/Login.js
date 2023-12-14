@@ -6,9 +6,12 @@ import { UserContext } from '../App';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
-
+import { useDispatch } from 'react-redux';
+import { startGetUserAddress } from '../actions/address-action'
 
 const LoginForm = () => {
+    const dispatch = useDispatch()
+
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [formErrors, setFormErrors] = useState({})
@@ -55,6 +58,7 @@ const LoginForm = () => {
                     }
                 })
                 userDispatch({ type: 'USER_LOGIN', payload: profile.data })
+                dispatch(startGetUserAddress())
                 navigate('/', { state: { msg: 'Login Successful' } })
                 
             }
