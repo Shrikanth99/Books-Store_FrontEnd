@@ -6,7 +6,6 @@ import { UserContext } from '../../App';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import {toast, Toaster } from 'react-hot-toast';
-import { useDispatch } from 'react-redux';
 import { setEmptyAddress } from '../../actions/address-action';
 import { setClearCart } from '../../actions/product-action';
 import { setClearWishlist } from '../../actions/wishlist-action';
