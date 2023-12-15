@@ -23,9 +23,7 @@ const LoginForm = () => {
     const { userDispatch } = useContext(UserContext)
     const navigate = useNavigate()
     const location = useLocation()
-    if(location.state?.msg){
-        toast.success(location.state.msg)
-    }
+    
     const notify = (msg) => toast.error(msg)
     const runValidations = () => {
         if (email.length === 0) {
@@ -91,6 +89,12 @@ const LoginForm = () => {
             notify(loginErr.msg)
         }
     },[serverFormErrors])
+
+    useEffect(()=>{
+        if(location.state?.msg){
+            toast.success(location.state.msg)
+        }
+    },[])
 
     return (
         <div>

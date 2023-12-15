@@ -37,7 +37,7 @@ export default function Cart() {
         return acc + curr.productId.price * curr.quantity
     },0)
     let shippingPrice
-    if(totalPrice > 1000){
+    if(totalPrice > 1000 || totalPrice === 0){
         shippingPrice = 0
     }
     else{

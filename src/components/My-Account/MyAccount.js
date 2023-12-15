@@ -9,6 +9,7 @@ import { startGetUserAddress } from '../../actions/address-action';
 import AddressForm from '../AddressForm/AddressForm';
 import { ListGroupItem } from 'react-bootstrap';
 import MyProfile from './MyProfile';
+import MyOrders from './MyOrders';
 
 
 
@@ -63,8 +64,7 @@ const MyAccount = () => {
     {profileToggle && <MyProfile />}
     { myOrder && <MyOrders/> }
     { showAdd && <ShowAddress  /> }
-    { addressForm && <AddressForm/> }
-    
+    { addressForm && <AddressForm/> }   
     </div>
   )
 }
