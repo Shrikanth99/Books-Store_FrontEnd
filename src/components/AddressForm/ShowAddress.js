@@ -23,7 +23,7 @@ const ShowAddress = (props) => {
     }
 
     const handleFormAdd = () => {
-        setAddressForm(!addressForm)
+        setAddressForm(true)
     }
 
 
@@ -34,7 +34,9 @@ const ShowAddress = (props) => {
             <Button onClick={handleFormAdd} ><Link to='/account/addressForm' style={{color : 'white'}} > ➕ Add-New-Address </Link></Button>
             </>
             <div>
-                {address.length>0 ?  editAdd ? <AddressForm /> : (
+               
+            </div> 
+                {address.length>0 ? addressForm ? <AddressForm/> : editAdd ? <AddressForm /> : (
                 address.map((ele) => {
                     return (
                         <>
@@ -59,7 +61,6 @@ const ShowAddress = (props) => {
                         <h4> No-Address-Found </h4>
 
                     </> }
-            </div>
         </div>
   )
 }

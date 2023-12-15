@@ -1,50 +1,56 @@
-import React,{useEffect, useState} from 'react'
+import React,{useEffect, useState, useContext} from 'react'
 import { Link, useParams } from 'react-router-dom'
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
-
+import Button from 'react-bootstrap/Button';
 import ShowAddress from '../AddressForm/ShowAddress';
 import { useDispatch } from 'react-redux';
 import { startGetUserAddress } from '../../actions/address-action';
 import AddressForm from '../AddressForm/AddressForm';
-import { ListGroupItem } from 'react-bootstrap';
-import MyProfile from './MyProfile';
+import MyOrders from './MyOrders';
+import Profile from '../Profile/Profile';
+import { UserContext } from '../../App';
 
 
 
 const MyAccount = () => {
+    const {userState} = useContext(UserContext)
     const dispatch = useDispatch()
     const {id} = useParams()
-    const [showAdd,setShowAdd] = useState(false)
-    const [addressForm,setAddressForm] = useState(false)
-    const [editAddressForm,setEditAddressForm] = useState(false)
+    const [showAddToggle,setShowAddToggle] = useState(false)
+    const [addressFormToggle,setAddressFormToggle] = useState(false)
     const [profileToggle,setProfileToggle] = useState(false)
-    const [myOrder, setMyOrder ] = useState(false)
+    const [myOrderToggle, setMyOrderToggle ] = useState(false)
   //console.log('after refresh',id)
   
     const handleShowAdd  = () => {
-      setShowAdd(true)
+      setShowAddToggle(true)
       setProfileToggle(false)
-      setMyOrder(false)
-      console.log('sad',showAdd)
+      setMyOrderToggle(false)
+      setAddressFormToggle(!addressFormToggle)
+      console.log('sad',showAddToggle)
   }
   const handleShowProfile = () =>{
     setProfileToggle(true)
-    setShowAdd(false)
-    setMyOrder(false)
+    setShowAddToggle(false)
+    setMyOrderToggle(false)
+    setAddressFormToggle(false)
+    console.log('aF',addressFormToggle)
   }
 
   const handleOrder = () => {
-    setMyOrder(true)
-    setShowAdd(false)
+    setMyOrderToggle(true)
+    setShowAddToggle(false)
     setProfileToggle(false)
+    setAddressFormToggle(false)
   }
 
   useEffect(() => {
     dispatch(startGetUserAddress())
-    setEditAddressForm()
     if(id){
-      setAddressForm(true)
+      setAddressFormToggle(true)
+    } else if ( userState ){
+      setProfileToggle()
     }
   },[])
 
@@ -53,17 +59,18 @@ const MyAccount = () => {
       
       <Card style={{ width: '18rem' }}>
       <ListGroup variant="flush">
-        <ListGroup.Item onClick={handleShowProfile} ><Link to='/account/my-profile' >My-Profile</Link></ListGroup.Item>
+        <ListGroup.Item ><Button variant="link" style={{color:'white'}} onClick={handleShowProfile}  ><Link to='/account/profile' >My-Profile</Link></Button></ListGroup.Item>
+        {/* <ListGroup.Item onClick={handleOrder} >My-Order</ListGroup.Item> */}
         <ListGroup.Item onClick={handleOrder} ><Link to='/account/my-orders' >My-Orders</Link></ListGroup.Item>
         <ListGroup.Item  onClick={handleShowAdd}  >
         <Card.Link ><Link to='/account/address' >Saved-Address</Link></Card.Link>
         </ListGroup.Item>
       </ListGroup>
     </Card>
-    {profileToggle && <MyProfile />}
-    { myOrder && <MyOrders/> }
-    { showAdd && <ShowAddress  /> }
-    { addressForm && <AddressForm/> }
+    {profileToggle && <Profile />}
+    { myOrderToggle ? <MyOrders/> : 'Byee' }
+    { showAddToggle ? <ShowAddress  /> : " hii" }
+    { addressFormToggle ? <AddressForm/>  : 'Helo' } 
     
     </div>
   )

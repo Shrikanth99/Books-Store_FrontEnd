@@ -24,6 +24,7 @@ import MyProfile from './components/My-Account/MyProfile.js';
 import MyOrders from './components/My-Account/MyOrders.js';
 import Wishlist from './components/Wishlist/Wishlist.js';
 import { startSetWishlist } from './actions/wishlist-action.js';
+import Profile from './components/Profile/Profile.js';
 
 export const UserContext = createContext()
 const App = () =>{
@@ -73,6 +74,7 @@ const App = () =>{
         <Route path='/myCart' element={<Carts/>} />
         <Route path='/account' element={<MyAccount/>} >
             <>
+              <Route path='/account/profile' element={<Profile/>} />
               <Route path='/account/my-orders' element={<MyOrders/>} />
               <Route path='/account/my-profile' element={<MyProfile/>} />
               <Route path='/account/address' element={<ShowAddress/>} />

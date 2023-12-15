@@ -1,13 +1,17 @@
-import React from 'react'
+import React,{useState,useContext} from 'react'
 import { Form, Button, Container, Col, Row } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../../App';
 
 const Profile = () => {
+  const {userState} = useContext(UserContext)
+  console.log(userState,'mp')
+  const {user} = userState
+  console.log(user,'us')
 
-    const [userName,setUsername] = useState('')
-    const [email,setEmail] = useState('')
-    const [password,setPassword] = useState('')
-    const [phoneNumber,setPhoneNumber] = useState('')
-    const [role,setRole] = useState('user')
+    const [userName,setUsername] = useState(user? user.userName : '')
+    const [email,setEmail] = useState(user ?  user.email :'')
+    const [phoneNumber,setPhoneNumber] = useState(user ? user.phoneNumber : '')
     const [formErrors,setFormErrors] = useState({})
     const [serverFormErrors,setServerFormErrors] = useState([])
   
@@ -27,18 +31,11 @@ const Profile = () => {
       //     errors.email = 'email format is invalid'
       // }
   
-      if(password.length === 0){
-          errors.password = 'password is required'
-      }
-  
       if(phoneNumber.length === 0){
           errors.phoneNumber = 'phoneNumber is required'
       }
       else if(phoneNumber.length !== 10){
           errors.phoneNumber = 'phoneNumber must be of 10 digits'
-      }
-      if(role.length === 0){
-          errors.role = 'Please select any one role'
       }
   
     }
@@ -51,43 +48,37 @@ const Profile = () => {
       else if(name == 'email'){
           setEmail(value)
       }
-      else if(name == 'password'){
-          setPassword(value)
-      }
+      
       else if(name == 'phoneNumber'){
           setPhoneNumber(value)
       }
-      else if(name == 'role'){
-          setRole(value)  
-      }
+      
     };
   
-    const handleSubmit = async(e) => {
-      e.preventDefault();
-      runValidations()
-      if(Object.keys(errors).length === 0){
-          const formData = {
-              userName,
-              email,
-              password,
-              phoneNumber,
-              role
-          }
-          try{
-              setFormErrors({})
-              const response = await axios.post('/api/register',formData)
-              navigate('/login')
-          }
-          catch(e){
-              console.log(e)
-              setServerFormErrors(e.response.data.errors)
-          }
-      }
-      else{
-          console.log(errors)
-          setFormErrors(errors)
-      }
-    };
+    // const handleSubmit = async(e) => {
+    //   e.preventDefault();
+    //   runValidations()
+    //   if(Object.keys(errors).length === 0){
+    //       const formData = {
+    //           userName,
+    //           email,
+    //           phoneNumber,
+    //       }
+    //       try{
+    //           setFormErrors({})
+    //           // const response = await axios.post('/api/register',formData)
+    //           // navigate('/login')
+    //       }
+    //       catch(e){
+    //           console.log(e)
+    //           setServerFormErrors(e.response.data.errors)
+    //       }
+    //   }
+    //   else{
+    //       console.log(errors)
+    //       setFormErrors(errors)
+    //   }
+    // };
   
     return (
       <div>
@@ -100,7 +91,7 @@ const Profile = () => {
               )}
     
       <Container style={{maxWidth:'768px',marginTop:'100px',border:'1px solid grey',padding:'20px',borderRadius:'10px'}}>
-        <Form onSubmit={handleSubmit}>
+        <Form >
           <Form.Group controlId="formUsername">
             <Form.Label>Username</Form.Label>
             <Form.Control
@@ -110,6 +101,7 @@ const Profile = () => {
               name="username"
               value={userName}
               onChange={handleChange}
+              readOnly
             />
             {formErrors.userName && (
               <div className='invalid-feedback'>{formErrors.userName}</div>
@@ -119,6 +111,7 @@ const Profile = () => {
           <Form.Group controlId="formEmail">
             <Form.Label>Email address</Form.Label>
             <Form.Control
+              readOnly
              className={`${formErrors.email ? 'is-invalid' : ''}`}
               type="email"
               placeholder="Enter email"
@@ -131,24 +124,12 @@ const Profile = () => {
             )}
           </Form.Group>
   
-          <Form.Group controlId="formPassword">
-            <Form.Label>Password</Form.Label>
-            <Form.Control 
-              className={`${formErrors.password ? 'is-invalid' : ''}`}
-              type="password"
-              placeholder="Password"
-              name="password"
-              value={password}
-              onChange={handleChange}
-            />
-             {formErrors.password && (
-              <div className='invalid-feedback'>{formErrors.password}</div>
-            )}
-          </Form.Group>
+          
   
           <Form.Group controlId="formPhoneNumber">
             <Form.Label>Phone Number</Form.Label>
             <Form.Control
+              readOnly
               className={`${formErrors.phoneNumber ? 'is-invalid' : ''}`}
               type="tel"
               placeholder="Enter phone number"
@@ -161,49 +142,11 @@ const Profile = () => {
             )}
           </Form.Group>
   
-          <Form.Group as={Row} controlId="formGender">
-            <Form.Label as="legend" column sm={2}>
-              Role
-            </Form.Label>
-            <Col sm={10}>
-              <Form.Check
-                type="radio"
-                label="admin"
-                name="role"
-                value="admin"
-                checked={role === 'admin'}
-                onChange={handleChange}
-                required
-              
-              />
-              <Form.Check
-                type="radio"
-                label="user"
-                name="role"
-                value="user"
-                checked={role === 'user'}
-                onChange={handleChange}
-                required
-               
-              />
-              <Form.Check
-                type="radio"
-                label="moderator"
-                name="role"
-                value="moderator"
-                checked={role === 'moderator'}
-                onChange={handleChange}
-                required
-              />
-            </Col>
-            {formErrors.role && (
-              <div className='invalid-feedback'>{formErrors.role}</div>
-            )}
-          </Form.Group>
+          
           <div className='text-center'>
-          <Button variant="primary" type="submit">
+          {/* <Button variant="primary" type="submit">
             Register
-          </Button>
+          </Button> */}
           </div>
         </Form>
       </Container>

@@ -43,6 +43,7 @@ const AddressForm = () => {
   });
 
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues : {
         fullName: foundAddress ? foundAddress.fullName : '',
         userId : userId,
@@ -71,7 +72,7 @@ const AddressForm = () => {
   })
 
   const handleClick = () => {
-    foundAddress = undefined
+    // foundAddress = undefined
     navigate('/account/address')
   }
 
