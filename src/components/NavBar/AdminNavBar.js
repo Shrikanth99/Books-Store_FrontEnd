@@ -20,7 +20,7 @@ const AdminNavBar = () => {
                 <Nav className="ml-auto">
                     <Nav.Link as={Link} to="/">Home</Nav.Link>
                     <Nav.Link as={Link} to="/products">Products</Nav.Link>
-                    <Nav.Link as={Link} to="/account">My Account</Nav.Link>
+                    <Nav.Link as={Link} to="/add-product" >Add-Product</Nav.Link>
                     <Nav.Link as={Link} to="/" onClick={handleLogout}>Logout</Nav.Link>                    
                 </Nav>
             </Navbar.Collapse>

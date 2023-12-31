@@ -50,6 +50,17 @@ const addAddress = (address) => {
     return { type : 'ADD_ADDRESS', payload : address }
 }
 
+export const startEditAddress = ({formData,resetForm,redirect,id}) => {
+    return async (dispatch) => {
+        console.log('uId',id)
+        try {
+            // const res = await axios.put(`/address/${}`)
+        } catch (e) {
+            
+        }
+    }
+}
+
 const setServerErrors = (err) => {
     return { type : 'SET_ERRORS', payload: err }
 }

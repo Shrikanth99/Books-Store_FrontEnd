@@ -18,6 +18,7 @@ import {
 
 import '../../styles/cart.css'
 import Button from 'react-bootstrap/Button';
+import Alert from 'react-bootstrap/Alert';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
@@ -25,18 +26,40 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { faMinus } from '@fortawesome/free-solid-svg-icons';
 import { useSelector } from 'react-redux'
 import { useDispatch } from "react-redux";
-import { startIncCartQuantity, startRemoveCart } from "../../actions/product-action";
+import { startEmptyCart, startIncCartQuantity, startRemoveCart } from "../../actions/product-action";
 import { startRemCartQuantity } from "../../actions/product-action";
 import { startCreateWishlist } from "../../actions/wishlist-action";
+import { useContext, useEffect } from "react";
+import { UserContext } from "../../App";
+import { startPayment, startRemovePayment, startUpdatePayment } from "../../actions/payment-action";
+import { startOrder } from "../../actions/order-action";
+import { useNavigate } from "react-router-dom";
 
 export default function Cart() {
+
+    const {userState} = useContext(UserContext)
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const carts = useSelector(state => state.products.cart)
+    const payment = useSelector(state => state.payments.payment )
+    const address = useSelector(state => state.address.address)
     console.log('carts', carts)
+    console.log('address',address)
+    console.log('payment',payment)
+    // console.log('us',userState)
+    const searchParams = new URLSearchParams(window.location.search)
+        const success= searchParams.get('success')
+        const cancel = searchParams.get('cancel')
+
+    const userEmail = userState?.user.email
+    // console.log(userEmail)
+
     const totalPrice = carts.reduce((acc,curr)=>{
         return acc + curr.productId.price * curr.quantity
     },0)
+
     let shippingPrice
+
     if(totalPrice > 1000){
         shippingPrice = 0
     }
@@ -56,8 +79,81 @@ export default function Cart() {
     const handleWishlist = (id) =>{
         dispatch(startCreateWishlist(id))
     }
+
+    const requestObj = (carts) =>{
+        //console.log('Icart',carts)
+        const products = carts.map((ele) => {
+            return {
+                product : ele.productId._id,
+                price : ele.productId.price,
+                title : ele.productId.title,
+                quantity : ele.quantity
+            }
+        })
+        //  console.log('ro',products)
+        return products
+    }
+
+    // const orderCreation = (carts,) => {
+    //     const orderItems = carts.map(ele => {
+    //         return {
+    //             product : ele.productId._id,
+    //             quantity : ele.quantity
+    //         }
+    //     })
+    // }
+
+    const handleNavigate = () => {
+        navigate('/account/addressForm',{state:{msg:'show'}})
+    }
+
+
+    const handleCheckOut = async () => {
+        console.log('hi')
+        const products = requestObj(carts)
+        dispatch(startPayment(products,totalPrice,userEmail))
+    }
+
+    const orderItem = payment.products?.map(ele => {
+        return {
+            product : ele.product,
+            quantity : ele.quantity
+        }
+    }) 
+     const orderData = {
+        orderItem : orderItem,
+        totalAmount : payment?.totalAmount,
+        payment: payment?._id
+    }
+    console.log('od',orderData)
+    console.log('total',payment.totalAmount)
+
+    
+
+    useEffect(() => {
+        
+        if(success && localStorage.getItem('transactionId')){
+           
+            dispatch(startUpdatePayment(localStorage.getItem('transactionId')))
+            console.log('hell')
+        }   
+        if (Object.keys(payment).length == 0 && success ){
+            console.log('pag')
+            dispatch(startEmptyCart())
+
+        }
+        if(cancel){
+            dispatch(startRemovePayment(localStorage.getItem('transactionId')))
+        }
+    },[])
+
+    useEffect(()=>{
+        if (Object.keys(payment).length > 0 && success){
+        dispatch(startOrder(orderData))
+        }
+    },[payment])
     return (
-        <section className="h-100 gradient-custom">
+        <section className="h-100 gradient-custom" style={{height:'100vh'}}>
             <MDBContainer className="py-5 h-100">
 
                 <MDBRow className="justify-content-center my-4">
@@ -73,7 +169,7 @@ export default function Cart() {
                                     return (
                                         <div>
 
-                                            <MDBRow>
+                                            <MDBRow key={product.productId._id} >
                                                 <MDBCol lg="3" md="12" className="mb-4 mb-lg-0">
 
 
@@ -134,14 +230,7 @@ export default function Cart() {
                             </MDBCardBody>
                         </MDBCard>
 
-                        <MDBCard className="mb-4">
-                            <MDBCardBody>
-                                <p>
-                                    <strong>Expected shipping delivery</strong>
-                                </p>
-                                <p className="mb-0">12.10.2020 - 14.10.2020</p>
-                            </MDBCardBody>
-                        </MDBCard>
+                        
 
                         <MDBCard className="mb-4 mb-lg-0">
                             <MDBCardBody>
@@ -195,9 +284,13 @@ export default function Cart() {
                                     </MDBListGroupItem>
                                 </MDBListGroup>
 
-                               <Button variant="primary">
+                               <Button className="mb-2" variant="primary" onClick={handleCheckOut} disabled={address.length == 0 } >
                                     Go to Checkout
-                               </Button>
+                               </Button>    
+                               { address.length === 0 && (<Alert  variant='danger'>
+                                    No Address.. {' '}
+                                    <Alert.Link onClick={handleNavigate} >Add-Address</Alert.Link>
+                                    </Alert>) }
                             </MDBCardBody>
                         </MDBCard>
                     </MDBCol>

@@ -1,10 +1,49 @@
 import axios from '../config/axios'
 import {toast} from 'react-hot-toast'
-export const startGetProduct = () =>{
+
+export const startGetProduct = (search,categoryId,sort) =>{
     return async (dispatch) =>{
         try{
-            const response = await axios.get('/product')
-            dispatch(setProduct(response.data))
+            if(search && categoryId){
+                if(sort){
+                    const sortRes = await axios.get(`/product?search=${search}&categoryId=${categoryId}&sort=${sort}`)
+                    console.log('sR',sortRes.da)
+                    dispatch(setProduct(sortRes.data))
+                }else{
+                    const res = await axios.get(`/product?search=${search}&categoryId=${categoryId}`)
+                    console.log('daemon',res.data)
+                    dispatch(setProduct(res.data))
+                }
+            }
+            else if(search){
+                if(sort){
+                    const response = await axios.get(`/product?search=${search}&sort=${sort}`)
+                    dispatch(setProduct(response.data))
+                }else{
+                    const res = await axios.get(`/product?search=${search}`)
+                    console.log('searches',res.data)
+                    dispatch(setProduct(res.data))
+                }
+            }
+            else if(categoryId){
+                if(sort){
+                    const res = await axios.get(`/product?categoryId=${categoryId}&sort=${sort}`)
+                    dispatch(setProduct(res.data))
+                }else {
+                    const res = await axios.get(`/product?categoryId=${categoryId}`)
+                    dispatch(setProduct(res.data))
+                }
+            }
+            else{
+                if(sort){
+                    const res = await axios.get(`/product?sort=${sort}`)
+                    dispatch(setProduct(res.data))
+                }else {
+                    const response = await axios.get('/product')
+                    console.log('tyrion',response.data)
+                    dispatch(setProduct(response.data))
+                }
+            }
         }
         catch(e){
             console.log(e)
@@ -16,11 +55,32 @@ const setProduct = (data) =>{
     return ({type:'SET_PRODUCTS',payload: data})
 }
 
+export const startAddProduct = (formData) => {
+    return async (dispatch) => {
+        try {
+            const res = await axios.post('/product',formData,{
+                headers : {
+                    'Content-Type' : 'multipart/form-data',
+                    'Authorization' : localStorage.getItem('token')
+                }
+            })
+            console.log('pd',res.data)
+            dispatch(addProduct(res.data))
+
+        } catch (e) {
+            console.log('adP',e)
+        }
+    }
+}
+
+const addProduct = (product) => {
+    return { type : 'ADD_PRODUCT' , payload : product }
+}
+
 export const startCreateCart = (id,toggleSet) =>{
     return async (dispatch) =>{
         try{
-            const formData = {}
-            const response = await axios.post(`/product/cart/${id}`,formData,{
+            const response = await axios.post(`/product/cart/${id}`,null,{
                 headers:{
                     'Authorization': localStorage.getItem('token')
                 }
@@ -43,7 +103,7 @@ export const startSetCart = () =>{
                     'Authorization': localStorage.getItem('token')
                 }
             })
-            //console.log('cart list',response.data)
+            console.log('cart list',response.data)
             if(response.data.length===0){
                 dispatch(setCart(response.data))
             }
@@ -134,4 +194,24 @@ const removeCart = (id) =>{
 export const setClearCart = () =>{
     return ({type:'CLEAR_CART'})
 }
+
+export const startEmptyCart = () =>{
+    console.log('in EC',)
+    return async(dispatch) =>{
+        try{
+            const response = await axios.delete('/product/cart/removeAll',{
+                headers:{
+                    'Authorization': localStorage.getItem('token')
+                }
+            })
+            console.log('deleted',response.data)
+            dispatch(setClearCart())
+        }
+        catch(e){
+            console.log(e)
+        }
+    }
+}
+
+
 

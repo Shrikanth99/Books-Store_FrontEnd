@@ -1,4 +1,4 @@
-import React,{useState,useContext} from 'react'
+import React,{useState,useContext, useEffect} from 'react'
 import { Form, Button, Container, Col, Row } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../App';
@@ -9,7 +9,7 @@ const Profile = () => {
   const {user} = userState
   console.log(user,'us')
 
-    const [userName,setUsername] = useState(user? user.userName : '')
+    const [userName,setUsername] = useState(user? user?.userName : '')
     const [email,setEmail] = useState(user ?  user.email :'')
     const [phoneNumber,setPhoneNumber] = useState(user ? user.phoneNumber : '')
     const [formErrors,setFormErrors] = useState({})
@@ -79,6 +79,14 @@ const Profile = () => {
     //       setFormErrors(errors)
     //   }
     // };
+
+    useEffect(() => {
+      if(user){
+        setUsername(user.userName)
+        setEmail(user.email)
+        setPhoneNumber(user.phoneNumber)
+      }
+    },[user])
   
     return (
       <div>

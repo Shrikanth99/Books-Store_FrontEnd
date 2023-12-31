@@ -1,9 +1,12 @@
-const initialState = {data:[],cart:[]}
+const initialState = {data:[],cart:[],serverErrors:[]}
 
 export const productsReducer = (state = initialState, action) =>{
     switch(action.type){
         case 'SET_PRODUCTS':{
             return {...state,data: action.payload}
+        }
+        case 'ADD_PRODUCT':{
+            return {...state, data : [ action.payload, ...state.data ] }
         }
         case 'SET_CARTS':{
             return {...state,cart:action.payload}

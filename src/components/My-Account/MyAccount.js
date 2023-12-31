@@ -1,5 +1,5 @@
 import React,{useEffect, useState, useContext} from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams,useNavigate, useLocation } from 'react-router-dom'
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Button from 'react-bootstrap/Button';
@@ -13,28 +13,45 @@ import { UserContext } from '../../App';
 
 
 
+
 const MyAccount = () => {
     const {userState} = useContext(UserContext)
     const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const location = useLocation()
     const {id} = useParams()
     const [showAddToggle,setShowAddToggle] = useState(false)
     const [addressFormToggle,setAddressFormToggle] = useState(false)
     const [profileToggle,setProfileToggle] = useState(false)
     const [myOrderToggle, setMyOrderToggle ] = useState(false)
   //console.log('after refresh',id)
+
+
+    
   
     const handleShowAdd  = () => {
       setShowAddToggle(true)
       setProfileToggle(false)
       setMyOrderToggle(false)
-      setAddressFormToggle(!addressFormToggle)
+      setAddressFormToggle(false)
+      localStorage.setItem('showAddToggle', 'true');
+      localStorage.removeItem('myOrderToggle')
+      localStorage.removeItem('profileToggle')
+      localStorage.removeItem('addressForm')
+
       console.log('sad',showAddToggle)
   }
   const handleShowProfile = () =>{
+
     setProfileToggle(true)
     setShowAddToggle(false)
     setMyOrderToggle(false)
     setAddressFormToggle(false)
+    localStorage.setItem('profileToggle', 'true');
+    localStorage.removeItem('myOrderToggle')
+    localStorage.removeItem('showAddToggle')
+    localStorage.removeItem('addressForm')
+
     console.log('aF',addressFormToggle)
   }
 
@@ -43,15 +60,44 @@ const MyAccount = () => {
     setShowAddToggle(false)
     setProfileToggle(false)
     setAddressFormToggle(false)
+    localStorage.setItem('myOrderToggle', 'true');
+    localStorage.removeItem('profileToggle')
+    localStorage.removeItem('showAddToggle')
+    localStorage.removeItem('addressForm')
+
   }
 
   useEffect(() => {
-    dispatch(startGetUserAddress())
+
+    if(location.state?.msg === 'show'){
+      setShowAddToggle(true)
+      setAddressFormToggle(true)
+    }
+    const storedShowAdd = localStorage.getItem('showAddToggle');
+    const storedProfile = localStorage.getItem('profileToggle');
+    const storedMyOrder = localStorage.getItem('myOrderToggle');
+    const storesAddForm = localStorage.getItem('addressForm')
+
     if(id){
       setAddressFormToggle(true)
-    } else if ( userState ){
-      setProfileToggle()
+    } else if (storedShowAdd === 'true') {
+      setShowAddToggle(true)
+    }else if ( storedProfile === 'true' ){
+      setProfileToggle(true)
+    } else if ( storedMyOrder === 'true' ){
+      setMyOrderToggle(true)
+    } else if ( storesAddForm === 'true' ){
+      setAddressFormToggle()
     }
+
+    return () => {
+      localStorage.removeItem('showAddToggle');
+      localStorage.removeItem('profileToggle');
+      localStorage.removeItem('myOrderToggle');
+      localStorage.removeItem('addressForm')
+  };
+
+
   },[])
 
   return (
@@ -68,9 +114,9 @@ const MyAccount = () => {
       </ListGroup>
     </Card>
     {profileToggle && <Profile />}
-    { myOrderToggle ? <MyOrders/> : 'Byee' }
-    { showAddToggle ? <ShowAddress  /> : " hii" }
-    { addressFormToggle ? <AddressForm/>  : 'Helo' } 
+    { localStorage.getItem('myOrderToggle') && <MyOrders/>  }
+    { showAddToggle && <ShowAddress  />  }
+    { addressFormToggle && <AddressForm/>  } 
     
     </div>
   )

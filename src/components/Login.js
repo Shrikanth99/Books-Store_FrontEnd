@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux';
 import { startGetUserAddress } from '../actions/address-action'
 import { startSetWishlist } from '../actions/wishlist-action';
 import { startSetCart } from '../actions/product-action';
+import { startGetOrder } from '../actions/order-action';
 
 
 const LoginForm = () => {
@@ -70,6 +71,7 @@ const LoginForm = () => {
 
                     dispatch(startSetWishlist())
                     dispatch(startSetCart())
+                    dispatch(startGetOrder())
                 }
                 navigate('/', { state: { msg: 'Login Successful' } })
                 

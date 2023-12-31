@@ -4,7 +4,7 @@ import { useFormik} from 'formik';
 import * as Yup from 'yup';
 import { useNavigate,useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { startNewAddress } from '../../actions/address-action';
+import { startEditAddress, startNewAddress } from '../../actions/address-action';
 import { useContext } from 'react';
 import { UserContext } from '../../App';
 
@@ -53,7 +53,7 @@ const AddressForm = () => {
         landMark: foundAddress ? foundAddress.landMark : '',
         city:foundAddress ? foundAddress.city : '',
         state: foundAddress ? foundAddress.state : '',
-        country: foundAddress ? foundAddress.country : '',
+          country: foundAddress ? foundAddress.country : '',
         pincode: foundAddress ? foundAddress.pincode : '',
         addressType: foundAddress ? foundAddress.addressType : 'Home',
         defaultAdd: false,
@@ -66,7 +66,11 @@ const AddressForm = () => {
         const redirect = () => {
           navigate('/account/address', { state: { msg: 'Address added' } })
         }
-        dispatch(startNewAddress(formData,resetForm,redirect))
+        if(foundAddress){
+          dispatch(startEditAddress({formData,resetForm,redirect,id}))
+        } else {
+          dispatch(startNewAddress(formData,resetForm,redirect))
+        }
     }
 
   })
@@ -257,7 +261,7 @@ const AddressForm = () => {
         </Form.Group>
 
         { foundAddress ? <> 
-                          <Button variant="primary" type='submit' >Update</Button> 
+                          <Button variant="primary" type='submit'  >Update</Button> 
                           <Button variant="danger" type='submit' onClick={handleClick} >Cancel</Button>
                          </> : <>
                                 <Button variant="primary" type="submit" className="w-100 mt-3" >
