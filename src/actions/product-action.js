@@ -40,7 +40,7 @@ export const startGetProduct = (search,categoryId,sort) =>{
                     dispatch(setProduct(res.data))
                 }else {
                     const response = await axios.get('/product')
-                    console.log('tyrion',response.data)
+                    // console.log('tyrion',response.data)
                     dispatch(setProduct(response.data))
                 }
             }
@@ -77,16 +77,19 @@ const addProduct = (product) => {
     return { type : 'ADD_PRODUCT' , payload : product }
 }
 
-export const startCreateCart = (id,toggleSet) =>{
+export const startCreateCart = (id,body,toggleSet) =>{
     return async (dispatch) =>{
         try{
-            const response = await axios.post(`/product/cart/${id}`,null,{
+            const response = await axios.post(`/product/cart/${id}`,body,{
                 headers:{
                     'Authorization': localStorage.getItem('token')
                 }
             })
             toast.success("Product added to the cart successfully")
-            toggleSet()
+            if(toggleSet){
+
+                toggleSet()
+            }
             dispatch(setCart(response.data.products))
         }
         catch(e){
@@ -118,15 +121,20 @@ export const startSetCart = () =>{
     }
 }
 
-export const startIncCartQuantity = (id) =>{
+export const startIncCartQuantity = (id,mode) =>{
     return async(dispatch) =>{
         try{         
-            const response = await axios.post(`/product/cart/${id}`,{},{
+            const response = await axios.post(`/product/cart/${id}`,mode,{
                 headers:{
                     'Authorization': localStorage.getItem('token')
                 }
             })
-            dispatch(setCart(response.data.products))
+            if(response.data.msg){
+                toast.error(response.data.msg)
+            }else{
+
+                dispatch(setCart(response.data.products))
+            }
         }
         catch(e){
             console.log(e)
@@ -134,10 +142,10 @@ export const startIncCartQuantity = (id) =>{
     }
 }
 
-export const startRemCartQuantity = (id) =>{
+export const startRemCartQuantity = (id,mode) =>{
     return async(dispatch) =>{
         try{
-            const response = await axios.delete(`/product/cart/quantity/${id}`,{
+            const response = await axios.delete(`/product/cart/quantity/${id}?mode=${mode}`,{
                 headers:{
                     'Authorization': localStorage.getItem('token')
                 }
@@ -161,10 +169,10 @@ const setCart = (products) =>{
     return ({type:'SET_CARTS',payload:products})
 }
 
-export const startRemoveCart = (id,toggleSet) =>{
+export const startRemoveCart = (id,body,toggleSet) =>{
     return async (dispatch) =>{
         try{
-            const response = await axios.put(`/product/cartItemRemove/${id}`,{},{
+            const response = await axios.put(`/product/cartItemRemove/${id}`,body,{
                 headers:{
                     'Authorization': localStorage.getItem('token')
                 }
@@ -191,21 +199,21 @@ const removeCart = (id) =>{
     return ({type:'REMOVE_CART',payload:id})
 }
 
-export const setClearCart = () =>{
-    return ({type:'CLEAR_CART'})
+export const setClearCart = (mode) =>{
+    return ({type:'CLEAR_CART', payload : mode })
 }
 
-export const startEmptyCart = () =>{
+export const startEmptyCart = (mode) =>{
     console.log('in EC',)
     return async(dispatch) =>{
         try{
-            const response = await axios.delete('/product/cart/removeAll',{
+            const response = await axios.delete(`/product/cart/removeAll?mode=${mode}`,{
                 headers:{
                     'Authorization': localStorage.getItem('token')
                 }
             })
             console.log('deleted',response.data)
-            dispatch(setClearCart())
+            dispatch(setClearCart(mode))
         }
         catch(e){
             console.log(e)

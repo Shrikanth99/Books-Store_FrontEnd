@@ -8,24 +8,51 @@ export const startOrder = (orderData) => {
                 'Authorization' : localStorage.getItem('token')
             }
         })
-        console.log(res.data)
+        localStorage.removeItem('addID')
+        console.log(res.data,'rana')
         
     }
 }
 
 export const startGetOrder = () =>{
     return async(dispatch) =>{
-        const res = await axios.get('/order/list',{
-            headers : {
-                'Authorization' : localStorage.getItem('token')
-            }
-        })
-        dispatch(getOrder(res.data))
+        try {
+            const res = await axios.get('/order/list',{
+                headers : {
+                    'Authorization' : localStorage.getItem('token')
+                }
+            })
+            dispatch(getOrder(res.data))
+        } catch (e) {
+            console.log('od-err',e)
+        }
     }
 }
 
 const getOrder = (data) =>{
     return({type:'GET_ORDER',payload:data})
+}
+
+// admmin
+export const startgetAllOrders = () => {
+    return async(dispatch) => {
+        try {
+            const res = await axios.get('/order/listAll',{
+                headers : {
+                    'Authorization' : localStorage.getItem('token')
+                }
+            })
+            //console.log('all-od',res.data)
+            dispatch(allOrder(res.data))
+        } catch (e) {
+            console.log('admin-od',e)
+        }
+
+    }
+}
+
+const allOrder = (data) => {
+    return { type : 'ALL_ORDERS', payload : data }
 }
 
 

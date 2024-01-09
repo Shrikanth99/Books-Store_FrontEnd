@@ -11,6 +11,9 @@ import { startGetUserAddress } from '../actions/address-action'
 import { startSetWishlist } from '../actions/wishlist-action';
 import { startSetCart } from '../actions/product-action';
 import { startGetOrder } from '../actions/order-action';
+import { startGetReview } from '../actions/review-action';
+import { startGetCategories } from '../actions/category-action';
+import { startgetAllOrders } from '../actions/order-action';
 
 
 const LoginForm = () => {
@@ -66,12 +69,16 @@ const LoginForm = () => {
                     }
                 })
                 userDispatch({ type: 'USER_LOGIN', payload: profile.data })
-                dispatch(startGetUserAddress())
+                
                 if(profile.data.role === 'user'){
-
+                    dispatch(startGetUserAddress())
+                    dispatch(startGetCategories())
                     dispatch(startSetWishlist())
                     dispatch(startSetCart())
                     dispatch(startGetOrder())
+                    dispatch(startGetReview())
+                }else if( profile.data.role === 'admin' ){
+                    dispatch(startgetAllOrders())
                 }
                 navigate('/', { state: { msg: 'Login Successful' } })
                 
@@ -93,6 +100,9 @@ const LoginForm = () => {
             notify(loginErr.msg)
         }
     },[serverFormErrors])
+    useEffect(()=>{
+        localStorage.clear()
+    },[])
 
     return (
         <div>

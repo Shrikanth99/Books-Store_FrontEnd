@@ -11,6 +11,9 @@ export const wishlistReducer = (state = initialState, action) =>{
         case 'REMOVE_WISHLIST':{
             return {...state,data:state.data.filter(ele=>ele._id!=action.payload)}
         }
+        case 'CLEAR_WISHLIST' : {
+            return {...state, data:[] }
+        }
         default:{
             return {...state}
         }

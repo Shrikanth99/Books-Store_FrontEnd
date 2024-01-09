@@ -45,7 +45,7 @@ export default function MyOrders() {
   return (
     <>
       <section
-        className="h-100 gradient-custom"
+        className=" gradient-custom2"
         style={{ backgroundColor: "#eee" }}
       >
         <MDBContainer className="py-5 h-100">

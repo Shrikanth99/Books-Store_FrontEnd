@@ -1,21 +1,25 @@
 import React from 'react'
 import { useState,useEffect } from 'react';
-import { useDispatch } from 'react-redux';    
+import { useDispatch, useSelector } from 'react-redux';    
 import { Form, Button, Card, InputGroup, Col } from 'react-bootstrap';
 import axios from '../config/axios';
 import { startAddProduct } from '../actions/product-action';
 import { useNavigate } from 'react-router-dom';
+import { addCategory } from '../actions/category-action';
 
 
 
     const AddProduct = () => {
+
+        const categories = useSelector(state => state.categories.categories )
+
         const [title,setTitle] = useState('')
         const [author,setAuthor] = useState('')
         const [description,setDescription] = useState('')
         const [price,setPrice] = useState('')
         const [ratings,setRatings] = useState('')
         const [stockCount,setStockCount] = useState('')
-        const [categories,setCategories] = useState([])
+        // const [categories,setCategories] = useState([])
         const [categoryId,setCategoryId] = useState('')
         const [categoryName,setCategoryName] = useState('')
         const [condition,setCondition] = useState('')
@@ -107,8 +111,9 @@ import { useNavigate } from 'react-router-dom';
                         }
                     })
                     const category = res.data
-                    setCategories([...categories,category])
+                    // setCategories([...categories,category])
                     setCategoryId(category._id)
+                    dispatch(addCategory(category))
                     setCategoryName('')
                 } catch (e) {
                     console.log(e)
@@ -116,17 +121,6 @@ import { useNavigate } from 'react-router-dom';
             }
         }
 
-        useEffect(() => {
-            (async () => {
-                try {
-                    const response = await axios.get('/categories/list')
-                    //console.log(response.data)
-                    setCategories(response.data)
-                } catch (e) {
-                    console.log(e)
-                }
-            })()
-        },[])
 
     return (
         <div>

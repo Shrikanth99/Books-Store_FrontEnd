@@ -37,6 +37,7 @@ const ProductPage = () => {
   const [product] = useSelector((state) => {
     return state.products.data.filter((ele) => ele._id === id);
   });
+  console.log('pp',product)
 
   const cart = useSelector((state) => {
     return state.products.cart;
@@ -84,13 +85,16 @@ const ProductPage = () => {
   // console.log('ni',userState)
   const user = userState.user.role;
   const handleClick = () => {
+    const body = {
+      mode: 'buy'
+    }
     if (!localStorage.getItem("token")) {
       navigate("/login", { state: { msg: "You need to Login first" } });
     } else {
       if (!cartToggle) {
-        dispatch(startCreateCart(id, cartToggleSet));
+        dispatch(startCreateCart(id,body,cartToggleSet));
       } else {
-        dispatch(startRemoveCart(id, cartToggleSet));
+        dispatch(startRemoveCart(id,body,cartToggleSet));
         // console.log("I am working")
       }
     }
@@ -149,7 +153,8 @@ const ProductPage = () => {
               variant="success"
               className="mr-2"
               onClick={handleClick}
-              disabled={userState.user?.role === "admin"}
+              disabled={userState.user?.role === "admin" || product?.stockCount === 0 }
+
             >
               Add to Cart
             </Button>
@@ -184,10 +189,10 @@ const ProductPage = () => {
                 {reviews.map((review, index) => (
                   <ListGroup.Item key={index}>
                     <strong>{review.userId.userName}<Rating
-        value={review.rating} 
-        precision={0.5}
-        readOnly 
-      /></strong>
+                      value={review.rating} 
+                      precision={0.5}
+                      readOnly 
+                    /></strong>
                     <p>{review.review}</p>
                     {/* You can add more details like date, rating, etc. if available in your review data */}
                   </ListGroup.Item>
@@ -198,26 +203,26 @@ const ProductPage = () => {
             
         </Col>  
       </Row>
-      <Row style={{ width: "30%",position:'fixed' }}>
+      <Row style={{ width: "20%" ,  height: '5vh' }}>
         <div>
-          <p>5⭐</p>
-          <ProgressBar animated now={(fiveStars.length/reviews.length)*100} style={{ marginBottom: "20px" }} />
+          <span >5⭐</span>
+          <ProgressBar animated now={(fiveStars.length/reviews.length)*100} style={{ marginBottom: "10px" }} />
         </div>
         <div>
-          <p>4⭐</p>
-          <ProgressBar animated now={(fourStars.length/reviews.length)*100} style={{ marginBottom: "20px" }} />
+          <span>4⭐</span>
+          <ProgressBar animated now={(fourStars.length/reviews.length)*100} style={{ marginBottom: "10px" }} />
         </div>
         <div>
-          <p>3⭐</p>
-          <ProgressBar animated now={(threeStars.length/reviews.length)*100} style={{ marginBottom: "20px" }} />
+          <span>3⭐</span>
+          <ProgressBar animated now={(threeStars.length/reviews.length)*100} style={{ marginBottom: "10px" }} />
         </div>
         <div>
-          <p>2⭐</p>
-          <ProgressBar animated now={(twoStars.length/reviews.length)*100} style={{ marginBottom: "20px" }} />
+          <span>2⭐</span>
+          <ProgressBar animated now={(twoStars.length/reviews.length)*100} style={{ marginBottom: "10px" }} />
         </div>
         <div>
-          <p>1⭐</p>
-          <ProgressBar animated now={(oneStar.length/reviews.length)*100} style={{ marginBottom: "20px" }} />
+          <span>1⭐</span>
+          <ProgressBar animated now={(oneStar.length/reviews.length)*100} style={{ marginBottom: "10px" }} />
         </div>
       </Row>
     </Container>

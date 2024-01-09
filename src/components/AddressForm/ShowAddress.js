@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react'
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import { useNavigate, Link, useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector,useDispatch } from 'react-redux';
 import AddressForm from './AddressForm';
+import { startDeleteAddress } from '../../actions/address-action';
 
 
 const ShowAddress = (props) => {
@@ -12,10 +13,12 @@ const ShowAddress = (props) => {
     const [editAdd,setEditAdd] = useState(false)
     const [addressForm,setAddressForm] = useState(false)
     const {id} = useParams()
+    const dispatch = useDispatch()
     // if(id){
     //     setEditAdd(true)
     // }
     const {address} = useSelector(state => state.address )
+    console.log('added',address)
 
     const handleClick = (id) => {
         console.log('ad_id',id)
@@ -30,6 +33,11 @@ const ShowAddress = (props) => {
 
     console.log('mak',addressForm)
 
+    const handleDelete =(id) => {
+        console.log('del',id)
+        dispatch(startDeleteAddress(id))
+    }
+
     useEffect(() => {
         const storesAddForm = localStorage.getItem('addressForm')
         if(storesAddForm === 'true'){
@@ -43,14 +51,9 @@ const ShowAddress = (props) => {
            
             <>
             <Button onClick={handleFormAdd} ><Link to='/account/addressForm' style={{color : 'white'}} > ➕ Add-New-Address </Link></Button>
+
             </>
-            <div>
-               
-            </div>
                 {address.length > 0 ? (
-                addressForm || editAdd ? (
-                    <AddressForm />
-                ) : (
                     address.map((ele) => (
                     <Card key={ele._id} style={{ width: '30rem' }}>
                         <Card.Body>
@@ -61,7 +64,7 @@ const ShowAddress = (props) => {
                             {ele.state} - {ele.pincode} <br />
                             Mobile - {ele.phoneNumber}
                         </Card.Text>
-                        <Button variant="primary">Delete</Button>
+                        <Button variant="primary" onClick={() => {handleDelete(ele._id)}} >Delete</Button>
                         <Button variant="primary" onClick={() => { handleClick(ele._id) }}>
                             <Link to={`/account/addressForm/${ele._id}`} style={{ color: 'white' }}>Edit</Link>
                         </Button>
@@ -69,9 +72,9 @@ const ShowAddress = (props) => {
                     </Card>
                     ))
                 )
-                ) : (
+                 : 
                 <h4> No Address Found </h4>
-                )}
+                }
                 {/* {address.length>0 ? addressForm ? <AddressForm/> : editAdd ? <AddressForm /> : (
                 address.map((ele) => {
                     return (

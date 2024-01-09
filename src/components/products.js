@@ -13,7 +13,8 @@ const Products = () => {
     return state.products.data;
   });
   console.log('ch',products)
-  const [categories, setCategories] = useState([]);
+//   const [categories, setCategories] = useState([]);
+  const categories = useSelector(state => state.categories.categories )
   const [categoryId, setCategoryId] = useState(
     localStorage.getItem("categoryId") ? localStorage.getItem("categoryId") : ""
   );
@@ -22,6 +23,8 @@ const Products = () => {
     const savedPage = localStorage.getItem("currentPage");
     return savedPage ? parseInt(savedPage) : 1;
   });
+  console.log('P',currentPage)
+
 
   const [sort, setSort] = useState(localStorage.getItem('sort')? localStorage.getItem('sort'):'');
   const sortValues = ["a-z", "z-a", "lowest-highest", "highest-lowest"];
@@ -64,16 +67,16 @@ const Products = () => {
     localStorage.setItem('sort',e.target.value)
   }
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const res = await axios.get("/categories/list");
-        setCategories(res.data);
-      } catch (e) {
-        console.log("categories err", e.message);
-      }
-    })();
-  }, []);
+//   useEffect(() => {
+//     (async () => {
+//       try {
+//         const res = await axios.get("/categories/list");
+//         setCategories(res.data);
+//       } catch (e) {
+//         console.log("categories err", e.message);
+//       }
+//     })();
+//   }, []);
 
   useEffect(() => {
     if( categoryId && search ){
@@ -112,10 +115,14 @@ const Products = () => {
 
   useEffect(() => {
     localStorage.setItem("currentPage", currentPage);
+    return () => {
+        console.log('poye')
+        localStorage.removeItem('currentPage');
+      };
   }, [currentPage]);
 
   return (
-    <div>
+    <div  >  
       <Form.Select
         className="mb-5"
         style={{ width: "300px", display: "inline-block" }}
@@ -194,14 +201,15 @@ const Products = () => {
                 onClick={() => handleClick(ele._id)}
               >
                 <Card className="custom-card">
-                  <Card.Img
+                  <Card.Img 
                     className="custom-card-img"
+                    style={{ opacity: `${ele.stockCount == 0 ? '0.3' : '1'}` }}
                     src={ele.image[0].url}
                     key={ele.image[0].key}
                   />
                   <Card.Body>
                     <Card.Title>{ele.title}</Card.Title>
-                    <Card.Text>₹{ele.price}</Card.Text>
+                    <Card.Text>₹{ele.price} { ele.stockCount == 0 && <p style={{color:'red'}} >Out-Of-Stock</p>  } </Card.Text>
                   </Card.Body>
                 </Card>
               </Col>

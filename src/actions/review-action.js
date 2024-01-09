@@ -10,11 +10,17 @@ export const startAddReview = (fData) => {
                     'Authorization' : localStorage.getItem('token')
                 }
             })
+            dispatch(addReview(res.data))
             toast.success('Reviewed successfully')
+
         } catch (e) {
             (e.response.data.errors?.map(ele => toast.error(ele.msg)))
         }
     }
+}
+
+const addReview = (data) => {
+    return {type : 'ADD_REVIEW', payload : data }
 }
 
 export const startGetReview = () => {

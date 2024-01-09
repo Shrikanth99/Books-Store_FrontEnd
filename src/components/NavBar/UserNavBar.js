@@ -1,6 +1,6 @@
 import { Navbar, Nav } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import { useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useContext,useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { UserContext } from '../../App';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,10 +9,35 @@ import {toast, Toaster } from 'react-hot-toast';
 import { setEmptyAddress } from '../../actions/address-action';
 import { setClearCart } from '../../actions/product-action';
 import { setClearWishlist } from '../../actions/wishlist-action';
+import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import logo from '../../images/logo.png'
 
 
 const UserNavBar = () => {
     const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event) => {
+      setAnchorEl(event.currentTarget);
+    };
+    const handleClose = (e) => {
+      setAnchorEl(null);
+      console.log('hjj',e.currentTarget.textContent)
+      if(e.currentTarget.textContent == 'Profile'){
+        navigate('/account/profile')
+      }
+      else if(e.currentTarget.textContent == 'MyOrders'){
+        navigate('/account/my-orders')
+    }
+    else if(e.currentTarget.textContent == 'SavedAddress'){
+       
+        navigate('/account/address')
+    }
+}
+  
 
     const { userDispatch } = useContext(UserContext)
     const carts = useSelector(state=>state.products.cart)
@@ -26,16 +51,37 @@ const UserNavBar = () => {
 
     }
     return (
-        <div>
+        <div style={{position:'sticky',top:'0', zIndex:1, width:'100%',backgroundColor:'aqua' }}  >
             <Toaster/>
-            <Navbar bg="light" expand="md">
-            <Navbar.Brand as={Link} to="/">My App</Navbar.Brand>
+            <Navbar expand="md"  >
+            <Navbar.Brand as={Link} to="/"><img src={logo} width='50' height='50'style={{borderRadius:'50%'}}/></Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="ml-auto">
                     <Nav.Link as={Link} to="/">Home</Nav.Link>
                     <Nav.Link as={Link} to="/products">Products</Nav.Link>
-                    <Nav.Link as={Link} to="/account">My Account</Nav.Link>
+                    <Nav.Link
+        id="basic-button"
+        aria-controls={open ? 'basic-menu' : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? 'true' : undefined}
+        onClick={handleClick}
+      >
+        MyAccount
+      </Nav.Link>
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
+        }}
+      >
+        <MenuItem onClick={handleClose}>Profile</MenuItem>
+        <MenuItem onClick={handleClose}>MyOrders</MenuItem>
+        <MenuItem onClick={handleClose}>SavedAddress</MenuItem>
+      </Menu>
                     <Nav.Link as={Link} to="/" onClick={handleLogout}>Logout</Nav.Link>
                     <Nav.Link as={Link} to="/myCart">
                         <FontAwesomeIcon icon={faShoppingCart} />

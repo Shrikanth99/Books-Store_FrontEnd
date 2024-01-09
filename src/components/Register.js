@@ -1,6 +1,6 @@
-import React, { useState} from 'react';
+import React, { useEffect, useState} from 'react';
 import axios from '../config/axios';
-import { useNavigate } from 'react-router-dom';
+import { json, useNavigate } from 'react-router-dom';
 import { Form, Button, Container, Col, Row } from 'react-bootstrap';
 
 const RegistrationForm = () => {
@@ -75,9 +75,15 @@ const RegistrationForm = () => {
             role
         }
         try{
-            setFormErrors({})
-            const response = await axios.post('/api/register',formData)
-            navigate('/login')
+            if(role === 'moderator'){
+              localStorage.setItem('registerFormData',JSON.stringify(formData) )
+              navigate('/account/addressForm' )
+            }else {
+              setFormErrors({})
+              const response = await axios.post('/api/register',formData)
+              navigate('/login')
+            }
+            
         }
         catch(e){
             console.log(e)
@@ -90,8 +96,18 @@ const RegistrationForm = () => {
     }
   };
 
+  useEffect(() => {
+    const savedFormData = JSON.parse(localStorage.getItem('registerFormData')) || {};
+    setUsername(savedFormData.userName || '')
+    setEmail(savedFormData.email || '')
+    setPhoneNumber(savedFormData.phoneNumber || '')
+    setPassword(savedFormData.password || '')
+    setRole(savedFormData.role || '')
+
+  },[])
+
   return (
-    <div>
+    <div style={{height:'463px'}}>
         {serverFormErrors.length > 0 && (
               <div className="alert alert-danger">
                 {serverFormErrors.map(ele => (
@@ -100,7 +116,7 @@ const RegistrationForm = () => {
               </div>
             )}
   
-    <Container style={{maxWidth:'768px',marginTop:'100px',border:'1px solid grey',padding:'20px',borderRadius:'10px'}}>
+    <Container style={{maxWidth:'768px',marginTop:'20px',border:'1px solid grey',padding:'20px',borderRadius:'10px'}}>
       <Form onSubmit={handleSubmit}>
         <Form.Group controlId="formUsername">
           <Form.Label>Username</Form.Label>
@@ -202,9 +218,14 @@ const RegistrationForm = () => {
           )}
         </Form.Group>
         <div className='text-center'>
-        <Button variant="primary" type="submit">
+          { role=== 'moderator' ? (<Button variant="primary" type="submit">
+          Next
+        </Button>) : (<Button variant="primary" type="submit">
           Register
-        </Button>
+        </Button>) }
+        {/* <Button variant="primary" type="submit">
+          Register
+        </Button> */}
         </div>
       </Form>
     </Container>

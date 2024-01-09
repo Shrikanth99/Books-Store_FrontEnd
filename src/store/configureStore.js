@@ -6,6 +6,8 @@ import { addressReducer } from '../redux-reducers/address-reducer'
 import { wishlistReducer } from '../redux-reducers/wishlist-reducer'
 import { orderReducer } from '../redux-reducers/order-reducer'
 import { reviewReducer } from '../redux-reducers/review-reducer'
+import { categoryReducer } from '../redux-reducers/category-reducer'
+import { procurementReducer } from '../redux-reducers/procurement-reducer'
 
 const configureStore = () =>{
     const store = createStore(combineReducers({
@@ -14,7 +16,9 @@ const configureStore = () =>{
         address : addressReducer,
         wishlist:wishlistReducer,
         order: orderReducer,
-        review : reviewReducer
+        review : reviewReducer,
+        categories : categoryReducer,
+        procurement: procurementReducer
     }),applyMiddleware(thunk))
     return store
 }

@@ -8,6 +8,9 @@ export const reviewReducer = (state=initialState,action) => {
         case 'GET_PRO_REVIEW' : {
             return {...state, productReview: action.payload }
         }
+        case 'ADD_REVIEW' : {
+            return {...state, data : [...state.data, action.payload ] }
+        }
         default : {
             return {...state}
         }

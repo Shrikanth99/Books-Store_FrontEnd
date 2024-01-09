@@ -69,5 +69,6 @@ const setWishlist = (items) =>{
 }
 
 export const setClearWishlist = () =>{
+    console.log('raven')
     return ({type:'CLEAR_WISHLIST'})
 }

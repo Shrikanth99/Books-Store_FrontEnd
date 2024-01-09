@@ -17,7 +17,7 @@ const Home = () => {
     },[])
 
     return (
-        <div>
+        <div style={{minHeight:'82%'}} >
             <Toaster/>
             <Carousel>
                 <Carousel.Item>
@@ -56,6 +56,7 @@ const Home = () => {
                     </Carousel.Caption>
                 </Carousel.Item>
             </Carousel>
+
         </div>
     )
 }

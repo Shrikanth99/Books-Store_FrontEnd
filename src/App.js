@@ -19,15 +19,18 @@ import ShowAddress from "./components/AddressForm/ShowAddress.js";
 import { startGetUserAddress } from "./actions/address-action.js";
 import { useSelector } from "react-redux";
 import AddressForm from "./components/AddressForm/AddressForm.js";
-import MyProfile from "./components/My-Account/MyProfile.js";
 import MyOrders from "./components/My-Account/MyOrders.js";
 import Wishlist from "./components/Wishlist/Wishlist.js";
 import { startSetWishlist } from "./actions/wishlist-action.js";
 import Profile from "./components/Profile/Profile.js";
 import AddProduct from "./components/AddProduct.js";
 import SellProduct from "./components/SellProduct.js";
-import { startGetOrder } from "./actions/order-action.js";
+import { startGetOrder, startgetAllOrders } from "./actions/order-action.js";
 import { startGetReview } from "./actions/review-action.js";
+import ViewOrders from "./components/Admin/ViewOrders.js";
+import Stats from "./components/Admin/Stats.js";
+import { startGetCategories } from "./actions/category-action.js";
+import Footer from "./components/Footer/Footer.js";
 
 export const UserContext = createContext();
 const App = () => {
@@ -41,6 +44,7 @@ const App = () => {
 
   useEffect(() => {
     dispatch(startGetProduct(null, null, null));
+    dispatch(startGetCategories())
   }, []);
 
   useEffect(() => {
@@ -59,6 +63,8 @@ const App = () => {
             dispatch(startGetOrder());
             dispatch(startGetReview())
             dispatch(startGetUserAddress())
+          }else if( profile.data.role === 'admin' ){
+            dispatch(startgetAllOrders())
           }
         } catch (e) {
           alert(e);
@@ -69,6 +75,7 @@ const App = () => {
 
   return (
     <UserContext.Provider value={{ userState, userDispatch }}>
+    
       {userState.isLoggedIn ? (
         (userState.user.role === "admin" && <AdminNavBar />) ||
         (userState.user.role === "user" && <UserNavBar />)
@@ -83,23 +90,31 @@ const App = () => {
         <Route path="/products" element={<Product />} />
         <Route path="/product/:id" element={<ProductPage />} />
         <Route path="/add-product" element={<AddProduct />} />
+        <Route path="/all-Orders" element={<ViewOrders/> } />
+        <Route path="/stats" element={<Stats/>} />
         <Route path="/myCart" element={<Carts />} />
-        <Route path="/account" element={<MyAccount />}>
-          <>
-            <Route path="/account/profile" element={<Profile />} />
+        <Route path="/account" >
+          
+            <Route path="profile" element={<Profile />} />
             <Route path="/account/my-orders" element={<MyOrders />} />
-            <Route path="/account/my-profile" element={<MyProfile />} />
             <Route path="/account/address" element={<ShowAddress />} />
             <Route path="/account/addressForm" element={<AddressForm />} />
             <Route path="/account/addressForm/:id" element={<AddressForm />} />
-          </>
+          
         </Route>
 
         <Route path="/account" element={<MyAccount />} />
         <Route path="/wishlist" element={<Wishlist />} />
-        <Route path="/sellProduct" element={<Product />} />
+        <Route path="/sellProduct" element={<SellProduct />} />
         {/* <Route path='/addresses' element={<AddressForm/>} /> */}
       </Routes>
+     
+     {/* <footer className="bottom" >
+
+      <Footer/>
+     </footer> */}
+      
+     
     </UserContext.Provider>
   );
 };

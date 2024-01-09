@@ -40,11 +40,6 @@ const ReviewModal = (props) => {
           <Form  >
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
               <Form.Label>Rating</Form.Label>
-              {/* <Form.Control
-                type="email"
-                placeholder="name@example.com"
-                autoFocus
-              /> */}
               <Stack spacing={1}>
                 <Rating name="half-rating" value={rating} onChange={(e)=>setRating(e.target.value)} precision={0.5} />
               </Stack>
