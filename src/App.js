@@ -10,6 +10,7 @@ import Home from "./components/Home";
 import Register from "./components/Register";
 import LoginForm from "./components/Login";
 import AdminNavBar from "./components/NavBar/AdminNavBar.js";
+import ModeratorNavBar from "./components/NavBar/ModeratorNavBar";
 import userReducer from "./reducers/user-reducer";
 import Product from "./components/products.js";
 import ProductPage from "./components/product-page.js";
@@ -78,7 +79,7 @@ const App = () => {
     
       {userState.isLoggedIn ? (
         (userState.user.role === "admin" && <AdminNavBar />) ||
-        (userState.user.role === "user" && <UserNavBar />)
+        (userState.user.role === "user" && <UserNavBar />) 
       ) : (
         <NavBar />
       )}
