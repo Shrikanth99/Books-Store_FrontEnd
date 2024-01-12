@@ -114,6 +114,7 @@ export default function Cart() {
        return carts.map(ele=>{
         return {
             product: ele.productId._id,
+            quantity : ele.quantity
         }
        })
     }

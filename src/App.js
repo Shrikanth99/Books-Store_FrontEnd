@@ -31,7 +31,9 @@ import { startGetReview } from "./actions/review-action.js";
 import ViewOrders from "./components/Admin/ViewOrders.js";
 import Stats from "./components/Admin/Stats.js";
 import { startGetCategories } from "./actions/category-action.js";
-import Footer from "./components/Footer/Footer.js";
+import { startGetProcurement } from "./actions/procurement-action.js";
+import Notification from "./components/Notification/Notification.js";
+import MySelling from "./components/My-Account/MySelling.js";
 
 export const UserContext = createContext();
 const App = () => {
@@ -64,11 +66,15 @@ const App = () => {
             dispatch(startGetOrder());
             dispatch(startGetReview())
             dispatch(startGetUserAddress())
+            dispatch(startGetProcurement())
           }else if( profile.data.role === 'admin' ){
             dispatch(startgetAllOrders())
+            dispatch(startGetProcurement())
+          }else if(profile.data.role === 'moderator') {
+            dispatch(startGetProcurement()) 
           }
         } catch (e) {
-          alert(e);
+          console.log('app-Err',e)
         }
       })();
     }
@@ -79,7 +85,8 @@ const App = () => {
     
       {userState.isLoggedIn ? (
         (userState.user.role === "admin" && <AdminNavBar />) ||
-        (userState.user.role === "user" && <UserNavBar />) 
+        (userState.user.role === "user" && <UserNavBar />)  || 
+        (userState.user.role === 'moderator' && <ModeratorNavBar/> )
       ) : (
         <NavBar />
       )}
@@ -95,9 +102,10 @@ const App = () => {
         <Route path="/stats" element={<Stats/>} />
         <Route path="/myCart" element={<Carts />} />
         <Route path="/account" >
-          
+              {/* Nested Routes */}
             <Route path="profile" element={<Profile />} />
             <Route path="/account/my-orders" element={<MyOrders />} />
+            <Route path="/account/my-sell" element={<MySelling/>} />
             <Route path="/account/address" element={<ShowAddress />} />
             <Route path="/account/addressForm" element={<AddressForm />} />
             <Route path="/account/addressForm/:id" element={<AddressForm />} />
@@ -107,6 +115,7 @@ const App = () => {
         <Route path="/account" element={<MyAccount />} />
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/sellProduct" element={<SellProduct />} />
+        <Route path="/notifications" element={<Notification/>} />
         {/* <Route path='/addresses' element={<AddressForm/>} /> */}
       </Routes>
      

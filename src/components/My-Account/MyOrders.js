@@ -1,4 +1,5 @@
 import {
+  MDBBtn,
   MDBCard,
   MDBCardBody,
   MDBCardFooter,
@@ -12,7 +13,7 @@ import {
 import React, { useContext, useState } from "react";
 import "../../styles/MyOrders.css";
 import { UserContext } from "../../App";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 
 import { faL } from "@fortawesome/free-solid-svg-icons";
 import Button from "react-bootstrap/Button";
@@ -21,8 +22,10 @@ import Modal from "react-bootstrap/Modal";
 import Rating from "@mui/material/Rating";
 import Stack from "@mui/material/Stack";
 import ReviewModal from "../ReviewModal/ReviewModal";
+import { startRemoveOrder } from "../../actions/order-action";
 
 export default function MyOrders() {
+  const dispatch = useDispatch()
   const orders = useSelector((state) => state.order.orders);
   const review = useSelector((state) => state.review.data);
 
@@ -42,6 +45,9 @@ export default function MyOrders() {
     setProductId(id);
   };
 
+    const handleCancel = (id) =>{
+      dispatch(startRemoveOrder(id))
+    }
   return (
     <>
       <section
@@ -74,88 +80,85 @@ export default function MyOrders() {
                     </p>
                   </div>
                   {orders.map((ele) => {
-                    return ele.orderItem.map((order) => {
-                      return (
+                    return (
+                      <div>
                         <MDBCard className="shadow-0 border mb-4">
-                          <MDBCardBody>
-                            <MDBRow>
-                              <MDBCol md="2">
-                                <MDBCardImage
-                                  src={order.product.image[0].url}
-                                  fluid
-                                  alt="Phone"
-                                />
-                              </MDBCol>
-                              <MDBCol
-                                md="2"
-                                className="text-center d-flex justify-content-center align-items-center"
-                              >
-                                <p className="text-muted mb-0">
-                                  {order.product.title}
-                                </p>
-                              </MDBCol>
-                              {/* <MDBCol
+                          {ele.orderItem.map((order) => {
+                            return (
+                              <MDBCardBody>
+                                <MDBRow>
+                                  <MDBCol md="2">
+                                    <MDBCardImage
+                                      src={order.product.image[0].url}
+                                      fluid
+                                      alt="Phone"
+                                    />
+                                  </MDBCol>
+                                  <MDBCol
+                                    md="2"
+                                    className="text-center d-flex justify-content-center align-items-center"
+                                  >
+                                    <p className="text-muted mb-0">
+                                      {order.product.title}
+                                    </p>
+                                  </MDBCol>
+                                  {/* <MDBCol
                             md="2"
                             className="text-center d-flex justify-content-center align-items-center"
                           >
                             <p className="text-muted mb-0 small">White</p>
                           </MDBCol> */}
-                              <MDBCol
-                                md="2"
-                                className="text-center d-flex justify-content-center align-items-center"
-                              >
-                                <p className="text-muted mb-0 small">
-                                  {order.product.condition}
-                                </p>
-                              </MDBCol>
-                              <MDBCol
-                                md="2"
-                                className="text-center d-flex justify-content-center align-items-center"
-                              >
-                                <p className="text-muted mb-0 small">
-                                  Qty: {order.quantity}
-                                </p>
-                              </MDBCol>
-                              <MDBCol
-                                md="2"
-                                className="text-center d-flex justify-content-center align-items-center"
-                              >
-                                <p className="text-muted mb-0 small">
-                                  ₹{order.quantity * order.product.price}
-                                </p>
-                              </MDBCol>
-                              <MDBCol
-                                md="2"
-                                className="text-center d-flex justify-content-center align-items-center"
-                              >
-                                {review.find((ele) => {
-                                  return ele.product == order.product._id;
-                                }) ? (
-                                  <Button
-                                    variant="success"
-                                    disabled
-                                    
+                                  <MDBCol
+                                    md="2"
+                                    className="text-center d-flex justify-content-center align-items-center"
                                   >
-                                    Reviewed
-                                  </Button>
-                                ) : (
-                                  <Button
-                                    variant="primary"
-                                    onClick={() => {
-                                      handleShow(order.product._id);
-                                    }}
+                                    <p className="text-muted mb-0 small">
+                                      {order.product.condition}
+                                    </p>
+                                  </MDBCol>
+                                  <MDBCol
+                                    md="2"
+                                    className="text-center d-flex justify-content-center align-items-center"
                                   >
-                                    Rating & Review
-                                  </Button>
-                                )}
-                               
-                              </MDBCol>
-                            </MDBRow>
-                            {/* <hr
+                                    <p className="text-muted mb-0 small">
+                                      Qty: {order.quantity}
+                                    </p>
+                                  </MDBCol>
+                                  <MDBCol
+                                    md="2"
+                                    className="text-center d-flex justify-content-center align-items-center"
+                                  >
+                                    <p className="text-muted mb-0 small">
+                                      ₹{order.quantity * order.product.price}
+                                    </p>
+                                  </MDBCol>
+                                  <MDBCol
+                                    md="2"
+                                    className="text-center d-flex justify-content-center align-items-center"
+                                  >
+                                    {review.find((ele) => {
+                                      return ele.product == order.product._id;
+                                    }) ? (
+                                      <Button variant="success" disabled>
+                                        Reviewed
+                                      </Button>
+                                    ) : (
+                                      <Button
+                                        variant="primary"
+                                        onClick={() => {
+                                          handleShow(order.product._id);
+                                        }}
+                                      >
+                                        Rating & Review
+                                      </Button>
+                                    )}
+                                  </MDBCol>
+                                </MDBRow>
+                                {/* <hr
                           className="mb-4"
                           style={{ backgroundColor: "#e0e0e0", opacity: 1 }}
                         /> */}
-                            {/* <MDBRow className="align-items-center">
+                                {/* <MDBRow className="align-items-center">
                           <MDBCol md="2">
                             <p className="text-muted mb-0 small">Track Order</p>
                           </MDBCol>
@@ -183,89 +186,23 @@ export default function MyOrders() {
                             </div>
                           </MDBCol>
                         </MDBRow> */}
-                          </MDBCardBody>
+                              </MDBCardBody>
+                            );
+                          })}
+                          {ele.orderStatus === 'Pending' && (
+                            <MDBBtn
+                            color="danger"
+                            onClick={(e) => handleCancel(ele._id)}
+                          >
+                            Cancel
+                          </MDBBtn>
+                          )}
+                          
                         </MDBCard>
-                      );
-                    });
+                      </div>
+                    );
                   })}
 
-                  {/* <MDBCard className="shadow-0 border mb-4">
-                    <MDBCardBody>
-                      <MDBRow>
-                        <MDBCol md="2">
-                          <MDBCardImage
-                            src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/1.webp"
-                            fluid
-                            alt="Phone"
-                          />
-                        </MDBCol>
-                        <MDBCol
-                          md="2"
-                          className="text-center d-flex justify-content-center align-items-center"
-                        >
-                          <p className="text-muted mb-0">iPad</p>
-                        </MDBCol>
-                        <MDBCol
-                          md="2"
-                          className="text-center d-flex justify-content-center align-items-center"
-                        >
-                          <p className="text-muted mb-0 small">Pink rose</p>
-                        </MDBCol>
-                        <MDBCol
-                          md="2"
-                          className="text-center d-flex justify-content-center align-items-center"
-                        >
-                          <p className="text-muted mb-0 small">
-                            Capacity: 32GB
-                          </p>
-                        </MDBCol>
-                        <MDBCol
-                          md="2"
-                          className="text-center d-flex justify-content-center align-items-center"
-                        >
-                          <p className="text-muted mb-0 small">Qty: 1</p>
-                        </MDBCol>
-                        <MDBCol
-                          md="2"
-                          className="text-center d-flex justify-content-center align-items-center"
-                        >
-                          <p className="text-muted mb-0 small">$399</p>
-                        </MDBCol>
-                      </MDBRow>
-                      <hr
-                        className="mb-4"
-                        style={{ backgroundColor: "#e0e0e0", opacity: 1 }}
-                      />
-                      <MDBRow className="align-items-center">
-                        <MDBCol md="2">
-                          <p className="text-muted mb-0 small">Track Order</p>
-                        </MDBCol>
-                        <MDBCol md="10">
-                          <MDBProgress
-                            style={{ height: "6px", borderRadius: "16px" }}
-                          >
-                            <MDBProgressBar
-                              style={{
-                                borderRadius: "16px",
-                                backgroundColor: "#a8729a",
-                              }}
-                              width={20}
-                              valuemin={0}
-                              valuemax={100}
-                            />
-                          </MDBProgress>
-                          <div className="d-flex justify-content-around mb-1">
-                            <p className="text-muted mt-1 mb-0 small ms-xl-5">
-                              Out for delivary
-                            </p>
-                            <p className="text-muted mt-1 mb-0 small ms-xl-5">
-                              Delivered
-                            </p>
-                          </div>
-                        </MDBCol>
-                      </MDBRow>
-                    </MDBCardBody>
-                  </MDBCard> */}
                 </MDBCardBody>
               </MDBCard>
             </MDBCol>

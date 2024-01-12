@@ -55,4 +55,17 @@ const allOrder = (data) => {
     return { type : 'ALL_ORDERS', payload : data }
 }
 
+export const startRemoveOrder = (id) =>{
+    return async (dispatch) =>{
+        const res = await axios.delete(`/order/delete/${id}`,{
+            headers : {
+                'Authorization' : localStorage.getItem('token')
+            }
+        })
+        dispatch(removeOrder(res.data._id))
+    }
+}
 
+const removeOrder = (id) =>{
+    return ({type:'REMOVE_ORDER',payload:id})
+}

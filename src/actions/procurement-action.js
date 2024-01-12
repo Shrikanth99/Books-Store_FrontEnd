@@ -33,10 +33,54 @@ export const startGetProcurement = () =>{
                     Authorization: localStorage.getItem("token"),
                   }
             })
-            
+            // console.log('pc',res.data)
+            dispatch(getProcurment(res.data))
         }
         catch(e){
             console.log(e)
         }
     }
+}
+
+const getProcurment = (data) => {
+    return { type : 'LIST_PROC' , payload : data }
+}
+
+export const startUpdateProcurment = (id) => {
+    return async(dispatch) => {
+        try {
+            const res = await axios.put(`/procurement/update/${id}`,null,{
+                headers : {
+                    'Authorization' : localStorage.getItem('token')
+                }
+            })
+            console.log('up',res.data)
+            dispatch(updateProcurment(res.data))
+        } catch (e) {
+            console.log('Update-err',e)
+        }
+    }
+}
+
+const updateProcurment = (data) => {
+    return { type : 'UPDATE_PROC', payload : data }
+}
+
+export const startCancelProcurement = (id) => {
+    return async(dispatch) => {
+        try {
+            const res = await axios.delete(`/procurement/cancel/${id}`,{
+                headers : {
+                    'Authorization' : localStorage.getItem('token')
+                }
+            })
+            dispatch(cancelProcurement(res.data))
+        } catch (e) {
+            console.log('Proc_del-Err',e)
+        }
+    }
+}
+
+const cancelProcurement = (data) => {
+    return { type : 'DEL_PROC' , payload: data }
 }

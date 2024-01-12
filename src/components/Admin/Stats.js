@@ -10,11 +10,44 @@ const Stats = () => {
     const products = useSelector((state) => {
         return state.products.data;
     });
-    const orders = useSelector((state) => {
+    let orders = useSelector((state) => {
         return state.order.orders
     })
-    console.log('od',orders)
+    orders = orders.filter(ele=>ele.orderStatus === 'Delivered')
+    //console.log('od',orders)
     const categories = useSelector(state => state.categories.categories )
+
+    let procurement = useSelector(state => state.procurements.data )
+    procurement = procurement?.filter(ele => ele.status === "Procured" )
+    console.log('pr',procurement)
+
+    const procPieData = categories.map((ele,i) => {
+        return procurement.reduce((acc,cv) => {
+            acc.value += cv.products.reduce((acc2,cv2) => {
+                if(cv2.product.categoryId === ele._id){
+                    acc2 += cv2.quantity
+                }
+                return acc2
+            },0)
+            return acc
+        },{id : i, label : ele.name, value : 0 })
+    })
+    console.log('ProPie',procPieData)
+
+    const procBarData = categories.map((ele,i)=> {
+        return procurement.reduce((acc,cv) => {
+            acc += cv.products.reduce((acc2,cv2)=>{
+                if(cv2.product.categoryId === ele._id){
+                    acc2 += cv2.quantity
+                }
+                return acc2
+            },0)
+            return acc
+        },0)
+    })
+    console.log('hjd',procBarData)
+
+    
 
     const data = categories?.map((ele,i)=> {
         return products?.reduce((acc,cv) => {
@@ -47,7 +80,7 @@ const Stats = () => {
             return acc
         },0)
     })
-    console.log('dani',orderData)
+    //console.log('dani',orderData)
 
     const orderPieData = categories?.map((ele,i)=> {
         return orders?.reduce((acc,cv) => {
@@ -60,7 +93,7 @@ const Stats = () => {
             return acc
         },{id:i,label: ele.name, value : 0 })
     })
-    console.log('oP',orderPieData)
+    //console.log('oP',orderPieData)
 
     const sizing = {
         margin : {right: 20},
@@ -94,7 +127,7 @@ const Stats = () => {
             width={950}
             height={300}
             margin={{ right: 100 }}
-        />
+            />
             </div>
             <Typography raphy sx={{ fontSize: 45, display: 'flex', justifyContent: 'center' }} color="text.secondary" >Orders Statistics</Typography>
             <div style={{display:'flex'}}>
@@ -108,19 +141,44 @@ const Stats = () => {
             margin={{right:200}}         
             />
             <BarChart
-            series={[
-               {
-                data: orderData,
-                label: 'Products Count'
-               }
-            ]}
-            xAxis={[{ data: categories.map(ele=>ele.name), scaleType: 'band' }]}
-            width={950}
-            height={300}
-            margin={{ right: 100 }}
-        />
+                series={[
+                {
+                    data: orderData,
+                    label: 'Products Count'
+                }
+                ]}
+                xAxis={[{ data: categories.map(ele=>ele.name), scaleType: 'band' }]}
+                width={950}
+                height={300}
+                margin={{ right: 100 }}
+            />
             </div>
         </div>
+        ) }
+
+        { procurement.length > 0 && (
+            <>
+            <Typography raphy sx={{ fontSize: 45, display: 'flex', justifyContent: 'center' }} color="text.secondary" >Procuring Statistics</Typography>
+            <div style={{display : 'flex'}} >
+            <PieChart
+                series={[
+                    { data : procPieData }
+                ]}
+                width={650}
+                height={300}
+                margin={{right:200}}
+            />
+            <BarChart
+                series={[
+                    { data : procBarData , label : 'Procure-Count' }
+                ]}
+                xAxis={[{data : categories.map(ele => ele.name ), scaleType:'band' }]}
+                width={950}
+                height={300}
+                margin={{ right: 100 }}
+            />
+            </div>
+            </>
         ) }
         </>
         

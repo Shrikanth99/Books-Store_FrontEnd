@@ -27,9 +27,11 @@ export const startGetProduct = (search,categoryId,sort) =>{
             }
             else if(categoryId){
                 if(sort){
+                    
                     const res = await axios.get(`/product?categoryId=${categoryId}&sort=${sort}`)
                     dispatch(setProduct(res.data))
                 }else {
+                    console.log('catee',categoryId)
                     const res = await axios.get(`/product?categoryId=${categoryId}`)
                     dispatch(setProduct(res.data))
                 }

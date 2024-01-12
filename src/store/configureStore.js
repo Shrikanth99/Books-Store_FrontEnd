@@ -18,7 +18,7 @@ const configureStore = () =>{
         order: orderReducer,
         review : reviewReducer,
         categories : categoryReducer,
-        procurement: procurementReducer
+        procurements: procurementReducer
     }),applyMiddleware(thunk))
     return store
 }
