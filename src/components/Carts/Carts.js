@@ -200,7 +200,7 @@ export default function Cart() {
         }   
         if (Object.keys(payment).length == 0 && success ){
             console.log('pag')
-            dispatch(startEmptyCart())
+            dispatch(startEmptyCart('buy'))
 
         }
         if(cancel){
