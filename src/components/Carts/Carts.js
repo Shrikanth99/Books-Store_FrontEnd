@@ -17,6 +17,7 @@ import {
 } from "mdb-react-ui-kit";
 
 import '../../styles/cart.css'
+import {loadStripe} from '@stripe/stripe-js';
 import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -28,6 +29,7 @@ import { useDispatch } from "react-redux";
 import { startIncCartQuantity, startRemoveCart } from "../../actions/product-action";
 import { startRemCartQuantity } from "../../actions/product-action";
 import { startCreateWishlist } from "../../actions/wishlist-action";
+import axios from "../../config/axios";
 
 export default function Cart() {
     const dispatch = useDispatch()
@@ -55,6 +57,43 @@ export default function Cart() {
 
     const handleWishlist = (id) =>{
         dispatch(startCreateWishlist(id))
+    }
+
+    const handleCheckout = async() =>{
+        try{
+
+            // const stripe = await loadStripe("pk_test_51OPJrJSCecpsTYrqVgJZyysDZ70nrWlbS5602dry6xsgqYg3CI8cG0F9GDMWlWOL9Ti9nzxcvAo9dXzzikeUbE5D00EzjLUGo1")
+            const body = {
+                // products: carts.map(product=>{
+                //     return (
+                //         {
+                //             product: product.productId._id,
+                //             quantity: product.quantity
+                //         }
+                //     )
+                // })
+                products: carts
+            }
+            console.log('kj',body)
+            const session = await axios.post('/api/create-checkout-session',body,{
+                headers:{
+                    'Authorization': localStorage.getItem('token')
+                }
+            })
+            console.log('session',session)
+            // const result = stripe.redirectToCheckout({
+            //     sessionId: session.data.id
+            // })
+
+    
+            // if(result.error){
+            //     console.log(result.error)
+            // }
+            window.location=session.data.url
+        }
+        catch(e){
+            console.log(e)
+        }
     }
     return (
         <section className="h-100 gradient-custom">
@@ -195,7 +234,7 @@ export default function Cart() {
                                     </MDBListGroupItem>
                                 </MDBListGroup>
 
-                               <Button variant="primary">
+                               <Button variant="primary" onClick={handleCheckout}>
                                     Go to Checkout
                                </Button>
                             </MDBCardBody>
