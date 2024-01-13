@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Button, Row, Col, Container } from 'react-bootstrap';
 import { useFormik} from 'formik';
 import * as Yup from 'yup';
 import { useNavigate,useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { startNewAddress } from '../../actions/address-action';
+import { startEditAddress, startNewAddress } from '../../actions/address-action';
 import { useContext } from 'react';
 import { UserContext } from '../../App';
 
@@ -16,16 +16,21 @@ const AddressForm = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
+  // const [foundAddress,setFoundAddress] = useState({})
+
   const {address} = useSelector(state => state.address )
   console.log('sa',address)
 
   const userId = userState?.user._id
   // console.log('id',userId)
-
   let foundAddress = address.find((ele) => {
     return ele._id === id
   })
-  console.log('Fadd',foundAddress)
+  
+  if(localStorage.getItem('addressFormData')){
+    foundAddress = JSON.parse(localStorage.getItem('addressFormData'))
+    console.log('lucy',foundAddress)
+  }
 
 
   const validationSchema = Yup.object().shape({
@@ -41,12 +46,11 @@ const AddressForm = () => {
     addressType: Yup.string().required('Address Type is required').oneOf(['Home', 'Office'])
     //defaultAdd: Yup.boolean().required('Default Address is required'),
   });
-
+  
   const formik = useFormik({
     enableReinitialize: true,
     initialValues : {
         fullName: foundAddress ? foundAddress.fullName : '',
-        userId : userId,
         phoneNumber: foundAddress ? foundAddress.phoneNumber : '',
         houseNumber: foundAddress ? foundAddress.houseNumber : '',
         address: foundAddress ? foundAddress.address : '',
@@ -62,21 +66,112 @@ const AddressForm = () => {
     validateOnChange: false, 
     validateOnBlur : false,
     onSubmit : (formData,{resetForm}) => {
+        // localStorage.setItem('addressFormData',JSON.stringify(formData))
         console.log('fd',formData)
         const redirect = () => {
           navigate('/account/address', { state: { msg: 'Address added' } })
         }
-        dispatch(startNewAddress(formData,resetForm,redirect))
+        const redirect2 = () =>{
+          navigate('/login',{state:{msg: 'Address successfully added'}})
+        }
+        // if(l){
+        //   dispatch(startEditAddress({formData,resetForm,redirect,id}))
+        // } else {
+        //   dispatch(startNewAddress(formData,resetForm,redirect))
+        // }
+        if(localStorage.getItem('addressFormData') && foundAddress){
+          dispatch(startNewAddress(formData,resetForm,redirect2))
+        }
+        else if(localStorage.getItem('token') && foundAddress){
+          dispatch(startEditAddress({formData,resetForm,redirect,id}))
+        }
+        else{
+          formData.userId = userId
+          dispatch(startNewAddress(formData,resetForm,redirect))
+        }
     }
 
   })
+
+  const handleBack = () => {
+    navigate('/register')
+  }
 
   const handleClick = () => {
     // foundAddress = undefined
     navigate('/account/address')
   }
 
-
+  const handleChange = (e) =>{
+    if(e.target.name === 'fullName'){
+      formik.setFieldValue('fullName',e.target.value)
+      if(!localStorage.getItem('token')){
+        localStorage.setItem('addressFormData',JSON.stringify({...formik.values,fullName:e.target.value}))
+      }
+    }
+     else if(e.target.name === 'phoneNumber'){
+      formik.setFieldValue('phoneNumber',e.target.value)
+      if(!localStorage.getItem('token')){
+        localStorage.setItem('addressFormData',JSON.stringify({...formik.values,phoneNumber:e.target.value}))
+      }
+    }
+    else if(e.target.name === 'houseNumber'){
+      formik.setFieldValue('houseNumber',e.target.value)
+      if(!localStorage.getItem('token')){
+        localStorage.setItem('addressFormData',JSON.stringify({...formik.values,houseNumber:e.target.value}))
+      }
+    }
+    else if(e.target.name === 'address'){
+      formik.setFieldValue('address',e.target.value)
+      if(!localStorage.getItem('token')){
+        localStorage.setItem('addressFormData',JSON.stringify({...formik.values,address:e.target.value}))
+      }
+    }
+    else if(e.target.name === 'landMark'){
+      formik.setFieldValue('landMark',e.target.value)
+      if(!localStorage.getItem('token')){
+        localStorage.setItem('addressFormData',JSON.stringify({...formik.values,landMark:e.target.value}))
+      }
+    }
+    else if(e.target.name === 'city'){
+      formik.setFieldValue('city',e.target.value)
+      if(!localStorage.getItem('token')){
+        localStorage.setItem('addressFormData',JSON.stringify({...formik.values,city:e.target.value}))
+      }
+    }
+    else if(e.target.name === 'state'){
+      formik.setFieldValue('state',e.target.value)
+      if(!localStorage.getItem('token')){
+        localStorage.setItem('addressFormData',JSON.stringify({...formik.values,state:e.target.value}))
+      }
+    }
+    else if(e.target.name === 'country'){
+      formik.setFieldValue('country',e.target.value)
+      if(!localStorage.getItem('token')){
+        localStorage.setItem('addressFormData',JSON.stringify({...formik.values,country:e.target.value}))
+      }
+    }
+    else if(e.target.name === 'pincode'){
+      formik.setFieldValue('pincode',e.target.value)
+      if(!localStorage.getItem('token')){
+        localStorage.setItem('addressFormData',JSON.stringify({...formik.values,pincode:e.target.value}))
+      }
+    }
+    else if(e.target.name === 'addressType'){
+      formik.setFieldValue('addressType',e.target.value)
+      if(!localStorage.getItem('token')){
+        localStorage.setItem('addressFormData',JSON.stringify({...formik.values,addressType:e.target.value}))
+      }
+    }
+    //console.log('ss',formik.values)
+    // localStorage.setItem('addressFormData',JSON.stringify(formik.values))
+    
+  }
+  
+  // useEffect(()=>{
+  //   console.log('booooooooooom')
+  //   localStorage.setItem('addressFormData',JSON.stringify(formik.values))
+  // },[formik.values])
   return (
     <Container style={{maxWidth:'730px',marginTop:'30px',border:'1px solid grey',padding:'20px',borderRadius:'10px'}} >
       <h2>Address Form</h2>
@@ -89,7 +184,7 @@ const AddressForm = () => {
             placeholder="Enter username"
             name="fullName"
             value={formik.values.fullName}
-            onChange={formik.handleChange}
+            onChange={handleChange}
 
           />
           {formik.errors.fullName && (
@@ -104,7 +199,7 @@ const AddressForm = () => {
             placeholder="Enter-Mobile-Number"
             name="phoneNumber"
             value={formik.values.phoneNumber}
-            onChange={formik.handleChange}
+            onChange={handleChange}
 
           />
           {formik.errors.phoneNumber && (
@@ -119,7 +214,7 @@ const AddressForm = () => {
             placeholder="Enter houseNumber"
             name="houseNumber"
             value={formik.values.houseNumber}
-            onChange={formik.handleChange}
+            onChange={handleChange}
 
           />
           {formik.errors.houseNumber && (
@@ -134,7 +229,7 @@ const AddressForm = () => {
             placeholder="Enter Address"
             name="address"
             value={formik.values.address}
-            onChange={formik.handleChange}
+            onChange={handleChange}
 
           />
           {formik.errors.address && (
@@ -149,7 +244,7 @@ const AddressForm = () => {
             placeholder="Enter username"
             name="landMark"
             value={formik.values.landMark}
-            onChange={formik.handleChange}
+            onChange={handleChange}
 
           />
           {formik.errors.landMark && (
@@ -164,7 +259,7 @@ const AddressForm = () => {
             placeholder="Enter State"
             name="state"
             value={formik.values.state}
-            onChange={formik.handleChange}
+            onChange={handleChange}
 
           />
           {formik.errors.state && (
@@ -179,7 +274,7 @@ const AddressForm = () => {
             placeholder="Enter City"
             name="city"
             value={formik.values.city}
-            onChange={formik.handleChange}
+            onChange={handleChange}
 
           />
           {formik.errors.city && (
@@ -194,7 +289,7 @@ const AddressForm = () => {
             placeholder="Enter Country "
             name="country"
             value={formik.values.country}
-            onChange={formik.handleChange}
+            onChange={handleChange}
 
           />
           {formik.errors.country && (
@@ -209,7 +304,7 @@ const AddressForm = () => {
             placeholder="Enter Your Pin-Code "
             name="pincode"
             value={formik.values.pincode}
-            onChange={formik.handleChange}
+            onChange={handleChange}
 
           />
           {formik.errors.pincode && (
@@ -227,7 +322,7 @@ const AddressForm = () => {
                 name="addressType"
                 value='Home'
                 checked={formik.values.addressType === 'Home'}
-                onChange={formik.handleChange}
+                onChange={handleChange}
                 
             />
             <Form.Check
@@ -236,7 +331,7 @@ const AddressForm = () => {
                 name="addressType"
                 value='Office'
                 checked={formik.values.addressType === 'Office'}
-                onChange={formik.handleChange}
+                onChange={handleChange}
                 
             />
               {formik.errors.addressType && (
@@ -251,16 +346,17 @@ const AddressForm = () => {
                 label='Default-Address'
                 name='defaultAdd'
                 value={formik.values.defaultAdd}
-                onChange={formik.handleChange}
+                onChange={handleChange}
                 
             />
         </Form.Group>
 
-        { foundAddress ? <> 
-                          <Button variant="primary" type='submit' >Update</Button> 
+        { localStorage.getItem('token') && foundAddress? <> 
+                          <Button variant="primary" type='submit'  >Update</Button> 
                           <Button variant="danger" type='submit' onClick={handleClick} >Cancel</Button>
                          </> : <>
-                                <Button variant="primary" type="submit" className="w-100 mt-3" >
+                                { localStorage.getItem('registerFormData') && <Button variant='primary' onClick={handleBack}  >Back</Button> }
+                                <Button variant="primary" type="submit" className="ml-10 mt-3" >
                                   Add Address
                                 </Button>
                               </> 

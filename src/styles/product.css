@@ -1,0 +1,65 @@
+/* .custom-card {
+    width: 18rem;
+    height: 100%;
+    margin-bottom: 20px;
+    margin-left: 5px;
+    margin-right: 10px;
+    margin: 0 10px 20px 5px;
+} */
+
+/* .custom-card-img {  
+    width: 100%;
+    height: 200px; 
+    object-fit: cover; 
+} */
+/* 
+.custom-card .card-body {
+    
+    height: 80px;
+    overflow: hidden; 
+} 
+*/
+
+/* Example CSS for the custom cards */
+.custom-card {
+    border: 1px solid #0e0d0d;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+    height: 100%;
+  }
+  
+  .custom-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .custom-card-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
+  
+  .custom-card .card-body {
+    padding: 16px;
+  }
+  
+  .card-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+  
+  .card-text {
+    font-size: 16px;
+    color: #555;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 576px) {
+    .custom-card {
+      margin-bottom: 20px;
+    }
+  }
+  

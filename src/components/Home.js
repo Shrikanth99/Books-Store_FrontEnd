@@ -10,14 +10,20 @@ const Home = () => {
 
     const location = useLocation()
 
+    console.log('hhh',location.state)
+    // alert('lhjkhhj')
+
     useEffect(() =>{
         if(location.state?.msg){
+            // console.log('sal')
             toast.success('Logged In')
         }
     },[])
 
+    console.log('ng')
+
     return (
-        <div>
+        <div style={{minHeight:'82%'}} >
             <Toaster/>
             <Carousel>
                 <Carousel.Item>
@@ -56,6 +62,7 @@ const Home = () => {
                     </Carousel.Caption>
                 </Carousel.Item>
             </Carousel>
+
         </div>
     )
 }

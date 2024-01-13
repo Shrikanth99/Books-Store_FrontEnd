@@ -3,21 +3,29 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "../styles/product.css";
 import { useEffect, useState } from "react";
-import axios from "../config/axios";
-import { startGetProduct } from "../actions/product-action";
-
-const Products = () => {
+import { startGetProduct,startCreateCart,startRemoveCart } from "../actions/product-action";
+import ConditionModal from "./ReviewModal/ConditionModal";
+const SellProducts = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const products = useSelector((state) => {
     return state.products.data;
   });
+  const carts = useSelector((state)=>{
+    return state.products.cart
+  })
+  let filteredCarts = carts.filter(ele=>ele.mode == 'sell')
+  filteredCarts = filteredCarts.map(ele=>ele.productId._id)
   console.log('ch',products)
+  console.log('al',carts)
 //   const [categories, setCategories] = useState([]);
   const categories = useSelector(state => state.categories.categories )
   const [categoryId, setCategoryId] = useState(
     localStorage.getItem("categoryId") ? localStorage.getItem("categoryId") : ""
   );
+  const [show,setShow] = useState(false)
+  const [productId,setProductId] = useState('')
+  const [price,setPrice] = useState('')
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(() => {
     const savedPage = localStorage.getItem("currentPage");
@@ -25,6 +33,7 @@ const Products = () => {
   });
   console.log('P',currentPage)
 
+//   const [cartToggle, setCartToggle] = useState(false);
 
   const [sort, setSort] = useState(localStorage.getItem('sort')? localStorage.getItem('sort'):'');
   const sortValues = ["a-z", "z-a", "lowest-highest", "highest-lowest"];
@@ -41,7 +50,7 @@ const Products = () => {
   const totalPages = Math.ceil(products.length / productsPerPage);
 
   let filteredProduct;
-  if (categoryId ) {
+  if (categoryId) {
     filteredProduct = products.filter((product) => {
       return product.categoryId === categoryId;
     });
@@ -54,17 +63,49 @@ const Products = () => {
   console.log('catP',catProducts)
   
 
-  const handleClick = (id) => {
-    navigate(`/product/${id}`);
-  };
-
   const handlePaginationClick = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
+  
+
   const handleSort = (e) => {
     setSort(e.target.value)
     localStorage.setItem('sort',e.target.value)
+  }
+
+  const handleCart = (id,pricing,func) =>{
+    const body = {
+        mode: 'sell'
+      }
+      if (!localStorage.getItem("token")) {
+        navigate("/login", { state: { msg: "You need to Login first" } });
+      } else {
+        if (func == 'create') {
+        //   dispatch(startCreateCart(id,body));
+        setShow(true)
+        setProductId(id)
+        setPrice(pricing)
+        } else {
+          dispatch(startRemoveCart(id,body));
+          // console.log("I am working")
+        }
+      }
+  }
+  const handleClose = () => {
+    setShow(false);
+    
+  };
+
+  const handleProceed = (condition) =>{
+    const body = {
+        mode: 'sell',
+        condition,
+        price: condition == 'Fair' ? (price*50)/100 : price
+      }
+      handleClose()
+      dispatch(startCreateCart(productId,body));
+
   }
 
 //   useEffect(() => {
@@ -116,7 +157,7 @@ const Products = () => {
   useEffect(() => {
     localStorage.setItem("currentPage", currentPage);
     return () => {
-        console.log('poye')
+        console.log('moye moye')
         localStorage.removeItem('currentPage');
       };
   }, [currentPage]);
@@ -168,7 +209,7 @@ const Products = () => {
         </FloatingLabel>
       
       <Row xs={1} md={2} lg={3} className="g-4 mb-2" >
-        {categoryId && !search
+        {/* {categoryId && !search
           ? catProducts?.map((ele) => (
               <Col
                 key={ele._id}
@@ -186,30 +227,44 @@ const Products = () => {
                   />
                   <Card.Body>
                     <Card.Title>{ele.title}</Card.Title>
-                    <Card.Text>₹{ele.price}</Card.Text>
+                    <Card.Text> <strong>Condition :- Good</strong> ₹{ele.price}    </Card.Text>
+                    <Card.Text><b>Condition :- Fair</b> ₹{(ele.price*50)/100} { ele.stockCount == 0 && <p style={{color:'red'}} >Out-Of-Stock</p> } </Card.Text>
                   </Card.Body>
                 </Card>
               </Col>
-            ))
-          : currentProducts?.map((ele) => (
+            )) */}
+          { currentProducts?.map((ele) => (
               <Col
                 key={ele._id}
                 xs={12}
                 sm={6}
                 md={4}
                 lg={3}
-                onClick={() => handleClick(ele._id)}
+                // onClick={() => handleClick(ele._id)}
               >
                 <Card className="custom-card">
                   <Card.Img 
                     className="custom-card-img"
-                    style={{ opacity: `${ele.stockCount == 0 ? '0.3' : '1'}` }}
                     src={ele.image[0].url}
                     key={ele.image[0].key}
                   />
                   <Card.Body>
-                    <Card.Title>{ele.title}</Card.Title>
-                    <Card.Text>₹{ele.price} { ele.stockCount == 0 && <p style={{color:'red'}} >Out-Of-Stock</p>  } </Card.Text>
+                    <Card.Title> {ele.title}</Card.Title>
+                    <Card.Text> <strong>Condition :- Good</strong> ₹{ele.price}  </Card.Text>
+                    <Card.Text><b>Condition :- Fair</b> ₹{(ele.price*50)/100} </Card.Text> 
+                    {filteredCarts.includes(ele._id) ? (
+                        <Button variant="warning" className="mr-2" onClick={()=>{handleCart(ele._id,ele.price,'remove')}}>
+                        Remove from the Cart
+                        </Button>
+                        ) : (
+                        <Button
+                        variant="success"
+                        className="mr-2"
+                        onClick={()=>handleCart(ele._id,ele.price,'create')}
+                        >
+                        Add to Cart
+                        </Button>
+                    )}
                   </Card.Body>
                 </Card>
               </Col>
@@ -231,8 +286,9 @@ const Products = () => {
         <Pagination.Next onClick={() => handlePaginationClick(currentPage)} />
         <Pagination.Last onClick={() => handlePaginationClick(totalPages)} />
       </Pagination>
+      {show && <ConditionModal show={show} handleClose={handleClose} handleProceed={handleProceed}/>}
     </div>
   );
 };
 
-export default Products;
+export default SellProducts;
