@@ -2,6 +2,10 @@ import React,{useState,useContext, useEffect} from 'react'
 import { Form, Button, Container, Col, Row } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../App';
+import { MDBCol, MDBContainer, MDBRow, MDBCard, MDBCardText, MDBCardBody, MDBCardImage, MDBTypography, MDBIcon } from 'mdb-react-ui-kit';
+import '../../styles/profile.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit } from '@fortawesome/free-solid-svg-icons';
 
 const Profile = () => {
   const {userState} = useContext(UserContext)
@@ -97,8 +101,54 @@ const Profile = () => {
                   ))}
                 </div>
               )}
+
+
+<section  style={{ backgroundColor: '#f4f5f7',minHeight:'89.5vh' }}>
+      <MDBContainer className="py-5 " >
+        <MDBRow className="justify-content-center align-items-center ">
+          <MDBCol lg="6" >
+            <MDBCard className="mb-3" style={{ borderRadius: '.5rem'}} >
+              <MDBRow className="g-0">
+                <MDBCol md="4" className="gradient-custom text-center text-white"
+                  style={{ borderTopLeftRadius: '.5rem', borderBottomLeftRadius: '.5rem',maxHeight:'400px' }}>
+                  <MDBCardImage src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
+                    alt="Avatar" className="my-5" style={{ width: '80px' }} fluid />
+                  <MDBTypography tag="h5">{userName}</MDBTypography>
+                  <FontAwesomeIcon icon={faEdit} style={{cursor:'pointer'}} />
+                </MDBCol>
+                <MDBCol md="8">
+                  <MDBCardBody className="p-4">
+                    <MDBTypography tag="h6">Information</MDBTypography>
+                    <hr className="mt-0 mb-4" />
+                    <MDBTypography tag="h6">#UserId </MDBTypography>
+                    <MDBCardText  >{user._id}</MDBCardText>
+
+                    <MDBRow className="pt-1">
+                      <MDBCol  className="mb-3">
+                        <MDBTypography tag="h6">Email</MDBTypography>
+                        <MDBCardText className="text-muted">{email}</MDBCardText>
+                      </MDBCol>
+                    </MDBRow>
+                    <MDBRow>
+                      <MDBCol  className="mb-3">
+                        <MDBTypography tag="h6">Phone</MDBTypography>
+                        <MDBCardText className="text-muted">{phoneNumber}</MDBCardText>
+                      </MDBCol>
+                    </MDBRow>
+
+                    
+
+                    
+                  </MDBCardBody>
+                </MDBCol>
+              </MDBRow>
+            </MDBCard>
+          </MDBCol>
+        </MDBRow>
+      </MDBContainer>
+    </section>
     
-      <Container style={{maxWidth:'768px',marginTop:'100px',border:'1px solid grey',padding:'20px',borderRadius:'10px'}}>
+      {/* <Container style={{maxWidth:'768px',marginTop:'100px',border:'1px solid grey',padding:'20px',borderRadius:'10px'}}>
         <Form >
           <Form.Group controlId="formUsername">
             <Form.Label>Username</Form.Label>
@@ -152,12 +202,13 @@ const Profile = () => {
   
           
           <div className='text-center'>
-          {/* <Button variant="primary" type="submit">
+          { <Button variant="primary" type="submit">
             Register
-          </Button> */}
+          </Button> }
           </div>
         </Form>
-      </Container>
+      </Container> */}
+      
       </div>
   );
 }

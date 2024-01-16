@@ -3,7 +3,7 @@ import img1 from '../images/79_inr.jpg'
 import img2 from '../images/83_inr.jpg'
 import img3 from '../images/85_inr.jpg'
 import { Toaster, toast } from 'react-hot-toast'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, Link } from 'react-router-dom'
 import { useEffect } from 'react'
 import {Card} from 'react-bootstrap'
 import Slider from "react-slick";
@@ -80,6 +80,10 @@ const Home = () => {
         ]
       };
 
+    const handleNavigate = () => {
+        navigate('/products')
+    }
+
     useEffect(() =>{
         if(location.state?.msg){
             // console.log('sal')
@@ -128,8 +132,10 @@ const Home = () => {
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
                     </Carousel.Caption>
                 </Carousel.Item>
+
             </Carousel>
             <h2 style={{display:'inline-block',margin:'50px auto'}}>New Arrivals</h2>
+            <span style={{marginLeft:'60px' }} onClick={handleNavigate} ><Link style={{color:'red'}} >See-all</Link></span>
             <Slider {...settings} style={{width:'90vw',margin:'0 auto'}}>
                {newArrivals.map(ele=>{
                 return (<Card style={{margin:'0 10px'}} onClick={()=>{handleClick(ele._id)}}>
