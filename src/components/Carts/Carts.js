@@ -17,7 +17,6 @@ import {
 } from "mdb-react-ui-kit";
 import Switch from '@mui/material/Switch';
 import FormControlLabel from '@mui/material/FormControlLabel';
-
 import '../../styles/cart.css'
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';

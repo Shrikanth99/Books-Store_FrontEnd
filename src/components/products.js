@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "../styles/product.css";
 import { useEffect, useState } from "react";
-import axios from "../config/axios";
 import { startGetProduct } from "../actions/product-action";
 
 const Products = () => {
@@ -122,7 +121,7 @@ const Products = () => {
   }, [currentPage]);
 
   return (
-    <div style={{backgroundColor:'#fafdea'}}>  
+    <div className="container mt-4"> 
       <Form.Select
         className="mb-4"
         style={{ width: "300px", display: "inline-block", }}

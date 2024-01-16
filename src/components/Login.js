@@ -136,6 +136,12 @@ const LoginForm = () => {
         localStorage.clear()
     },[])
 
+    useEffect(()=>{
+        if(location.state?.msg){
+            toast.success(location.state.msg)
+        }
+    },[])
+
     return (
         <div>
             <ToastContainer />

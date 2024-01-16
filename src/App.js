@@ -10,7 +10,7 @@ import Home from "./components/Home";
 import Register from "./components/Register";
 import LoginForm from "./components/Login";
 import AdminNavBar from "./components/NavBar/AdminNavBar.js";
-import ModeratorNavBar from "./components/NavBar/ModeratorNavBar";
+import ModeratorNavBar from "./components/NavBar/moderatorNavbar.js";
 import userReducer from "./reducers/user-reducer";
 import Product from "./components/products.js";
 import ProductPage from "./components/product-page.js";
