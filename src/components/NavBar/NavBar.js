@@ -5,7 +5,7 @@ import logo from '../../images/logo.png'
 const NavBar = () =>{
 
     return (
-    <Navbar bg="light" expand="md" style={{position:'sticky',top:'0', zIndex:1, width:'100%' }} >
+    <Navbar bg="light" expand="md" style={{position:'sticky',top:'0', zIndex:100, width:'100%' }} >
     <Navbar.Brand as={Link} to="/"><img src={logo} width='50' height='50'style={{borderRadius:'50%'}}/></Navbar.Brand>
     <Navbar.Toggle aria-controls="basic-navbar-nav" />
     <Navbar.Collapse id="basic-navbar-nav">

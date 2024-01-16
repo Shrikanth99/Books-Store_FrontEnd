@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "../styles/product.css";
 import { useEffect, useState } from "react";
-import axios from "../config/axios";
 import { startGetProduct } from "../actions/product-action";
 
 const Products = () => {
@@ -122,7 +121,7 @@ const Products = () => {
   }, [currentPage]);
 
   return (
-    <div  >  
+    <div className="container mt-4"> 
       <Form.Select
         className="mb-5"
         style={{ width: "300px", display: "inline-block" }}
@@ -156,8 +155,7 @@ const Products = () => {
         Clear Search
       </Button>
       
-        <FloatingLabel className="mb-5" style={{ width: "300px", display: "inline-block",marginLeft:'10px' }} >
-        <Form.Select className="mb-5" style={{ width: "300px", display: "inline-block" }} 
+        <Form.Select className="mb-5" style={{ width: "300px", display: "inline-block",marginLeft:'10px' }} 
                     onChange={handleSort}
         >
             <option value='' >Sort</option>
@@ -165,8 +163,7 @@ const Products = () => {
                 <option key={i} value={ele} selected={ele == sort} >{ele}</option>
             ))}
         </Form.Select>
-        </FloatingLabel>
-      
+   
       <Row xs={1} md={2} lg={3} className="g-4 mb-2" >
         {categoryId && !search
           ? catProducts?.map((ele) => (
@@ -215,7 +212,7 @@ const Products = () => {
               </Col>
             ))}
       </Row>
-      <Pagination style={{ marginLeft: "700px" }}>
+      <Pagination style={{ marginLeft: "40%" }}>
         <Pagination.First onClick={() => handlePaginationClick(1)} />
         <Pagination.Prev onClick={() => handlePaginationClick(currentPage)} />
 
