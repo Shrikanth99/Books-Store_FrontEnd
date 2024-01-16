@@ -122,10 +122,10 @@ const Products = () => {
   }, [currentPage]);
 
   return (
-    <div  >  
+    <div style={{backgroundColor:'#fafdea'}}>  
       <Form.Select
-        className="mb-5"
-        style={{ width: "300px", display: "inline-block" }}
+        className="mb-4"
+        style={{ width: "300px", display: "inline-block", }}
         onChange={(e) => {
           setCategoryId(e.target.value);
           localStorage.setItem("categoryId", e.target.value);
@@ -143,7 +143,7 @@ const Products = () => {
         ))}
       </Form.Select>
       <Form.Control
-        className="mb-5"
+        className="mb-4"
         style={{ width: "300px", display: "inline-block", marginLeft: "8px" }}
         type="text"
         placeholder="search"
@@ -156,8 +156,7 @@ const Products = () => {
         Clear Search
       </Button>
       
-        <FloatingLabel className="mb-5" style={{ width: "300px", display: "inline-block",marginLeft:'10px' }} >
-        <Form.Select className="mb-5" style={{ width: "300px", display: "inline-block" }} 
+        <Form.Select className="mb-4" style={{ width: "300px", display: "inline-block" }} 
                     onChange={handleSort}
         >
             <option value='' >Sort</option>
@@ -165,9 +164,8 @@ const Products = () => {
                 <option key={i} value={ele} selected={ele == sort} >{ele}</option>
             ))}
         </Form.Select>
-        </FloatingLabel>
       
-      <Row xs={1} md={2} lg={3} className="g-4 mb-2" >
+      <Row xs={1} md={2} lg={3} className="g-4 mb-2" style={{marginRight:'0'}}>
         {categoryId && !search
           ? catProducts?.map((ele) => (
               <Col
@@ -215,7 +213,7 @@ const Products = () => {
               </Col>
             ))}
       </Row>
-      <Pagination style={{ marginLeft: "700px" }}>
+      <Pagination style={{ marginLeft:'40%' }}>
         <Pagination.First onClick={() => handlePaginationClick(1)} />
         <Pagination.Prev onClick={() => handlePaginationClick(currentPage)} />
 

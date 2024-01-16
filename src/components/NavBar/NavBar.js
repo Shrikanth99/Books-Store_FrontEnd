@@ -2,10 +2,11 @@
 import { Navbar, Nav } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import logo from '../../images/logo.png'
+import '../../styles/navbar.css'
 const NavBar = () =>{
 
     return (
-    <Navbar bg="light" expand="md" style={{position:'sticky',top:'0', zIndex:1, width:'100%' }} >
+    <Navbar expand="md" className='navBar' >
     <Navbar.Brand as={Link} to="/"><img src={logo} width='50' height='50'style={{borderRadius:'50%'}}/></Navbar.Brand>
     <Navbar.Toggle aria-controls="basic-navbar-nav" />
     <Navbar.Collapse id="basic-navbar-nav">

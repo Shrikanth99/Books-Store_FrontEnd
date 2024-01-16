@@ -20,6 +20,11 @@
 } 
 */
 
+/* 
+.bColor{
+    background-color:#fafdea ;
+} */
+
 /* Example CSS for the custom cards */
 .custom-card {
     border: 1px solid #0e0d0d;
@@ -62,4 +67,5 @@
       margin-bottom: 20px;
     }
   }
+
   

@@ -55,7 +55,7 @@ const UserNavBar = () => {
 
     }
     return (
-        <div style={{position:'sticky',top:'0', zIndex:1, width:'100%',backgroundColor:'#092b5a' }}  >
+        <div style={{position:'sticky',top:'0', zIndex:1, backgroundColor:'#092b5a' }}  >
             <Toaster/>
             <Navbar expand="md"  >
             <Navbar.Brand as={Link} to="/"><img src={logo} width='50' height='50'style={{borderRadius:'50%'}}/></Navbar.Brand>
