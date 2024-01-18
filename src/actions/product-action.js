@@ -1,26 +1,26 @@
 import axios from '../config/axios'
 import {toast} from 'react-hot-toast'
 
-export const startGetProduct = (search,categoryId,sort) =>{
+export const startGetProduct = (search,categoryId,sort,currentPage) =>{
     return async (dispatch) =>{
         try{
             if(search && categoryId){
                 if(sort){
-                    const sortRes = await axios.get(`/product?search=${search}&categoryId=${categoryId}&sort=${sort}`)
+                    const sortRes = await axios.get(`/product?search=${search}&categoryId=${categoryId}&sort=${sort}&page=${currentPage}`)
                     console.log('sR',sortRes.da)
                     dispatch(setProduct(sortRes.data))
                 }else{
-                    const res = await axios.get(`/product?search=${search}&categoryId=${categoryId}`)
+                    const res = await axios.get(`/product?search=${search}&categoryId=${categoryId}&page=${currentPage}`)
                     console.log('daemon',res.data)
                     dispatch(setProduct(res.data))
                 }
             }
             else if(search){
                 if(sort){
-                    const response = await axios.get(`/product?search=${search}&sort=${sort}`)
+                    const response = await axios.get(`/product?search=${search}&sort=${sort}&page=${currentPage}`)
                     dispatch(setProduct(response.data))
                 }else{
-                    const res = await axios.get(`/product?search=${search}`)
+                    const res = await axios.get(`/product?search=${search}&page=${currentPage}`)
                     console.log('searches',res.data)
                     dispatch(setProduct(res.data))
                 }
@@ -28,20 +28,20 @@ export const startGetProduct = (search,categoryId,sort) =>{
             else if(categoryId){
                 if(sort){
                     
-                    const res = await axios.get(`/product?categoryId=${categoryId}&sort=${sort}`)
+                    const res = await axios.get(`/product?categoryId=${categoryId}&sort=${sort}&page=${currentPage}`)
                     dispatch(setProduct(res.data))
                 }else {
                     console.log('catee',categoryId)
-                    const res = await axios.get(`/product?categoryId=${categoryId}`)
+                    const res = await axios.get(`/product?categoryId=${categoryId}&page=${currentPage}`)
                     dispatch(setProduct(res.data))
                 }
             }
             else{
                 if(sort){
-                    const res = await axios.get(`/product?sort=${sort}`)
+                    const res = await axios.get(`/product?sort=${sort}&page=${currentPage}`)
                     dispatch(setProduct(res.data))
                 }else {
-                    const response = await axios.get('/product')
+                    const response = await axios.get(`/product?page=${currentPage}`)
                     // console.log('tyrion',response.data)
                     dispatch(setProduct(response.data))
                 }
@@ -57,7 +57,20 @@ const setProduct = (data) =>{
     return ({type:'SET_PRODUCTS',payload: data})
 }
 
+export const startGetAllProducts = () => {
+    return async(dispatch) => {
+        try {
+            const res = await axios.get('/product/all')
+            dispatch(setAllProducts(res.data))
+        } catch (e) {
+            console.log('all-pro',e)
+        }
+    }
+}
 
+const setAllProducts = (data) => {
+    return { type:'ALL_PRO' , payload:data }
+}
 
 export const startAddProduct = (formData) => {
     return async (dispatch) => {

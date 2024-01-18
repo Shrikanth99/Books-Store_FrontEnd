@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import { createContext, useReducer, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import axios from "./config/axios";
-import { startGetProduct, startSetCart } from "./actions/product-action.js";
+import { startGetAllProducts, startGetProduct, startSetCart } from "./actions/product-action.js";
 import NavBar from "./components/NavBar/NavBar.js";
 import UserNavBar from "./components/NavBar/UserNavBar.js";
 import Home from "./components/Home";
@@ -26,7 +26,7 @@ import { startSetWishlist } from "./actions/wishlist-action.js";
 import Profile from "./components/Profile/Profile.js";
 import AddProduct from "./components/AddProduct.js";
 import SellProduct from "./components/SellProduct.js";
-import { startGetOrder, startgetAllOrders } from "./actions/order-action.js";
+import { startGetOrder, startGetAllOrders } from "./actions/order-action.js";
 import { startGetReview } from "./actions/review-action.js";
 import ViewOrders from "./components/Admin/ViewOrders.js";
 import Stats from "./components/Admin/Stats.js";
@@ -48,6 +48,7 @@ const App = () => {
   useEffect(() => {
     dispatch(startGetProduct(null, null, null));
     dispatch(startGetCategories())
+    dispatch(startGetAllProducts())
   }, []);
 
   useEffect(() => {
@@ -68,7 +69,7 @@ const App = () => {
             dispatch(startGetUserAddress())
             dispatch(startGetProcurement())
           }else if( profile.data.role === 'admin' ){
-            dispatch(startgetAllOrders())
+            dispatch(startGetAllOrders(null))
             dispatch(startGetProcurement())
           }else if(profile.data.role === 'moderator') {
             dispatch(startGetProcurement()) 

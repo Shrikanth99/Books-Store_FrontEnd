@@ -1,9 +1,12 @@
 import { act } from "react-dom/test-utils"
 
-const initialState = {data:[],cart:[],serverErrors:[]}
+const initialState = {allProduct:[],data:[],cart:[],serverErrors:[]}
 
 export const productsReducer = (state = initialState, action) =>{
     switch(action.type){
+        case 'ALL_PRO':{
+            return {...state, allProduct : action.payload }
+        }
         case 'SET_PRODUCTS':{
             return {...state,data: action.payload}
         }

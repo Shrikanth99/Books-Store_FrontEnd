@@ -47,7 +47,7 @@ const ShowAddress = (props) => {
     },[])
 
   return (
-        <div style={{backgroundColor:'#fafdea',height:'100%' }} >
+        <div style={{backgroundColor:'#fafdea',height:'100%', padding:'10px' }} >
            
             <>
             <Button onClick={handleFormAdd} ><Link to='/account/addressForm' style={{color : 'white', textDecoration:'none' }} > ➕ Add-New-Address </Link></Button>
@@ -55,7 +55,7 @@ const ShowAddress = (props) => {
             </>
                 {address.length > 0 ? (
                     address.map((ele) => (
-                    <Card key={ele._id} style={{ width: '30rem' }}>
+                    <Card className='mt-5' key={ele._id} style={{ width: '30rem' }}>
                         <Card.Body>
                         <Card.Title> {ele.fullName}, {ele.addressType} </Card.Title>
                         <Card.Text>

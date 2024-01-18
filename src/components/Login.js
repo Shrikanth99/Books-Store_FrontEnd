@@ -24,7 +24,7 @@ import { startSetCart } from '../actions/product-action';
 import { startGetOrder } from '../actions/order-action';
 import { startGetReview } from '../actions/review-action';
 import { startGetCategories } from '../actions/category-action';
-import { startgetAllOrders } from '../actions/order-action';
+import { startGetAllOrders } from '../actions/order-action';
 import { startGetProcurement } from '../actions/procurement-action';
 
 
@@ -107,12 +107,13 @@ const LoginForm = () => {
                     dispatch(startGetReview())
                     dispatch(startGetProcurement())
                 }else if( profile.data.role === 'admin' ){
-                    dispatch(startgetAllOrders())
+                    dispatch(startGetAllOrders(null))
                     dispatch(startGetProcurement())
                 }else if(profile.data.role === 'moderator' ){
                     dispatch(startGetProcurement())
                 }
-                navigate('/', { state: { msg: 'Login Successful' } })
+                profile.data.role === 'moderator' ? navigate('/notifications') : navigate('/', { state: { msg: 'Login Successful' } })
+                
                 
             }
             catch (e) {

@@ -25,7 +25,7 @@ const ModeratorNavBar = () => {
     <div>
     <Toaster />
     <Navbar expand="md" style={{position:'sticky',top:'0', zIndex:1, width:'100%',backgroundColor:'#092b5a' }} >
-            <Navbar.Brand as={Link} to="/"><img src={logo} width='50' height='50'style={{borderRadius:'50%'}}/></Navbar.Brand>
+            <Navbar.Brand ><img src={logo} width='50' height='50'style={{borderRadius:'50%'}}/></Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="ml-auto">

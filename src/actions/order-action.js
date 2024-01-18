@@ -34,16 +34,26 @@ const getOrder = (data) =>{
 }
 
 // admmin
-export const startgetAllOrders = () => {
+export const startGetAllOrders = (sort) => {
     return async(dispatch) => {
         try {
-            const res = await axios.get('/order/listAll',{
-                headers : {
-                    'Authorization' : localStorage.getItem('token')
-                }
-            })
+            if(sort){
+
+                const res = await axios.get(`/order/listAll?sort=${sort}`,{
+                    headers : {
+                        'Authorization' : localStorage.getItem('token')
+                    }
+                })
+                dispatch(allOrder(res.data))
+            }else {
+                const res = await axios.get('/order/listAll',{
+                    headers : {
+                        'Authorization' : localStorage.getItem('token')
+                    }
+                })
+                dispatch(allOrder(res.data))
+            }
             //console.log('all-od',res.data)
-            dispatch(allOrder(res.data))
         } catch (e) {
             console.log('admin-od',e)
         }

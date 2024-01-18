@@ -8,6 +8,7 @@ import ConditionModal from "./ReviewModal/ConditionModal";
 const SellProducts = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const allProduct = useSelector(state => state.products.allProduct )
   const products = useSelector((state) => {
     return state.products.data;
   });
@@ -41,26 +42,26 @@ const SellProducts = () => {
   const productsPerPage = 8;
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = products.slice(
-    indexOfFirstProduct,
-    indexOfLastProduct
-  );
-  console.log("cp", currentProducts);   
+  // const currentProducts = products.slice(
+  //   indexOfFirstProduct,
+  //   indexOfLastProduct
+  // );
+  // console.log("cp", currentProducts);   
 
-  const totalPages = Math.ceil(products.length / productsPerPage);
+  const totalPages = Math.ceil(allProduct.length / productsPerPage);
 
   let filteredProduct;
   if (categoryId) {
     filteredProduct = products.filter((product) => {
       return product.categoryId === categoryId;
     });
-    console.log('fp',filteredProduct)
+    // console.log('fp',filteredProduct)
   }
   let catProducts
     if(categoryId && filteredProduct?.length > 0){
     catProducts = filteredProduct.slice(indexOfFirstProduct,indexOfLastProduct)
   } 
-  console.log('catP',catProducts)
+  // console.log('catP',catProducts)
   
 
   const handlePaginationClick = (pageNumber) => {
@@ -119,40 +120,40 @@ const SellProducts = () => {
 //     })();
 //   }, []);
 
-  useEffect(() => {
-    if( categoryId && search ){
-        if(sort){
-            console.log('ssc',sort)
-            dispatch(startGetProduct(search,categoryId,sort))
-        }else {
-            console.log('else')
-            dispatch(startGetProduct(search,categoryId,null))
-        }
-    }
-    else if (search) {
-        if(sort){
-            dispatch(startGetProduct(search,null,sort))
-        }else{
-            dispatch(startGetProduct(search,null,null));
-        }
-    }else if(categoryId){
-        if(sort){
-            dispatch(startGetProduct(null,categoryId,sort))
-        }else {
-            dispatch(startGetProduct(null,categoryId,null))
-        }
-    }
-    else {
-        if(sort){
-            dispatch(startGetProduct(null,null,sort))
-        }else{
-            dispatch(startGetProduct(null,null,null));
-        }
-    }
-    return () => {
-        console.log('som')
-    }
-  }, [search,categoryId,sort]);
+useEffect(() => {
+  if( categoryId && search ){
+      if(sort){
+          console.log('ssc',sort)
+          dispatch(startGetProduct(search,categoryId,sort,currentPage))
+      }else {
+          console.log('else')
+          dispatch(startGetProduct(search,categoryId,null,currentPage))
+      }
+  }
+  else if (search) {
+      if(sort){
+          dispatch(startGetProduct(search,null,sort,currentPage))
+      }else{
+          dispatch(startGetProduct(search,null,null,currentPage));
+      }
+  }else if(categoryId){
+      if(sort){
+          dispatch(startGetProduct(null,categoryId,sort,currentPage))
+      }else {
+          dispatch(startGetProduct(null,categoryId,null,currentPage))
+      }
+  }
+  else {
+      if(sort){
+          dispatch(startGetProduct(null,null,sort,currentPage))
+      }else{
+          dispatch(startGetProduct(null,null,null,currentPage));
+      }
+  }
+  return () => {
+      console.log('som')
+  }
+}, [search,categoryId,sort,currentPage]);
 
   useEffect(() => {
     localStorage.setItem("currentPage", currentPage);
@@ -163,9 +164,10 @@ const SellProducts = () => {
   }, [currentPage]);
 
   return (
-    <div  >  
+      <div className="container" style={{backgroundColor:'#fafdea', maxWidth:'100%', padding:'1px' }} >
+  
       <Form.Select
-        className="mb-5"
+        className="mb-4"
         style={{ width: "300px", display: "inline-block" }}
         onChange={(e) => {
           setCategoryId(e.target.value);
@@ -184,7 +186,7 @@ const SellProducts = () => {
         ))}
       </Form.Select>
       <Form.Control
-        className="mb-5"
+        className="mb-4"
         style={{ width: "300px", display: "inline-block", marginLeft: "8px" }}
         type="text"
         placeholder="search"
@@ -197,8 +199,7 @@ const SellProducts = () => {
         Clear Search
       </Button>
       
-        <FloatingLabel className="mb-5" style={{ width: "300px", display: "inline-block",marginLeft:'10px' }} >
-        <Form.Select className="mb-5" style={{ width: "300px", display: "inline-block" }} 
+        <Form.Select className="mb-4" style={{ width: "300px", display: "inline-block" }} 
                     onChange={handleSort}
         >
             <option value='' >Sort</option>
@@ -206,7 +207,6 @@ const SellProducts = () => {
                 <option key={i} value={ele} selected={ele == sort} >{ele}</option>
             ))}
         </Form.Select>
-        </FloatingLabel>
       
       <Row xs={1} md={2} lg={3} className="g-4 mb-2" >
         {/* {categoryId && !search
@@ -233,7 +233,7 @@ const SellProducts = () => {
                 </Card>
               </Col>
             )) */}
-          { currentProducts?.map((ele) => (
+          { products?.map((ele) => (
               <Col
                 key={ele._id}
                 xs={12}
@@ -270,21 +270,22 @@ const SellProducts = () => {
               </Col>
             ))}
       </Row>
-      <Pagination style={{ marginLeft: "700px" }}>
-        <Pagination.First onClick={() => handlePaginationClick(1)} />
-        <Pagination.Prev onClick={() => handlePaginationClick(currentPage)} />
+      <Pagination style={{ marginLeft:'40%' }}>
+        <Pagination.First name='first' onClick={(e) => setCurrentPage(1)} />
+        <Pagination.Prev  name='sub' onClick={(e) => setCurrentPage(currentPage -1)} />
 
         {Array.from({ length: totalPages }).map((_, index) => (
           <Pagination.Item
             key={index + 1}
             active={index + 1 === currentPage}
+            name='item'
             onClick={() => handlePaginationClick(index + 1)}
           >
-            {index + 1}
+            {index +1}
           </Pagination.Item>
         ))}
-        <Pagination.Next onClick={() => handlePaginationClick(currentPage)} />
-        <Pagination.Last onClick={() => handlePaginationClick(totalPages)} />
+        <Pagination.Next name='add' onClick={(e) => setCurrentPage(currentPage +1)} />
+        <Pagination.Last name='last' onClick={(e) => setCurrentPage(totalPages)} />
       </Pagination>
       {show && <ConditionModal show={show} handleClose={handleClose} handleProceed={handleProceed}/>}
     </div>

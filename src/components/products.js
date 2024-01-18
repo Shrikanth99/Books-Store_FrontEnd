@@ -8,21 +8,22 @@ import { startGetProduct } from "../actions/product-action";
 const Products = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const allProduct = useSelector(state => state.products.allProduct )
   const products = useSelector((state) => {
     return state.products.data;
   });
-  console.log('ch',products)
+  //console.log('ch',products)
 //   const [categories, setCategories] = useState([]);
   const categories = useSelector(state => state.categories.categories )
   const [categoryId, setCategoryId] = useState(
     localStorage.getItem("categoryId") ? localStorage.getItem("categoryId") : ""
   );
   const [search, setSearch] = useState("");
-  const [currentPage, setCurrentPage] = useState(() => {
-    const savedPage = localStorage.getItem("currentPage");
-    return savedPage ? parseInt(savedPage) : 1;
-  });
-  console.log('P',currentPage)
+    const [currentPage, setCurrentPage] = useState(() => {
+      const savedPage = localStorage.getItem("currentPage");
+      return savedPage ? parseInt(savedPage) : 1;
+    });
+  //console.log('P',currentPage)
 
 
   const [sort, setSort] = useState(localStorage.getItem('sort')? localStorage.getItem('sort'):'');
@@ -31,34 +32,35 @@ const Products = () => {
   const productsPerPage = 8;
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = products.slice(
-    indexOfFirstProduct,
-    indexOfLastProduct
-  );
-  console.log("cp", currentProducts);   
+  // const currentProducts = products.slice(
+  //   indexOfFirstProduct,
+  //   indexOfLastProduct
+  // );
+  //console.log("cp", currentProducts);   
 
-  const totalPages = Math.ceil(products.length / productsPerPage);
+  const totalPages = Math.ceil(allProduct.length / productsPerPage);
 
   let filteredProduct;
   if (categoryId ) {
     filteredProduct = products.filter((product) => {
       return product.categoryId === categoryId;
     });
-    console.log('fp',filteredProduct)
+    //console.log('fp',filteredProduct)
   }
   let catProducts
     if(categoryId && filteredProduct?.length > 0){
     catProducts = filteredProduct.slice(indexOfFirstProduct,indexOfLastProduct)
   } 
-  console.log('catP',catProducts)
+  //console.log('catP',catProducts)
   
 
   const handleClick = (id) => {
     navigate(`/product/${id}`);
   };
 
-  const handlePaginationClick = (pageNumber) => {
-    setCurrentPage(pageNumber);
+  const handlePaginationClick = (pageNo) => {
+//console.log('I am',name)
+    setCurrentPage(pageNo)
   };
 
   const handleSort = (e) => {
@@ -81,47 +83,48 @@ const Products = () => {
     if( categoryId && search ){
         if(sort){
             console.log('ssc',sort)
-            dispatch(startGetProduct(search,categoryId,sort))
+            dispatch(startGetProduct(search,categoryId,sort,currentPage))
         }else {
             console.log('else')
-            dispatch(startGetProduct(search,categoryId,null))
+            dispatch(startGetProduct(search,categoryId,null,currentPage))
         }
     }
     else if (search) {
         if(sort){
-            dispatch(startGetProduct(search,null,sort))
+            dispatch(startGetProduct(search,null,sort,currentPage))
         }else{
-            dispatch(startGetProduct(search,null,null));
+            dispatch(startGetProduct(search,null,null,currentPage));
         }
     }else if(categoryId){
         if(sort){
-            dispatch(startGetProduct(null,categoryId,sort))
+            dispatch(startGetProduct(null,categoryId,sort,currentPage))
         }else {
-            dispatch(startGetProduct(null,categoryId,null))
+            dispatch(startGetProduct(null,categoryId,null,currentPage))
         }
     }
     else {
         if(sort){
-            dispatch(startGetProduct(null,null,sort))
+            dispatch(startGetProduct(null,null,sort,currentPage))
         }else{
-            dispatch(startGetProduct(null,null,null));
+            dispatch(startGetProduct(null,null,null,currentPage));
         }
     }
     return () => {
         console.log('som')
     }
-  }, [search,categoryId,sort]);
+  }, [search,categoryId,sort,currentPage]);
 
   useEffect(() => {
     localStorage.setItem("currentPage", currentPage);
     return () => {
-        console.log('poye')
+        //console.log('poye')
         localStorage.removeItem('currentPage');
       };
   }, [currentPage]);
 
   return (
-    <div className="container mt-4"> 
+    <div className="container" style={{backgroundColor:'#fafdea', maxWidth:'100%', padding:'1px' }} >
+    <div className="mt-4" > 
       <Form.Select
         className="mb-4"
         style={{ width: "300px", display: "inline-block", }}
@@ -163,9 +166,9 @@ const Products = () => {
                 <option key={i} value={ele} selected={ele == sort} >{ele}</option>
             ))}
         </Form.Select>
-      
+      </div>
       <Row xs={1} md={2} lg={3} className="g-4 mb-2" style={{marginRight:'0'}}>
-        {categoryId && !search
+        {/* {categoryId && !search
           ? catProducts?.map((ele) => (
               <Col
                 key={ele._id}
@@ -188,7 +191,8 @@ const Products = () => {
                 </Card>
               </Col>
             ))
-          : currentProducts?.map((ele) => (
+        }    */}
+          {products?.map((ele) => (
               <Col
                 key={ele._id}
                 xs={12}
@@ -213,22 +217,24 @@ const Products = () => {
             ))}
       </Row>
       <Pagination style={{ marginLeft:'40%' }}>
-        <Pagination.First onClick={() => handlePaginationClick(1)} />
-        <Pagination.Prev onClick={() => handlePaginationClick(currentPage)} />
+        <Pagination.First name='first' onClick={(e) => setCurrentPage(1)} />
+        <Pagination.Prev  name='sub' onClick={(e) => setCurrentPage(currentPage -1)} />
 
         {Array.from({ length: totalPages }).map((_, index) => (
           <Pagination.Item
             key={index + 1}
             active={index + 1 === currentPage}
+            name='item'
             onClick={() => handlePaginationClick(index + 1)}
           >
-            {index + 1}
+            {index +1}
           </Pagination.Item>
         ))}
-        <Pagination.Next onClick={() => handlePaginationClick(currentPage)} />
-        <Pagination.Last onClick={() => handlePaginationClick(totalPages)} />
+        <Pagination.Next name='add' onClick={(e) => setCurrentPage(currentPage +1)} />
+        <Pagination.Last name='last' onClick={(e) => setCurrentPage(totalPages)} />
       </Pagination>
     </div>
+   
   );
 };
 

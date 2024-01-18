@@ -1,4 +1,6 @@
 import axios from "../config/axios";
+import {toast} from 'react-hot-toast'
+
 
 export const setEmptyAddress = () => {
     //console.log('ji')
@@ -55,6 +57,7 @@ export const startNewAddress = (formData,resetForm,redirect) => {
         } catch (e) {
             console.log(e)
             // alert('add-adrees')
+            toast.error(e.response.data.errors.msg)
             dispatch(setServerErrors(e.response.data.errors))
         }
     }
@@ -79,6 +82,7 @@ export const startEditAddress = ({formData,resetForm,redirect,id}) => {
             redirect()
 
         } catch (e) {
+            toast.error(e.response.data.errors.msg)
             console.log('edit-err',e)
         }
     }

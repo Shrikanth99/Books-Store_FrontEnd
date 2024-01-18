@@ -136,7 +136,7 @@ const Home = () => {
             </Carousel>
             <h2 style={{display:'inline-block',margin:'50px auto'}}>New Arrivals</h2>
             <span style={{marginLeft:'60px' }} onClick={handleNavigate} ><Link style={{color:'red'}} >See-all</Link></span>
-            <Slider {...settings} style={{width:'90vw',margin:'0 auto'}}>
+            <Slider {...settings} style={{width:'80vw',margin:'0 auto'}}>
                {newArrivals.map(ele=>{
                 return (<Card style={{margin:'0 10px'}} onClick={()=>{handleClick(ele._id)}}>
                 <Card.Img

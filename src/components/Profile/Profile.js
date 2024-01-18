@@ -103,7 +103,7 @@ const Profile = () => {
               )}
 
 
-<section  style={{ backgroundColor: '#f4f5f7',minHeight:'89.5vh' }}>
+<section  style={{ backgroundColor: '#fafdea',minHeight:'89.5vh' }}>
       <MDBContainer className="py-5 " >
         <MDBRow className="justify-content-center align-items-center ">
           <MDBCol lg="6" >

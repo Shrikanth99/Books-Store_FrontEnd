@@ -118,7 +118,8 @@ const ProductPage = () => {
   }, []);
 
   return (
-    <Container className="mt-5">
+    <div style={{height:'100vh',backgroundColor:'#fafdea', width:'100%', padding:'10px' }} >
+    <Container className="mt-5" >
       <Row>
         <Col md={6}>
           <Carousel style={{ width: "500px" }}>
@@ -226,6 +227,8 @@ const ProductPage = () => {
         </div>
       </Row>
     </Container>
+    </div>
+
   );
 };
 

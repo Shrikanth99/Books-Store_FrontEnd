@@ -52,7 +52,6 @@ export default function MyOrders() {
     <>
       <section
         className=" gradient-custom2"
-        style={{ backgroundColor: "#eee" }}
       >
         <MDBContainer className="py-5 h-100">
           <MDBRow className="justify-content-center align-items-center h-100">
