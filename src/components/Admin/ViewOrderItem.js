@@ -11,7 +11,7 @@ const ViewOrderItem = (props) => {
         <TableCell>{item.product.title}</TableCell>
         <TableCell>{item.quantity}</TableCell>
         <TableCell>{item.product.price}</TableCell>
-        <TableCell>{item.orderStatus}</TableCell>
+        <TableCell>{item.status}</TableCell>
         <TableCell>{item.orderId}</TableCell>
         <TableCell>{item.orderDate}</TableCell>
     </TableRow>
