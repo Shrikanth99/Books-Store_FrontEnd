@@ -110,7 +110,9 @@ const Products = () => {
         }
     }
     return () => {
-        console.log('som')
+        // setSearch('')
+        // setCategoryId('')
+        
     }
   }, [search,categoryId,sort,currentPage]);
 
@@ -121,6 +123,12 @@ const Products = () => {
         localStorage.removeItem('currentPage');
       };
   }, [currentPage]);
+
+  useEffect(()=>{
+    return () => {
+      console.log('cleam  ')
+    }
+  },[])
 
   return (
     <div className="container" style={{backgroundColor:'#fafdea', maxWidth:'100%', padding:'1px' }} >

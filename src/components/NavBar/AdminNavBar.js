@@ -20,12 +20,12 @@ const AdminNavBar = () => {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="ml-auto">
-                    <Nav.Link as={Link} to="/">Home</Nav.Link>
-                    <Nav.Link as={Link} to="/products">Products</Nav.Link>
-                    <Nav.Link as={Link} to="/add-product" >Add-Product</Nav.Link>
-                    <Nav.Link as={Link} to='/all-Orders' >View-Orders</Nav.Link>
-                    <Nav.Link as={Link} to="/stats" >Stats</Nav.Link>
-                    <Nav.Link as={Link} to="/" onClick={handleLogout}>Logout</Nav.Link>                    
+                    <Nav.Link as={Link} to="/" style={{color:'white'}} >Home</Nav.Link>
+                    <Nav.Link as={Link} to="/products" style={{color:'white'}} >Products</Nav.Link>
+                    <Nav.Link as={Link} to="/add-product"  style={{color:'white'}} >Add-Product</Nav.Link>
+                    <Nav.Link as={Link} to='/all-Orders' style={{color:'white'}} >View-Orders</Nav.Link>
+                    <Nav.Link as={Link} to="/stats" style={{color:'white'}} >Stats</Nav.Link>
+                    <Nav.Link as={Link} to="/" onClick={handleLogout} style={{color:'white'}} >Logout</Nav.Link>                    
                 </Nav>
             </Navbar.Collapse>
         </Navbar>

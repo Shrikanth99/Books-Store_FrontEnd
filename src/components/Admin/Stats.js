@@ -10,6 +10,7 @@ const Stats = () => {
     const products = useSelector((state) => {
         return state.products.data;
     });
+    console.log('00',products)
     let orders = useSelector((state) => {
         return state.order.orders
     })
@@ -57,6 +58,7 @@ const Stats = () => {
             return acc
         },{ id : i, label : ele.name , value : 0  })
     })
+    console.log('da',data)
   
 
     const barData = categories?.map((ele,i)=>{

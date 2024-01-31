@@ -46,7 +46,7 @@ const Home = () => {
     var settings = {
         dots: true,
         speed: 500,
-        slidesToShow: 4,
+        slidesToShow: 3,
         slidesToScroll: 1,
         initialSlide: 0,
         nextArrow: <Arrow />,
@@ -135,10 +135,11 @@ const Home = () => {
 
             </Carousel>
             <h2 style={{display:'inline-block',margin:'50px auto'}}>New Arrivals</h2>
-            <span style={{marginLeft:'60px' }} onClick={handleNavigate} ><Link style={{color:'red'}} >See-all</Link></span>
-            <Slider {...settings} style={{width:'80vw',margin:'0 auto'}}>
+            <span style={{marginLeft:'60px'}} onClick={handleNavigate} ><Link style={{color:'red'}} >See-all</Link></span>
+            <Slider {...settings} style={{width:'80vw', margin:'0 auto'}} >
                {newArrivals.map(ele=>{
-                return (<Card style={{margin:'0 10px'}} onClick={()=>{handleClick(ele._id)}}>
+                return (
+                <Card style={{margin:'0 10px'}} onClick={()=>{handleClick(ele._id)}}>
                 <Card.Img
                   className="custom-card-img"
                   src={ele.image[0].url}

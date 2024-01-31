@@ -13,6 +13,7 @@ import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import logo from '../../images/logo.png'
+import '../../styles/navbar.css'
 
 
 const UserNavBar = () => {
@@ -55,21 +56,22 @@ const UserNavBar = () => {
 
     }
     return (
-        <div style={{position:'sticky',top:'0', zIndex:1, backgroundColor:'#092b5a' }}  >
+        <div className='navBar'  >
             <Toaster/>
-            <Navbar expand="md"  >
+            <Navbar expand="md" >
             <Navbar.Brand as={Link} to="/"><img src={logo} width='50' height='50'style={{borderRadius:'50%'}}/></Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="ml-auto">
-                    <Nav.Link as={Link} to="/">Home</Nav.Link>
-                    <Nav.Link as={Link} to="/products">Products</Nav.Link>
+                    <Nav.Link as={Link} to="/" style={{color:'white'}}  >Home</Nav.Link>
+                    <Nav.Link as={Link} to="/products" style={{color:'white'}} >Products</Nav.Link>
                     <Nav.Link
                         id="basic-button"
                         aria-controls={open ? 'basic-menu' : undefined}
                         aria-haspopup="true"
                         aria-expanded={open ? 'true' : undefined}
                         onClick={handleClick}
+                        style={{color:'white'}}
                     > 
                         MyAccount
                     </Nav.Link>
@@ -87,7 +89,7 @@ const UserNavBar = () => {
                         <MenuItem onClick={handleClose}>SavedAddress</MenuItem>
                         <MenuItem onClick={handleClose} >My-Selling-Order</MenuItem>
                     </Menu>
-                    <Nav.Link as={Link} to="/" onClick={handleLogout}>Logout</Nav.Link>
+                    <Nav.Link as={Link} to="/" onClick={handleLogout} style={{color:'white'}} >Logout</Nav.Link>
                     <Nav.Link as={Link} to="/myCart">
                         <FontAwesomeIcon icon={faShoppingCart} />
                         <span className="cart-count">{carts?.length}</span>
