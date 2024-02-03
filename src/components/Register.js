@@ -127,6 +127,7 @@ const RegistrationForm = () => {
             name="username"
             value={userName}
             onChange={handleChange}
+            autoFocus={true}
           />
           {formErrors.userName && (
             <div className='invalid-feedback'>{formErrors.userName}</div>

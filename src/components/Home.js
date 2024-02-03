@@ -94,7 +94,7 @@ const Home = () => {
     console.log('ng')
 
     return (
-        <div style={{minHeight:'82%',display:'flex',flexDirection:'column'}} >
+        <div style={{minHeight:'82%',display:'flex',flexDirection:'column', backgroundColor:'#fafdea' }} >
             <Toaster/>
             <Carousel>
                 <Carousel.Item>
