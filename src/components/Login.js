@@ -144,7 +144,7 @@ const LoginForm = () => {
     },[])
 
     return (
-        <div>
+        <div  >
             <ToastContainer />
             {serverFormErrors.length > 0 && (
                 <div className="alert alert-danger">

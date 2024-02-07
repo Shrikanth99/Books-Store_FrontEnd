@@ -107,7 +107,7 @@ const RegistrationForm = () => {
   },[])
 
   return (
-    <div style={{height:'463px'}}>
+    <div  style={{display:'flex' }} className='m-4' >
         {serverFormErrors.length > 0 && (
               <div className="alert alert-danger">
                 {serverFormErrors.map(ele => (
@@ -116,7 +116,7 @@ const RegistrationForm = () => {
               </div>
             )}
   
-    <Container style={{maxWidth:'768px',marginTop:'20px',border:'1px solid grey',padding:'20px',borderRadius:'10px'}}>
+    <Container style={{maxWidth:'768px',marginTop:'40px',border:'1px solid grey',padding:'20px',borderRadius:'10px'}}>
       <Form onSubmit={handleSubmit}>
         <Form.Group controlId="formUsername">
           <Form.Label>Username</Form.Label>

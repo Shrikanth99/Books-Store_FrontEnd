@@ -15,6 +15,8 @@ import { Link } from "react-router-dom";
 import {Container,Typography,Grid,Box, ThemeProvider} from "@mui/material";
 import { LinkedIn, Instagram, Twitter, YouTube } from "@mui/icons-material";
 import theme from "./Theme";
+import './Footer.module.css'
+
 
 const Footer = () => {
 
@@ -26,36 +28,37 @@ const Footer = () => {
     <Box
     component="footer"
     sx={{
-        backgroundColor: 'aqua',
-        color:'customBlue',
+        color:'white',
+        backgroundColor: '#092b5a',
         
     }}
     >
     <Container   >
         <Grid container>
         <Grid item xs={12} sm={4}>
-            <Typography variant="h6" color="text.primary" gutterBottom>
+            <Typography variant="h6" color="text.light" gutterBottom>
             About Us
             </Typography>
-            <Typography variant="body2" color="text.secondary">
-hai            </Typography>
+            <Typography variant="body2" color="text.light">
+            Books-Store is a dynamic online marketplace tailored for book enthusiasts, offering a secure and user-friendly environment for browsing, purchasing, and selling books. 
+           </Typography>
         </Grid>
         <Grid item xs={12} sm={4}>
-            <Typography variant="h6" color="text.primary" gutterBottom>
+            <Typography variant="h6" color="text.light" gutterBottom>
             Contact Us
             </Typography>
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body2" color="text.light">
             Church St, Haridevpur, Shanthala Nagar, Ashok Nagar, Bengaluru, Karnataka 560001
             </Typography>
-            <Typography variant="body2" color="text.secondary">
-            Email: mail@comcraft.com
+            <Typography variant="body2" color="text.light">
+            Email: mail@bookstore.com
             </Typography>
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body2" color="text.light">
             Phone: +91 945684235
             </Typography>
         </Grid>
         <Grid item xs={12} sm={4}>
-            <Typography variant="h6" color="text.primary" gutterBottom>
+            <Typography variant="h6" color="text.light" gutterBottom>
             Follow Us
             </Typography>
             <Link to="https://www.linkedin.com/" target="_blank" color="inherit">
@@ -75,10 +78,10 @@ hai            </Typography>
         </Grid>
         </Grid>
         <Box mt={5}>
-        <Typography variant="body2" color="text.secondary" align="center">
-            {"Copyright © "}
+        <Typography variant="body2" color="text.light" align="center">
+             {"Copyright © "}
             <Link color="inherit" href="https://your-website.com/">
-            CommunityCrafter
+            BookStore
             </Link>{" "}
             {new Date().getFullYear()}
             {"."}

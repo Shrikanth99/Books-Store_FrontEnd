@@ -23,7 +23,7 @@ const WishList = () => {
     })
     console.log('syook', wishlistItems)
     return (
-        <div style={{ backgroundColor: '#fafdea', height: '100%', padding: '20px' }} >
+        <div style={{ backgroundColor: '#fafdea', height: '100%', padding: '20px', minHeight:'75vh' }} >
         <h2>Wishlisted Items</h2>
         {/* <div style={{ display: 'flex', flexWrap: 'wrap' }} > */}
         <Row xs={1} md={2} lg={3} className="g-4 mb-2" style={{marginRight:'0'}}>

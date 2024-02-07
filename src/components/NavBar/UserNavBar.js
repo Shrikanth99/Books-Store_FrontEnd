@@ -91,11 +91,11 @@ const UserNavBar = () => {
                     </Menu>
                     <Nav.Link as={Link} to="/" onClick={handleLogout} style={{color:'white'}} >Logout</Nav.Link>
                     <Nav.Link as={Link} to="/myCart">
-                        <FontAwesomeIcon icon={faShoppingCart} />
-                        <span className="cart-count">{carts?.length}</span>
+                        <FontAwesomeIcon icon={faShoppingCart} style={{color:'white'}} />
+                        <span className="cart-count" style={{color:'white'}} >{carts?.length}</span>
                     </Nav.Link>
-                    <Nav.Link as={Link} to="/wishlist">Wishlist</Nav.Link>
-                    <Nav.Link as={Link} to='/sellProduct' >Sell-Products</Nav.Link>
+                    <Nav.Link as={Link} to="/wishlist" style={{color:'white'}} >Wishlist</Nav.Link>
+                    <Nav.Link as={Link} to='/sellProduct' style={{color:'white'}} >Sell-Products</Nav.Link>
                 </Nav>
             </Navbar.Collapse>
         </Navbar>

@@ -15,7 +15,7 @@ const Home = () => {
     const navigate = useNavigate()
     const location = useLocation()
 
-    console.log('hhh',location.state)
+    // console.log('hhh',location.state)
     // alert('lhjkhhj')
     const handleClick = (id) => {
         navigate(`/product/${id}`);
@@ -91,7 +91,7 @@ const Home = () => {
         }
     },[])
 
-    console.log('ng')
+    // console.log('ng')
 
     return (
         <div style={{minHeight:'82%',display:'flex',flexDirection:'column', backgroundColor:'#fafdea' }} >
@@ -136,7 +136,7 @@ const Home = () => {
             </Carousel>
             <h2 style={{display:'inline-block',margin:'50px auto'}}>New Arrivals</h2>
             <span style={{marginLeft:'60px'}} onClick={handleNavigate} ><Link style={{color:'red'}} >See-all</Link></span>
-            <Slider {...settings} style={{width:'80vw', margin:'0 auto'}} >
+            <Slider {...settings} style={{width:'80vw', margin:'0 auto'}} className='mb-4' >
                {newArrivals.map(ele=>{
                 return (
                 <Card style={{margin:'0 10px'}} onClick={()=>{handleClick(ele._id)}}>

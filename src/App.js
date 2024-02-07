@@ -34,6 +34,7 @@ import { startGetCategories } from "./actions/category-action.js";
 import { startGetProcurement } from "./actions/procurement-action.js";
 import Notification from "./components/Notification/Notification.js";
 import MySelling from "./components/My-Account/MySelling.js";
+import Footer from "./components/Footer/Footer.js";
 
 export const UserContext = createContext();
 const App = () => {
@@ -120,10 +121,10 @@ const App = () => {
         {/* <Route path='/addresses' element={<AddressForm/>} /> */}
       </Routes>
      
-     {/* <footer className="bottom" >
+     <footer className="bottom" >
 
       <Footer/>
-     </footer> */}
+     </footer>
       
      
     </UserContext.Provider>
