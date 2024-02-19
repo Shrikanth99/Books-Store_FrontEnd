@@ -1,10 +1,9 @@
-# Getting Started with Create React App
+# Portfolio project : Books Store
+Developed a dynamic MERN-based Books-Store, offering 
+a secure online hub for browsing, searching, buying, and 
+selling books.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
-
-In the project directory, you can run:
 
 ### `npm start`
 
