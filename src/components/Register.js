@@ -116,9 +116,11 @@ const RegistrationForm = () => {
               </div>
             )}
   
-    <Container style={{maxWidth:'768px',marginTop:'40px',border:'1px solid grey',padding:'20px',borderRadius:'10px'}}>
+    <Container style={{maxWidth:'768px',marginTop:'40px',border:'1px solid grey',padding:'20px',}}>
       <Form onSubmit={handleSubmit}>
-        <Form.Group controlId="formUsername">
+        <Form.Group controlId="formUsername"
+        
+        >
           <Form.Label>Username</Form.Label>
           <Form.Control
             className={`${formErrors.userName ? 'is-invalid' : ''}`}

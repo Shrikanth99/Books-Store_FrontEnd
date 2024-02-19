@@ -1,15 +1,4 @@
-// import React from 'react'
-// import {
-//     Container,
-//     Grid,
-//     IconButton,
-//     Tooltip,
-//     Typography,
-//   } from "@mui/material";
-// import styles from './Footer.module.css'
-// import LinkedInIcon from "@mui/icons-material/LinkedIn";
-// import GitHubIcon from "@mui/icons-material/GitHub";
-// import { Link, useNavigate } from "react-router-dom";
+
 
 import { Link } from "react-router-dom";
 import {Container,Typography,Grid,Box, ThemeProvider} from "@mui/material";
