@@ -1,216 +1,215 @@
-import React,{useState,useContext, useEffect} from 'react'
-import { Form, Button, Container, Col, Row } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useContext, useEffect } from 'react';
 import { UserContext } from '../../App';
-import { MDBCol, MDBContainer, MDBRow, MDBCard, MDBCardText, MDBCardBody, MDBCardImage, MDBTypography, MDBIcon } from 'mdb-react-ui-kit';
-import '../../styles/profile.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit } from '@fortawesome/free-solid-svg-icons';
+import {
+  Box,
+  Container,
+  Typography,
+  Paper,
+  Grid,
+  Avatar,
+  Divider,
+  Card,
+  CardContent,
+  IconButton,
+  Stack,
+  Chip,
+  useTheme,
+  alpha
+} from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import EmailIcon from '@mui/icons-material/Email';
+import PhoneIcon from '@mui/icons-material/Phone';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import BadgeIcon from '@mui/icons-material/Badge';
 
 const Profile = () => {
-  const {userState} = useContext(UserContext)
-  console.log(userState,'mp')
-  const {user} = userState
-  console.log(user,'us')
+  const { userState } = useContext(UserContext);
+  const { user } = userState;
+  const theme = useTheme();
 
-    const [userName,setUsername] = useState(user? user?.userName : '')
-    const [email,setEmail] = useState(user ?  user.email :'')
-    const [phoneNumber,setPhoneNumber] = useState(user ? user.phoneNumber : '')
-    const [formErrors,setFormErrors] = useState({})
-    const [serverFormErrors,setServerFormErrors] = useState([])
-  
-    const errors = {}
-    const navigate = useNavigate()
-    const runValidations = () =>{
-      // const emailValidation = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
-  
-      if(userName.length === 0){
-          errors.userName = 'username is required'
-      }
-  
-      if(email.length === 0){
-          errors.email = 'email is required'
-      }
-      // else if(!emailValidation.test(email)){
-      //     errors.email = 'email format is invalid'
-      // }
-  
-      if(phoneNumber.length === 0){
-          errors.phoneNumber = 'phoneNumber is required'
-      }
-      else if(phoneNumber.length !== 10){
-          errors.phoneNumber = 'phoneNumber must be of 10 digits'
-      }
-  
+  const [userName, setUsername] = useState(user ? user.userName : '');
+  const [email, setEmail] = useState(user ? user.email : '');
+  const [phoneNumber, setPhoneNumber] = useState(user ? user.phoneNumber : '');
+  const [formErrors, setFormErrors] = useState({});
+  const [serverFormErrors, setServerFormErrors] = useState([]);
+
+  useEffect(() => {
+    if (user) {
+      setUsername(user.userName);
+      setEmail(user.email);
+      setPhoneNumber(user.phoneNumber);
     }
-  
-    const handleChange = (e) => {
-      const { name, value } = e.target;
-      if(name == 'username'){
-          setUsername(value)
-      }
-      else if(name == 'email'){
-          setEmail(value)
-      }
-      
-      else if(name == 'phoneNumber'){
-          setPhoneNumber(value)
-      }
-      
-    };
-  
-    // const handleSubmit = async(e) => {
-    //   e.preventDefault();
-    //   runValidations()
-    //   if(Object.keys(errors).length === 0){
-    //       const formData = {
-    //           userName,
-    //           email,
-    //           phoneNumber,
-    //       }
-    //       try{
-    //           setFormErrors({})
-    //           // const response = await axios.post('/api/register',formData)
-    //           // navigate('/login')
-    //       }
-    //       catch(e){
-    //           console.log(e)
-    //           setServerFormErrors(e.response.data.errors)
-    //       }
-    //   }
-    //   else{
-    //       console.log(errors)
-    //       setFormErrors(errors)
-    //   }
-    // };
+  }, [user]);
 
-    useEffect(() => {
-      if(user){
-        setUsername(user.userName)
-        setEmail(user.email)
-        setPhoneNumber(user.phoneNumber)
-      }
-    },[user])
-  
-    return (
-      <div>
-          {serverFormErrors.length > 0 && (
-                <div className="alert alert-danger">
-                  {serverFormErrors.map(ele => (
-                    <li key={ele.msg}>{ele.msg}</li>
-                  ))}
-                </div>
-              )}
+  return (
+    <Box 
+      sx={{ 
+        py: 6, 
+        minHeight: '89.5vh',
+        bgcolor: 'background.default',
+        background: `linear-gradient(to bottom, ${alpha(theme.palette.primary.light, 0.05)}, ${alpha(theme.palette.background.default, 1)})`
+      }}
+    >
+      <Container maxWidth="md">
+        {serverFormErrors.length > 0 && (
+          <Paper 
+            elevation={0}
+            sx={{ 
+              p: 2, 
+              mb: 3, 
+              borderRadius: 2,
+              border: `1px solid ${theme.palette.error.light}`,
+              bgcolor: alpha(theme.palette.error.light, 0.1)
+            }}
+          >
+            <Typography variant="subtitle2" color="error.main" fontWeight={500}>
+              {serverFormErrors.map(ele => (
+                <Box component="li" key={ele.msg} sx={{ mb: 0.5 }}>
+                  {ele.msg}
+                </Box>
+              ))}
+            </Typography>
+          </Paper>
+        )}
 
-
-<section  style={{ backgroundColor: '#fafdea',minHeight:'89.5vh' }}>
-      <MDBContainer className="py-5 " >
-        <MDBRow className="justify-content-center align-items-center ">
-          <MDBCol lg="6" >
-            <MDBCard className="mb-3" style={{ borderRadius: '.5rem'}} >
-              <MDBRow className="g-0">
-                <MDBCol md="4" className="gradient-custom text-center text-white"
-                  style={{ borderTopLeftRadius: '.5rem', borderBottomLeftRadius: '.5rem',maxHeight:'400px' }}>
-                  <MDBCardImage src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
-                    alt="Avatar" className="my-5" style={{ width: '80px' }} fluid />
-                  <MDBTypography tag="h5">{userName}</MDBTypography>
-                  <FontAwesomeIcon icon={faEdit} style={{cursor:'pointer'}} />
-                </MDBCol>
-                <MDBCol md="8">
-                  <MDBCardBody className="p-4">
-                    <MDBTypography tag="h6">Information</MDBTypography>
-                    <hr className="mt-0 mb-4" />
-                    <MDBTypography tag="h6">#UserId </MDBTypography>
-                    <MDBCardText  >{user._id}</MDBCardText>
-
-                    <MDBRow className="pt-1">
-                      <MDBCol  className="mb-3">
-                        <MDBTypography tag="h6">Email</MDBTypography>
-                        <MDBCardText className="text-muted">{email}</MDBCardText>
-                      </MDBCol>
-                    </MDBRow>
-                    <MDBRow>
-                      <MDBCol  className="mb-3">
-                        <MDBTypography tag="h6">Phone</MDBTypography>
-                        <MDBCardText className="text-muted">{phoneNumber}</MDBCardText>
-                      </MDBCol>
-                    </MDBRow>
-
-                    
-
-                    
-                  </MDBCardBody>
-                </MDBCol>
-              </MDBRow>
-            </MDBCard>
-          </MDBCol>
-        </MDBRow>
-      </MDBContainer>
-    </section>
-    
-      {/* <Container style={{maxWidth:'768px',marginTop:'100px',border:'1px solid grey',padding:'20px',borderRadius:'10px'}}>
-        <Form >
-          <Form.Group controlId="formUsername">
-            <Form.Label>Username</Form.Label>
-            <Form.Control
-              className={`${formErrors.userName ? 'is-invalid' : ''}`}
-              type="text"
-              placeholder="Enter username"
-              name="username"
-              value={userName}
-              onChange={handleChange}
-              readOnly
-            />
-            {formErrors.userName && (
-              <div className='invalid-feedback'>{formErrors.userName}</div>
-            )}
-          </Form.Group>
-  
-          <Form.Group controlId="formEmail">
-            <Form.Label>Email address</Form.Label>
-            <Form.Control
-              readOnly
-             className={`${formErrors.email ? 'is-invalid' : ''}`}
-              type="email"
-              placeholder="Enter email"
-              name="email"
-              value={email}
-              onChange={handleChange}
-            />
-            {formErrors.email && (
-              <div className='invalid-feedback'>{formErrors.email}</div>
-            )}
-          </Form.Group>
-  
-          
-  
-          <Form.Group controlId="formPhoneNumber">
-            <Form.Label>Phone Number</Form.Label>
-            <Form.Control
-              readOnly
-              className={`${formErrors.phoneNumber ? 'is-invalid' : ''}`}
-              type="tel"
-              placeholder="Enter phone number"
-              name="phoneNumber"
-              value={phoneNumber}
-              onChange={handleChange}
-            />
-            {formErrors.phoneNumber && (
-              <div className='invalid-feedback'>{formErrors.phoneNumber}</div>
-            )}
-          </Form.Group>
-  
-          
-          <div className='text-center'>
-          { <Button variant="primary" type="submit">
-            Register
-          </Button> }
-          </div>
-        </Form>
-      </Container> */}
-      
-      </div>
+        <Card
+          elevation={0}
+          sx={{
+            borderRadius: 3,
+            overflow: 'hidden',
+            border: `1px solid ${alpha(theme.palette.divider, 0.1)}`,
+            boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+            position: 'relative',
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              height: '6px',
+              background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
+            }
+          }}
+        >
+          <Grid container>
+            <Grid item xs={12} md={4} 
+              sx={{ 
+                bgcolor: 'primary.main',
+                background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
+                color: 'white',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                p: 4,
+                position: 'relative',
+              }}
+            >
+              <Avatar
+                src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
+                alt={userName}
+                sx={{ 
+                  width: 100, 
+                  height: 100,
+                  mb: 2,
+                  border: '4px solid white',
+                  boxShadow: '0 4px 10px rgba(0,0,0,0.15)'
+                }}
+              />
+              <Typography variant="h5" fontWeight={600} sx={{ mb: 1 }}>
+                {userName}
+              </Typography>
+              <Chip 
+                label="User Account" 
+                size="small" 
+                sx={{ 
+                  bgcolor: alpha('#fff', 0.2),
+                  color: 'white',
+                  fontWeight: 500
+                }} 
+              />
+              <IconButton 
+                sx={{ 
+                  position: 'absolute',
+                  top: 16,
+                  right: 16,
+                  color: 'white',
+                  bgcolor: alpha('#fff', 0.2),
+                  '&:hover': {
+                    bgcolor: alpha('#fff', 0.3),
+                  }
+                }}
+              >
+                <EditIcon fontSize="small" />
+              </IconButton>
+            </Grid>
+            
+            <Grid item xs={12} md={8}>
+              <CardContent sx={{ p: 4 }}>
+                <Typography 
+                  variant="h6" 
+                  fontWeight={600}
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    mb: 3
+                  }}
+                >
+                  <AccountCircleIcon sx={{ mr: 1 }} fontSize="small" color="primary" />
+                  User Information
+                </Typography>
+                <Divider sx={{ mb: 3 }} />
+                
+                <Stack spacing={3}>
+                  <Box>
+                    <Typography 
+                      variant="subtitle2" 
+                      color="text.secondary"
+                      sx={{ mb: 0.5, display: 'flex', alignItems: 'center' }}
+                    >
+                      <BadgeIcon fontSize="small" sx={{ mr: 1, color: theme.palette.primary.main }} />
+                      User ID
+                    </Typography>
+                    <Typography variant="body1" sx={{ fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      {user._id}
+                    </Typography>
+                  </Box>
+                  
+                  <Box>
+                    <Typography 
+                      variant="subtitle2" 
+                      color="text.secondary"
+                      sx={{ mb: 0.5, display: 'flex', alignItems: 'center' }}
+                    >
+                      <EmailIcon fontSize="small" sx={{ mr: 1, color: theme.palette.primary.main }} />
+                      Email
+                    </Typography>
+                    <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                      {email}
+                    </Typography>
+                  </Box>
+                  
+                  <Box>
+                    <Typography 
+                      variant="subtitle2" 
+                      color="text.secondary"
+                      sx={{ mb: 0.5, display: 'flex', alignItems: 'center' }}
+                    >
+                      <PhoneIcon fontSize="small" sx={{ mr: 1, color: theme.palette.primary.main }} />
+                      Phone
+                    </Typography>
+                    <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                      {phoneNumber}
+                    </Typography>
+                  </Box>
+                </Stack>
+              </CardContent>
+            </Grid>
+          </Grid>
+        </Card>
+      </Container>
+    </Box>
   );
-}
+};
 
-export default Profile
+export default Profile;

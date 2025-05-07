@@ -2,7 +2,54 @@
     background-color: #092b5a;
     position: sticky;
     top: 0;
-    z-index: 1;
+    z-index: 199;
     width: 100%;
 
 }
+
+.navBar {
+    background-color: #092b5a; /* Dark background */
+    padding: 10px 20px;
+  }
+  
+  .nav-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Ensures proper spacing */
+    width: 100%;
+  }
+  
+  /* Logo Styling */
+  .nav-logo img {
+    border-radius: 50%;
+  }
+  
+  /* Navbar Toggle */
+  .nav-toggle {
+    border: none;
+    background-color: transparent;
+  }
+  
+  .nav-toggle:focus {
+    outline: none;
+    box-shadow: none;
+  }
+  
+  /* Navigation Links */
+  .nav-links {
+    display: flex;
+    gap: 30px;
+  }
+  
+  .nav-item {
+    color: white !important;
+    font-size: 16px;
+    font-weight: 500;
+    transition: color 0.3s ease-in-out;
+  }
+  
+  .nav-item:hover {
+    color: #f39c12 !important; /* Highlight color */
+  }
+  
+  

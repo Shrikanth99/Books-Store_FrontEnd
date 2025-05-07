@@ -35,6 +35,7 @@ import { startGetProcurement } from "./actions/procurement-action.js";
 import Notification from "./components/Notification/Notification.js";
 import MySelling from "./components/My-Account/MySelling.js";
 import Footer from "./components/Footer/Footer.js";
+import About from "./components/About";
 
 export const UserContext = createContext();
 const App = () => {
@@ -99,6 +100,7 @@ const App = () => {
         <Route path="/login" element={<LoginForm />} />
         <Route path="/products" element={<Product />} />
         <Route path="/product/:id" element={<ProductPage />} />
+        <Route path="/about" element={<About />} />
         <Route path="/add-product" element={<AddProduct />} />
         <Route path="/all-Orders" element={<ViewOrders/> } />
         <Route path="/stats" element={<Stats/>} />

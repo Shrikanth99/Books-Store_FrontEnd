@@ -1,4 +1,5 @@
 import axios from "../config/axios";
+import {toast} from 'react-hot-toast'
 import { startEmptyCart } from "./product-action";
 
 export const startPayment = (products, totalAmount, userEmail) => {
@@ -16,7 +17,7 @@ export const startPayment = (products, totalAmount, userEmail) => {
           },
         }
       );
-      console.log("pa", res.data);
+      //console.log("pa", res.data);
       localStorage.setItem("transactionId", res.data.id);
       window.location = res.data.url;
     } catch (e) {
@@ -52,6 +53,7 @@ export const startUpdatePayment = (id) => {
         }
       });
       if(Object.keys(response.data).length > 0){
+        toast.success('Payment successfully done')
         console.log('nis',response.data)
           dispatch(successPayment(response.data))
           localStorage.removeItem('transactionId')
