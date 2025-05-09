@@ -134,21 +134,21 @@ const AddressForm = () => {
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      fullName: foundAddress ? foundAddress.fullName : '',
-      phoneNumber: foundAddress ? foundAddress.phoneNumber : '',
-      houseNumber: foundAddress ? foundAddress.houseNumber : '',
-      address: foundAddress ? foundAddress.address : '',
-      landMark: foundAddress ? foundAddress.landMark : '',
+        fullName: foundAddress ? foundAddress.fullName : '',
+        phoneNumber: foundAddress ? foundAddress.phoneNumber : '',
+        houseNumber: foundAddress ? foundAddress.houseNumber : '',
+        address: foundAddress ? foundAddress.address : '',
+        landMark: foundAddress ? foundAddress.landMark : '',
       city: foundAddress ? foundAddress.city : '',
-      state: foundAddress ? foundAddress.state : '',
+        state: foundAddress ? foundAddress.state : '',
       country: foundAddress ? foundAddress.country : 'India', // Default to India
-      pincode: foundAddress ? foundAddress.pincode : '',
-      addressType: foundAddress ? foundAddress.addressType : 'Home',
+        pincode: foundAddress ? foundAddress.pincode : '',
+        addressType: foundAddress ? foundAddress.addressType : 'Home',
       defaultAdd: foundAddress ? foundAddress.defaultAdd : false,
     },
     validationSchema: validationSchema,
     onSubmit: (formData, { resetForm }) => {
-      const redirect = () => {
+        const redirect = () => {
         navigate('/account/address', { state: { msg: foundAddress ? 'Address updated' : 'Address added' } });
       };
       
@@ -246,7 +246,7 @@ const AddressForm = () => {
   const getStepContent = (step) => {
     switch (step) {
       case 0:
-        return (
+  return (
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <Typography variant="h6" sx={{ mb: 2, display: 'flex', alignItems: 'center' }}>
@@ -256,8 +256,8 @@ const AddressForm = () => {
               <TextField
                 fullWidth
                 label="Full Name"
-                name="fullName"
-                value={formik.values.fullName}
+            name="fullName"
+            value={formik.values.fullName}
                 onChange={formik.handleChange}
                 error={formik.touched.fullName && Boolean(formik.errors.fullName)}
                 helperText={formik.touched.fullName && formik.errors.fullName}
@@ -275,8 +275,8 @@ const AddressForm = () => {
               <TextField
                 fullWidth
                 label="Phone Number"
-                name="phoneNumber"
-                value={formik.values.phoneNumber}
+            name="phoneNumber"
+            value={formik.values.phoneNumber}
                 onChange={formik.handleChange}
                 error={formik.touched.phoneNumber && Boolean(formik.errors.phoneNumber)}
                 helperText={formik.touched.phoneNumber && formik.errors.phoneNumber}
@@ -340,8 +340,8 @@ const AddressForm = () => {
               <TextField
                 fullWidth
                 label="House/Flat Number"
-                name="houseNumber"
-                value={formik.values.houseNumber}
+            name="houseNumber"
+            value={formik.values.houseNumber}
                 onChange={formik.handleChange}
                 error={formik.touched.houseNumber && Boolean(formik.errors.houseNumber)}
                 helperText={formik.touched.houseNumber && formik.errors.houseNumber}
@@ -353,8 +353,8 @@ const AddressForm = () => {
               <TextField
                 fullWidth
                 label="Street Address"
-                name="address"
-                value={formik.values.address}
+            name="address"
+            value={formik.values.address}
                 onChange={formik.handleChange}
                 error={formik.touched.address && Boolean(formik.errors.address)}
                 helperText={formik.touched.address && formik.errors.address}
@@ -368,8 +368,8 @@ const AddressForm = () => {
               <TextField
                 fullWidth
                 label="Landmark"
-                name="landMark"
-                value={formik.values.landMark}
+            name="landMark"
+            value={formik.values.landMark}
                 onChange={formik.handleChange}
                 error={formik.touched.landMark && Boolean(formik.errors.landMark)}
                 helperText={formik.touched.landMark && formik.errors.landMark}
@@ -425,8 +425,8 @@ const AddressForm = () => {
                     {...params}
                     fullWidth
                     label="State"
-                    name="state"
-                    value={formik.values.state}
+            name="state"
+            value={formik.values.state}
                     onChange={formik.handleChange}
                     error={formik.touched.state && Boolean(formik.errors.state)}
                     helperText={formik.touched.state && formik.errors.state}
@@ -440,8 +440,8 @@ const AddressForm = () => {
               <TextField
                 fullWidth
                 label="Country"
-                name="country"
-                value={formik.values.country}
+            name="country"
+            value={formik.values.country}
                 onChange={formik.handleChange}
                 error={formik.touched.country && Boolean(formik.errors.country)}
                 helperText={formik.touched.country && formik.errors.country}
@@ -453,8 +453,8 @@ const AddressForm = () => {
               <TextField
                 fullWidth
                 label="Pin Code"
-                name="pincode"
-                value={formik.values.pincode}
+            name="pincode"
+            value={formik.values.pincode}
                 onChange={formik.handleChange}
                 error={formik.touched.pincode && Boolean(formik.errors.pincode)}
                 helperText={formik.touched.pincode && formik.errors.pincode}
@@ -732,7 +732,7 @@ const AddressForm = () => {
             </form>
           </Box>
         </Paper>
-      </Container>
+    </Container>
     </Box>
   );
 };

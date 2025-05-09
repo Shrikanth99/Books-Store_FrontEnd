@@ -2,7 +2,6 @@ import React, { useContext, useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { UserContext } from '../../App';
 import { toast, Toaster } from 'react-hot-toast';
-import logo from '../../images/logo.png';
 
 // Material UI imports
 import {
@@ -44,7 +43,8 @@ import {
   Dashboard as DashboardIcon,
   Close as CloseIcon,
   Person as PersonIcon,
-  KeyboardArrowDown as KeyboardArrowDownIcon
+  KeyboardArrowDown as KeyboardArrowDownIcon,
+  LocalLibraryOutlined
 } from '@mui/icons-material';
 
 const AdminNavBar = () => {
@@ -153,14 +153,11 @@ const AdminNavBar = () => {
         }}
       >
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Avatar
-            src={logo}
-            alt="Book Store"
+          <LocalLibraryOutlined
             sx={{ 
-              width: 40, 
-              height: 40, 
-              mr: 1.5,
-              boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+              fontSize: '2rem', 
+              color: 'primary.main',
+              mr: 1.5
             }}
           />
           <Typography variant="h6" sx={{ fontWeight: 600 }}>
@@ -319,7 +316,7 @@ const AdminNavBar = () => {
     </Menu>
   );
   
-  return (
+    return (
     <>
       <Slide appear={false} direction="down" in={showAppBar}>
         <AppBar 
@@ -360,12 +357,10 @@ const AdminNavBar = () => {
                   color: 'inherit'
                 }}
               >
-                <Avatar
-                  src={logo}
-                  alt="Book Store"
+                <LocalLibraryOutlined
                   sx={{ 
-                    width: 40, 
-                    height: 40,
+                    fontSize: '2rem', 
+                    color: 'primary.main',
                     mr: 1,
                     transition: 'transform 0.2s ease',
                     '&:hover': {
@@ -378,11 +373,9 @@ const AdminNavBar = () => {
                     variant="h6"
                     noWrap
                     sx={{
+                      ml: 0.5,
                       fontWeight: 700,
-                      background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
-                      backgroundClip: 'text',
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
+                      color: 'text.primary',
                       mr: 2
                     }}
                   >

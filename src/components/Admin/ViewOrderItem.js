@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { 
   Typography, 
   TableRow, 
@@ -29,7 +29,7 @@ import {
 } from '@mui/icons-material';
 import { format } from 'date-fns';
 
-const ViewOrderItem = (props) => {
+const ViewOrderItem = forwardRef((props, ref) => {
   const { item } = props;
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -94,6 +94,7 @@ const ViewOrderItem = (props) => {
 
   return (
     <TableRow
+      ref={ref}
       hover
       sx={{
         '&:hover': {
@@ -279,6 +280,6 @@ const ViewOrderItem = (props) => {
       </TableCell>
     </TableRow>
   );
-};
+});
 
 export default ViewOrderItem;

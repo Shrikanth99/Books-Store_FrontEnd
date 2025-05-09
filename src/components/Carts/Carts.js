@@ -103,8 +103,8 @@ export default function Cart() {
   };
 
   const requestObj = (carts) => {
-    const products = carts.map((ele) => {
-      return {
+        const products = carts.map((ele) => {
+            return {
         product: ele.productId._id,
         price: ele.productId.price,
         title: ele.productId.title,
@@ -116,30 +116,30 @@ export default function Cart() {
 
   const requestObj2 = (carts) => {
     return carts.map(ele => {
-      return {
-        product: ele.productId._id,
+        return {
+            product: ele.productId._id,
         quantity: ele.quantity
       };
     });
   };
 
-  const handleNavigate = () => {
+    const handleNavigate = () => {
     navigate('/account/addressForm', { state: { msg: 'show' } });
   };
 
-  const handleClose = () => {
-    setShow(false);
+    const handleClose = () => {
+        setShow(false);
   };
-
+        
   const handleShow = () => {
     setShow(true);
-  };
-
+      };
+        
   const handleSwitch = () => {
     setSwitchBtn(!switchBtn);
-  };
+      };
 
-  const handleAddressId = (id) => {
+      const handleAddressId = (id) => {
     setAddressId(id);
     localStorage.setItem('addID', id);
   };
@@ -149,33 +149,33 @@ export default function Cart() {
     localStorage.removeItem('addID');
     setShow(false);
   };
-
-  const handleCheckOut = async () => {
+    
+    const handleCheckOut = async () => {
     if (!switchBtn) {
       const products = requestObj(carts);
       dispatch(startPayment(products, totalPrice, userEmail));
     } else {
       const products = requestObj2(carts);
-      const procurementData = {
-        products: products,
-        address: addressId,
+            const procurementData = {
+                products: products,
+                address: addressId,
         totalCost: totalPrice
       };
       dispatch(startCreateProcurement(procurementData, handleRemoveId));
     }
   };
 
-  const orderItem = payment.products?.map(ele => {
-    return {
+    const orderItem = payment.products?.map(ele => {
+        return {
       product: ele.product,
       quantity: ele.quantity
     };
   });
 
-  const orderData = {
+     const orderData = {
     orderItem: orderItem,
     totalAmount: payment?.totalAmount,
-    payment: payment?._id,
+        payment: payment?._id,
     address: addressId
   };
 
@@ -191,7 +191,7 @@ export default function Cart() {
     }
   }, []);
 
-  useEffect(() => {
+    useEffect(() => {
     if (Object.keys(payment).length > 0 && success) {
       dispatch(startOrder(orderData));
     }
@@ -391,7 +391,7 @@ export default function Cart() {
                               }}
                             >
                               Remove
-                            </Button>
+                                                        </Button>
                             {!switchBtn && (
                               <Button
                                 size="small"
@@ -407,7 +407,7 @@ export default function Cart() {
                                 }}
                               >
                                 Wishlist
-                              </Button>
+                                                        </Button>
                             )}
                           </Stack>
                         </Grid>
@@ -492,7 +492,7 @@ export default function Cart() {
                 <Stack direction="row" spacing={2} sx={{ flexWrap: 'wrap' }}>
                   <Box 
                     component="img" 
-                    src="https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce-gateway-stripe/assets/images/visa.svg"
+                                    src="https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce-gateway-stripe/assets/images/visa.svg"
                     alt="Visa"
                     sx={{ 
                       height: 30,
@@ -502,7 +502,7 @@ export default function Cart() {
                   />
                   <Box 
                     component="img" 
-                    src="https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce-gateway-stripe/assets/images/amex.svg"
+                                    src="https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce-gateway-stripe/assets/images/amex.svg"
                     alt="American Express"
                     sx={{ 
                       height: 30,
@@ -512,7 +512,7 @@ export default function Cart() {
                   />
                   <Box 
                     component="img" 
-                    src="https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce-gateway-stripe/assets/images/mastercard.svg"
+                                    src="https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce-gateway-stripe/assets/images/mastercard.svg"
                     alt="Mastercard"
                     sx={{ 
                       height: 30,
@@ -522,7 +522,7 @@ export default function Cart() {
                   />
                   <Box 
                     component="img" 
-                    src="https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce/includes/gateways/paypal/assets/images/paypal.png"
+                                    src="https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce/includes/gateways/paypal/assets/images/paypal.png"
                     alt="PayPal"
                     sx={{ 
                       height: 30,
@@ -574,7 +574,7 @@ export default function Cart() {
                         ₹{totalPrice}
                       </Typography>
                     </ListItem>
-                    {!switchBtn && (
+                                    {!switchBtn && (
                       <ListItem 
                         sx={{ 
                           px: 0, 
@@ -589,7 +589,7 @@ export default function Cart() {
                             sx={{ mr: 1, color: theme.palette.primary.main }}
                           />
                           <Typography variant="body1">
-                            Shipping
+                                        Shipping
                           </Typography>
                         </Box>
                         <Typography variant="body1" fontWeight={500}>
@@ -667,7 +667,7 @@ export default function Cart() {
                       }}
                     >
                       Proceed to Checkout
-                    </Button>
+                               </Button>    
                   )}
 
                   {switchBtn && (
@@ -704,5 +704,5 @@ export default function Cart() {
       
       {show && <AddressModal show={show} handleClose={handleClose} handleAddressId={handleAddressId} handleCheckOut={handleCheckOut} />}
     </Box>
-  );
+    );
 }

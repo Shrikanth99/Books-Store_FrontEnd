@@ -47,6 +47,7 @@ const App = () => {
   });
   const dispatch = useDispatch();
 
+
   useEffect(() => {
     dispatch(startGetProduct(null, null, null));
     dispatch(startGetCategories())

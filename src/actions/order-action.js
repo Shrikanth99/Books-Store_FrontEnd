@@ -33,36 +33,42 @@ const getOrder = (data) =>{
     return({type:'GET_ORDER',payload:data})
 }
 
-// admmin
-export const startGetAllOrders = (sort) => {
+// admin
+export const startGetAllOrders = (params = {}) => {
     return async(dispatch) => {
         try {
-            if(sort){
-
-                const res = await axios.get(`/order/listAll?sort=${sort}`,{
-                    headers : {
-                        'Authorization' : localStorage.getItem('token')
-                    }
-                })
-                dispatch(allOrder(res.data))
-            }else {
-                const res = await axios.get('/order/listAll',{
-                    headers : {
-                        'Authorization' : localStorage.getItem('token')
-                    }
-                })
-                dispatch(allOrder(res.data))
-            }
-            //console.log('all-od',res.data)
+            dispatch({ type: 'ORDERS_LOADING' });
+            
+            // Build query string from params
+            const { sort = -1, page = 1, limit = 8, status = '' } = params;
+            const queryParams = new URLSearchParams();
+            
+            if (sort) queryParams.append('sort', sort);
+            if (page) queryParams.append('page', page);
+            if (limit) queryParams.append('limit', limit);
+            if (status && status !== 'all') queryParams.append('status', status);
+            
+            const queryString = queryParams.toString();
+            const endpoint = queryString ? `/order/listAll?${queryString}` : '/order/listAll';
+            
+            const res = await axios.get(endpoint, {
+                headers: {
+                    'Authorization': localStorage.getItem('token')
+                }
+            });
+            
+            dispatch(allOrder(res.data));
+            return res.data;
         } catch (e) {
-            console.log('admin-od',e)
+            console.log('admin-od', e);
+            dispatch({ type: 'ORDERS_ERROR', payload: e.message });
+            return null;
         }
-
     }
 }
 
 const allOrder = (data) => {
-    return { type : 'ALL_ORDERS', payload : data }
+    return { type: 'ALL_ORDERS', payload: data }
 }
 
 export const startRemoveOrder = (id) =>{

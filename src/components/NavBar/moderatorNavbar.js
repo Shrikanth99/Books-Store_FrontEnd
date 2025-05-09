@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../../App';
 import { useSelector } from 'react-redux';
 import toast, { Toaster } from 'react-hot-toast';
-import logo from '../../images/logo.png';
 
 // Material UI imports
 import {
@@ -39,7 +38,10 @@ import {
   Logout as LogoutIcon,
   Dashboard as DashboardIcon,
   Person as PersonIcon,
-  Close as CloseIcon
+  Close as CloseIcon,
+  Add as AddIcon,
+  ShoppingBag as ShoppingBagIcon,
+  LocalLibraryOutlined
 } from '@mui/icons-material';
 
 const ModeratorNavBar = () => {
@@ -49,7 +51,7 @@ const ModeratorNavBar = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   
   // States
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [profileAnchorEl, setProfileAnchorEl] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -63,12 +65,13 @@ const ModeratorNavBar = () => {
     setError(null);
   }, []);
   
+  // Handle menu toggles
   const handleProfileMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
+    setProfileAnchorEl(event.currentTarget);
   };
   
-  const handleMenuClose = () => {
-    setAnchorEl(null);
+  const handleProfileMenuClose = () => {
+    setProfileAnchorEl(null);
   };
   
   const handleDrawerToggle = () => {
@@ -88,7 +91,7 @@ const ModeratorNavBar = () => {
       toast.error('Logout failed. Please try again.');
     } finally {
       setIsLoading(false);
-      handleMenuClose();
+      handleProfileMenuClose();
     }
   };
   
@@ -104,16 +107,22 @@ const ModeratorNavBar = () => {
     }
   };
   
-  const isMenuOpen = Boolean(anchorEl);
+  const handleNavigate = (path) => {
+    navigate(path);
+    handleProfileMenuClose();
+    setMobileOpen(false);
+  };
   
-  const menuId = 'primary-account-menu';
-  const renderMenu = (
+  const isProfileMenuOpen = Boolean(profileAnchorEl);
+  
+  // Profile Menu
+  const renderProfileMenu = (
     <Menu
-      anchorEl={anchorEl}
-      id={menuId}
+      anchorEl={profileAnchorEl}
+      id="profile-menu"
       keepMounted
-      open={isMenuOpen}
-      onClose={handleMenuClose}
+      open={isProfileMenuOpen}
+      onClose={handleProfileMenuClose}
       PaperProps={{
         sx: {
           mt: 1.5,
@@ -127,26 +136,22 @@ const ModeratorNavBar = () => {
     >
       <Box sx={{ px: 2, py: 1.5 }}>
         <Typography variant="subtitle1" fontWeight={600}>
-          Moderator Panel
+          Moderator Account
         </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Manage procurement
-        </Typography>
+
       </Box>
       <Divider />
-      <MenuItem onClick={() => { navigate('/dashboard'); handleMenuClose(); }}>
+      <MenuItem onClick={() => handleNavigate('/account/profile')}>
         <ListItemIcon>
-          <DashboardIcon fontSize="small" />
+          <PersonIcon fontSize="small" />
         </ListItemIcon>
-        <ListItemText>Dashboard</ListItemText>
+        <ListItemText>My Profile</ListItemText>
       </MenuItem>
-      <MenuItem onClick={() => { navigate('/notifications'); handleMenuClose(); }}>
+      <MenuItem onClick={() => handleNavigate('/notifications')}>
         <ListItemIcon>
-          <Badge badgeContent={pendingProcurements.length} color="error" sx={{ '& .MuiBadge-badge': { right: -3, top: 3 } }}>
-            <NotificationsIcon fontSize="small" />
-          </Badge>
+          <ShoppingBagIcon fontSize="small" />
         </ListItemIcon>
-        <ListItemText>Notifications</ListItemText>
+        <ListItemText>Procurements</ListItemText>
       </MenuItem>
       <Divider />
       <MenuItem onClick={handleLogout} disabled={isLoading}>
@@ -162,6 +167,7 @@ const ModeratorNavBar = () => {
     </Menu>
   );
   
+  // Mobile drawer content
   const drawer = (
     <Box sx={{ width: 250, bgcolor: 'background.paper' }}>
       <Box sx={{ 
@@ -169,36 +175,40 @@ const ModeratorNavBar = () => {
         alignItems: 'center', 
         justifyContent: 'space-between',
         p: 2,
-        borderBottom: `1px solid ${alpha(theme.palette.divider, 0.1)}`
+        borderBottom: `1px solid ${alpha(theme.palette.divider, 0.1)}`,
+        bgcolor: alpha(theme.palette.primary.main, 0.03)
       }}>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Avatar 
-            src={logo} 
-            alt="Logo" 
+          <LocalLibraryOutlined 
             sx={{ 
-              width: 42, 
-              height: 42,
-              mr: 1,
-              background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
+              fontSize: '2rem', 
+              color: 'primary.main',
+              mr: 1
             }} 
           />
           <Typography variant="h6" fontWeight={600}>
             Book Store
           </Typography>
         </Box>
-        <IconButton onClick={handleDrawerToggle} edge="end" sx={{ color: 'text.secondary' }}>
+        <IconButton onClick={handleDrawerToggle} sx={{ color: 'text.primary' }}>
           <CloseIcon />
         </IconButton>
       </Box>
       
       <List sx={{ pt: 1 }}>
-        <ListItem button onClick={() => { navigate('/dashboard'); handleDrawerToggle(); }}>
+        <ListItem button onClick={() => handleNavigate('/account/profile')}>
           <ListItemIcon>
-            <DashboardIcon color="primary" />
+            <PersonIcon color="primary" />
           </ListItemIcon>
-          <ListItemText primary="Dashboard" />
+          <ListItemText primary="My Profile" />
         </ListItem>
-        <ListItem button onClick={() => { navigate('/notifications'); handleDrawerToggle(); }}>
+        <ListItem button onClick={() => handleNavigate('/notifications')}>
+          <ListItemIcon>
+            <ShoppingBagIcon color="primary" />
+          </ListItemIcon>
+          <ListItemText primary="Procurements" />
+        </ListItem>
+        <ListItem button onClick={() => handleNavigate('/notifications')}>
           <ListItemIcon>
             <Badge badgeContent={pendingProcurements.length} color="error">
               {pendingProcurements.length > 0 ? (
@@ -242,22 +252,26 @@ const ModeratorNavBar = () => {
       <AppBar 
         position="sticky" 
         elevation={0}
-        sx={{
-          background: `linear-gradient(90deg, #092b5a, #1565c0)`,
-          borderBottom: `1px solid ${alpha(theme.palette.common.white, 0.1)}`,
-          boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+        sx={{ 
+          backgroundColor: 'background.paper',
+          borderBottom: `1px solid ${alpha(theme.palette.divider, 0.08)}`,
+          boxShadow: '0 2px 10px rgba(0,0,0,0.03)'
         }}
       >
-        <Container maxWidth="xl">
-          <Toolbar disableGutters sx={{ px: { xs: 1, sm: 2 } }}>
+        <Container maxWidth="lg">
+          <Toolbar disableGutters sx={{ py: { xs: 1, md: 1.5 } }}>
             {isMobile && (
               <IconButton
                 size="large"
                 edge="start"
-                color="inherit"
                 aria-label="menu"
                 onClick={handleDrawerToggle}
-                sx={{ mr: 1 }}
+                sx={{
+                  color: 'text.primary',
+                  '&:hover': {
+                    bgcolor: alpha(theme.palette.primary.main, 0.08)
+                  }
+                }}
               >
                 <MenuIcon />
               </IconButton>
@@ -265,7 +279,7 @@ const ModeratorNavBar = () => {
             
             <Box 
               component={Link} 
-              to="/dashboard" 
+              to="/notifications" 
               sx={{ 
                 display: 'flex', 
                 alignItems: 'center',
@@ -273,19 +287,13 @@ const ModeratorNavBar = () => {
                 color: 'inherit'
               }}
             >
-              <Avatar 
-                src={logo} 
-                alt="Logo" 
+              <LocalLibraryOutlined 
                 sx={{ 
-                  width: 45, 
-                  height: 45,
-                  bgcolor: 'white',
-                  p: 0.5,
-                  mr: 1,
-                  boxShadow: `0 0 10px ${alpha(theme.palette.common.white, 0.3)}`,
-                  transition: 'transform 0.2s ease',
+                  fontSize: '2rem', 
+                  color: 'primary.main',
+                  transition: 'transform 0.3s ease',
                   '&:hover': {
-                    transform: 'scale(1.05)',
+                    transform: 'scale(1.05)'
                   }
                 }} 
               />
@@ -294,10 +302,10 @@ const ModeratorNavBar = () => {
                   variant="h6"
                   noWrap
                   sx={{
-                    ml: 1,
+                    ml: 1.5,
                     fontWeight: 700,
-                    letterSpacing: '.1rem',
-                    color: 'white',
+                    color: 'text.primary',
+                    textDecoration: 'none',
                   }}
                 >
                   MODERATOR
@@ -305,19 +313,62 @@ const ModeratorNavBar = () => {
               )}
             </Box>
             
+            {!isMobile && (
+              <>
+                <Button
+                  component={Link}
+                  to="/account/profile"
+                  sx={{ 
+                    ml: 3,
+                    color: 'text.primary',
+                    fontSize: '0.9rem',
+                    fontWeight: 500,
+                    borderRadius: 1,
+                    px: 1.5,
+                    '&:hover': {
+                      backgroundColor: alpha(theme.palette.primary.main, 0.08),
+                    }
+                  }}
+                  startIcon={<PersonIcon />}
+                >
+                  Profile
+                </Button>
+                <Button
+                  component={Link}
+                  to="/notifications"
+                  sx={{ 
+                    ml: 2,
+                    color: 'text.primary',
+                    fontSize: '0.9rem',
+                    fontWeight: 500,
+                    borderRadius: 1,
+                    px: 1.5,
+                    '&:hover': {
+                      backgroundColor: alpha(theme.palette.primary.main, 0.08),
+                    }
+                  }}
+                  startIcon={<ShoppingBagIcon />}
+                >
+                  Procurements
+                </Button>
+              </>
+            )}
+            
             <Box sx={{ flexGrow: 1 }} />
             
             <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, md: 2 } }}>
               <Tooltip title={pendingProcurements.length ? `${pendingProcurements.length} pending notifications` : 'No new notifications'}>
                 <IconButton 
                   size="large" 
-                  color="inherit"
+                  aria-label="notifications"
                   onClick={handleNotificationsClick}
                   sx={{
+                    color: 'text.primary',
                     position: 'relative',
                     transition: 'transform 0.2s ease',
                     '&:hover': {
                       transform: 'scale(1.05)',
+                      bgcolor: alpha(theme.palette.primary.main, 0.08)
                     }
                   }}
                 >
@@ -342,48 +393,46 @@ const ModeratorNavBar = () => {
                 </IconButton>
               </Tooltip>
               
+              <IconButton
+                edge="end"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleProfileMenuOpen}
+                sx={{ 
+                  ml: { xs: 0, md: 1 },
+                  color: 'text.primary',
+                  '&:hover': {
+                    bgcolor: alpha(theme.palette.primary.main, 0.08)
+                  }
+                }}
+              >
+                <PersonIcon />
+              </IconButton>
+              
               {!isMobile && (
                 <Button
-                  variant="contained"
+                  variant="outlined"
                   onClick={handleLogout}
                   disabled={isLoading}
                   startIcon={isLoading ? <CircularProgress size={16} color="inherit" /> : <LogoutIcon />}
-                  color="error"
+                  color="primary"
                   sx={{
-                    borderRadius: 8,
+                    ml: 1,
+                    borderRadius: 1,
                     textTransform: 'none',
+                    fontSize: '0.9rem',
                     px: 2,
-                    bgcolor: alpha(theme.palette.error.main, 0.9),
+                    borderColor: alpha(theme.palette.primary.main, 0.5),
                     '&:hover': {
-                      bgcolor: theme.palette.error.main,
+                      bgcolor: alpha(theme.palette.primary.main, 0.08),
+                      borderColor: theme.palette.primary.main,
                     }
                   }}
                 >
                   Logout
                 </Button>
               )}
-              
-              <IconButton
-                edge="end"
-                aria-label="account of current user"
-                aria-controls={menuId}
-                aria-haspopup="true"
-                onClick={handleProfileMenuOpen}
-                color="inherit"
-                sx={{ 
-                  ml: { xs: 0, md: 1 },
-                  display: { xs: 'none', md: 'flex' },
-                }}
-              >
-                <Avatar 
-                  sx={{ 
-                    bgcolor: alpha(theme.palette.common.white, 0.15),
-                    '&:hover': { bgcolor: alpha(theme.palette.common.white, 0.25) }
-                  }}
-                >
-                  <PersonIcon />
-                </Avatar>
-              </IconButton>
             </Box>
           </Toolbar>
         </Container>
@@ -405,7 +454,8 @@ const ModeratorNavBar = () => {
         {drawer}
       </Drawer>
       
-      {renderMenu}
+      {/* Profile Menu */}
+      {renderProfileMenu}
       
       {/* Error Handling */}
       <Snackbar

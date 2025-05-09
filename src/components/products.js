@@ -53,18 +53,18 @@ const Products = () => {
     localStorage.getItem("categoryId") ? localStorage.getItem("categoryId") : ""
   );
   const [search, setSearch] = useState("");
-  const [currentPage, setCurrentPage] = useState(() => {
-    const savedPage = localStorage.getItem("currentPage");
-    return savedPage ? parseInt(savedPage) : 1;
-  });
+    const [currentPage, setCurrentPage] = useState(() => {
+      const savedPage = localStorage.getItem("currentPage");
+      return savedPage ? parseInt(savedPage) : 1;
+    });
   const [sort, setSort] = useState(localStorage.getItem('sort') ? localStorage.getItem('sort') : '');
-  
+
   // Added states for loading and error handling
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [loadingProducts, setLoadingProducts] = useState(false);
-  
+
   const sortValues = ["a-z", "z-a", "lowest-highest", "highest-lowest"];
 
   const productsPerPage = 8;
@@ -129,8 +129,8 @@ const Products = () => {
             .then(() => setLoadingProducts(false))
             .catch(handleFetchError);
         }
-      }
-      else if (search) {
+    }
+    else if (search) {
         if (sort) {
           dispatch(startGetProduct(search, null, sort, currentPage))
             .then(() => setLoadingProducts(false))
@@ -150,8 +150,8 @@ const Products = () => {
             .then(() => setLoadingProducts(false))
             .catch(handleFetchError);
         }
-      }
-      else {
+    }
+    else {
         if (sort) {
           dispatch(startGetProduct(null, null, sort, currentPage))
             .then(() => setLoadingProducts(false))
@@ -191,8 +191,8 @@ const Products = () => {
   useEffect(() => {
     localStorage.setItem("currentPage", currentPage);
     return () => {
-      localStorage.removeItem('currentPage');
-    };
+        localStorage.removeItem('currentPage');
+      };
   }, [currentPage]);
 
   useEffect(() => {
@@ -282,9 +282,9 @@ const Products = () => {
                   labelId="category-select-label"
                   id="category-select"
                   value={categoryId}
-                  onChange={(e) => {
-                    setCategoryId(e.target.value);
-                    localStorage.setItem("categoryId", e.target.value);
+        onChange={(e) => {
+          setCategoryId(e.target.value);
+          localStorage.setItem("categoryId", e.target.value);
                     setLoadingProducts(true);
                   }}
                   label="Category"
@@ -295,9 +295,9 @@ const Products = () => {
                   }
                 >
                   <MenuItem value="">All Categories</MenuItem>
-                  {categories.map((ele) => (
+        {categories.map((ele) => (
                     <MenuItem key={ele._id} value={ele._id}>
-                      {ele.name}
+            {ele.name}
                     </MenuItem>
                   ))}
                 </Select>
@@ -310,7 +310,7 @@ const Products = () => {
                 variant="outlined"
                 size="small"
                 placeholder="Search books..."
-                value={search}
+        value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 disabled={isLoading}
                 InputProps={{
@@ -342,7 +342,7 @@ const Products = () => {
                   labelId="sort-select-label"
                   id="sort-select"
                   value={sort}
-                  onChange={handleSort}
+                    onChange={handleSort}
                   label="Sort By"
                   startAdornment={
                     <InputAdornment position="start">
@@ -378,7 +378,7 @@ const Products = () => {
                         <Skeleton animation="wave" height={32} width="80%" />
                         <Skeleton animation="wave" height={24} width="50%" />
                       </CardContent>
-                    </Card>
+                </Card>
                   </Grid>
                 ))}
               </Grid>
@@ -442,8 +442,8 @@ const Products = () => {
                             }
                           },
                         }}
-                        onClick={() => handleClick(ele._id)}
-                      >
+                onClick={() => handleClick(ele._id)}
+              >
                         <Box sx={{ position: 'relative', overflow: 'hidden' }}>
                           <CardMedia
                             component="img"
@@ -502,7 +502,7 @@ const Products = () => {
                             ₹{ele.price}
                           </Typography>
                         </CardContent>
-                      </Card>
+                </Card>
                     </Grid>
                   ))}
                 </Grid>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import logo from '../../images/logo.png';
+// Remove logo import
+// import logo from '../../images/logo.png';
 
 // Material UI imports
 import {
@@ -29,6 +30,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import BookOutlinedIcon from '@mui/icons-material/BookOutlined';
+import { LocalLibraryOutlined } from '@mui/icons-material';
 
 // Hide AppBar on scroll
 function HideOnScroll(props) {
@@ -97,14 +99,10 @@ const NavBar = () => {
               }}
             >
               <Link to="/">
-                <Box
-                  component="img"
-                  src={logo}
-                  alt="Book Store"
+                <LocalLibraryOutlined
                   sx={{ 
-                    width: 45,
-                    height: 45,
-                    objectFit: 'contain',
+                    fontSize: '2rem', 
+                    color: 'primary.main',
                     transition: 'transform 0.3s ease',
                     '&:hover': {
                       transform: 'scale(1.05)'
@@ -264,14 +262,14 @@ const NavBar = () => {
               }}
             >
               <Link to="/">
-                <Box
-                  component="img"
-                  src={logo}
-                  alt="Book Store"
+                <LocalLibraryOutlined
                   sx={{ 
-                    width: 40,
-                    height: 40,
-                    objectFit: 'contain'
+                    fontSize: '2rem', 
+                    color: 'primary.main',
+                    transition: 'transform 0.3s ease',
+                    '&:hover': {
+                      transform: 'scale(1.05)'
+                    }
                   }}
                 />
               </Link>

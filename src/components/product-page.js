@@ -480,7 +480,7 @@ const ProductPage = () => {
               </Typography>
 
               <Stack direction="row" spacing={2} sx={{ mt: 4 }}>
-                <Button
+            <Button
                   variant={cartToggle ? "outlined" : "contained"}
                   color={cartToggle ? "error" : "primary"}
                   onClick={handleClick}
@@ -501,12 +501,12 @@ const ProductPage = () => {
                   }}
                 >
                   {cartToggle ? "Remove from Cart" : "Add to Cart"}
-                </Button>
-                <Button
+            </Button>
+            <Button
                   variant={wishlistToggle ? "outlined" : "contained"}
                   color={wishlistToggle ? "error" : "secondary"}
-                  onClick={handleWishlist}
-                  disabled={userState.user?.role === "admin"}
+              onClick={handleWishlist}
+              disabled={userState.user?.role === "admin"}
                   startIcon={wishlistToggle ? <FavoriteIcon /> : <FavoriteBorderIcon />}
                   sx={{
                     borderRadius: 8,
@@ -523,7 +523,7 @@ const ProductPage = () => {
                   }}
                 >
                   {wishlistToggle ? "Remove from Wishlist" : "Add to Wishlist"}
-                </Button>
+            </Button>
               </Stack>
               <Toaster position="top-center" />
             </Paper>
@@ -551,7 +551,7 @@ const ProductPage = () => {
                   </Typography>
                 </Box>
                 <List sx={{ p: 0 }}>
-                  {reviews.map((review, index) => (
+                {reviews.map((review, index) => (
                     <React.Fragment key={index}>
                       <ListItem 
                         alignItems="flex-start" 
@@ -582,9 +582,9 @@ const ProductPage = () => {
                                 {review.userId.userName}
                               </Typography>
                               <MuiRating
-                                value={review.rating}
-                                precision={0.5}
-                                readOnly
+                      value={review.rating} 
+                      precision={0.5}
+                      readOnly 
                                 size="small"
                               />
                             </Box>
@@ -602,7 +602,7 @@ const ProductPage = () => {
             )}
           </Grid>
         </Grid>
-      </Container>
+    </Container>
     </Box>
   );
 };

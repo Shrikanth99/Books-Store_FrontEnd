@@ -25,19 +25,35 @@ const createProcurement = (data) =>{
     return ({type:'CREATE_PROC',payload:data})
 }
 
-export const startGetProcurement = () =>{
-    return async (dispatch) =>{
-        try{
-            const res = await axios.get('/procurement/list',{
+export const startGetProcurement = (params = {}) => {
+    return async (dispatch) => {
+        try {
+            dispatch({ type: 'PROCUREMENT_LOADING' });
+            
+            // Build query string from params
+            const { sort = -1, page = 1, limit = 8, status = '' } = params;
+            const queryParams = new URLSearchParams();
+            
+            if (sort) queryParams.append('sort', sort);
+            if (page) queryParams.append('page', page);
+            if (limit) queryParams.append('limit', limit);
+            if (status && status !== 'all') queryParams.append('status', status);
+            
+            const queryString = queryParams.toString();
+            const endpoint = queryString ? `/procurement/list?${queryString}` : '/procurement/list';
+            
+            const res = await axios.get(endpoint, {
                 headers: {
-                    Authorization: localStorage.getItem("token"),
-                  }
-            })
-            // console.log('pc',res.data)
-            dispatch(getProcurment(res.data))
-        }
-        catch(e){
-            console.log(e)
+                    'Authorization': localStorage.getItem('token')
+                }
+            });
+            console.log('proc-res',res.data)
+            dispatch(getProcurment(res.data));
+            return res.data;
+        } catch (e) {
+            console.log('procurement-err', e);
+            dispatch({ type: 'PROCUREMENT_ERROR', payload: e.message });
+            return null;
         }
     }
 }

@@ -421,7 +421,7 @@ const Stats = () => {
               <Divider />
               <CardContent sx={{ p: 2 }}>
                 <Box sx={{ height: isTablet ? 300 : 350, display: 'flex', justifyContent: 'center' }}>
-                  <BarChart
+            <BarChart
                     series={[{
                       data: categoryBarData,
                       label: 'Products Count',
@@ -519,7 +519,7 @@ const Stats = () => {
               <Divider />
               <CardContent sx={{ p: 2 }}>
                 <Box sx={{ height: isTablet ? 300 : 350, display: 'flex', justifyContent: 'center' }}>
-                  <BarChart
+            <BarChart
                     series={[{
                       data: orderBarData,
                       label: 'Items Sold',
@@ -575,7 +575,7 @@ const Stats = () => {
               <Divider />
               <CardContent sx={{ p: 2 }}>
                 <Box sx={{ height: isTablet ? 300 : 350, display: 'flex', justifyContent: 'center' }}>
-                  <PieChart 
+            <PieChart
                     series={[{
                       data: procPieData,
                       highlightScope: { faded: 'global', highlighted: 'item' },
@@ -617,7 +617,7 @@ const Stats = () => {
               <Divider />
               <CardContent sx={{ p: 2 }}>
                 <Box sx={{ height: isTablet ? 300 : 350, display: 'flex', justifyContent: 'center' }}>
-                  <BarChart
+            <BarChart
                     series={[{
                       data: procBarData,
                       label: 'Procurement Count',

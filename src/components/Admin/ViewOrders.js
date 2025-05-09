@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useRef, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   Typography,
@@ -31,7 +31,6 @@ import {
   Badge,
   Grid,
   Avatar,
-  Pagination,
   useTheme,
   alpha
 } from "@mui/material";
@@ -56,39 +55,36 @@ const ViewOrders = () => {
   
   // State
   const [sort, setSort] = useState(-1);
-  const [pageNo, setPageNo] = useState(() => {
-    const savedPage = localStorage.getItem("currentPage");
-    return savedPage ? parseInt(savedPage) : 1;
-  });
-  const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [filterExpanded, setFilterExpanded] = useState(false);
   
+  // Pagination state
+  const [page, setPage] = useState(1);
+  const [hasMoreItems, setHasMoreItems] = useState(true);
+  const [localItems, setLocalItems] = useState([]);
+  
   // Get data from Redux store
-  const allOrders = useSelector((state) => state.order.orders || []);
-
-  // Constants for pagination
-  const productsPerPage = 8;
-  const indexOfLastProduct = pageNo * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const { orders, pagination, loading, error } = useSelector((state) => state.order);
 
   // Process order data
   const orderedProducts = useMemo(() => {
-    const products = [];
-    allOrders.forEach((ele) => {
-      ele.orderItem.forEach((ele2) => {
-        products.push({
-          ...ele2,
-          status: ele.orderStatus,
-          orderId: ele._id,
-          orderDate: ele.createdAt,
-          customer: ele.user?.name || 'Unknown',
-        });
+    // If searchQuery is used, filter the accumulated local items 
+    if (searchQuery) {
+      return localItems.filter(product => {
+        const query = searchQuery.toLowerCase();
+        return (
+          product.product?.title?.toLowerCase().includes(query) ||
+          product.orderId?.toLowerCase().includes(query) ||
+          product.status?.toLowerCase().includes(query) ||
+          (product.customer && product.customer.toLowerCase().includes(query))
+        );
       });
-    });
-    return products;
-  }, [allOrders]);
+    }
+    
+    // Otherwise return all accumulated items
+    return localItems;
+  }, [localItems, searchQuery]);
 
   // Calculate status counts for badges
   const statusCounts = useMemo(() => {
@@ -98,62 +94,92 @@ const ViewOrders = () => {
     }, {});
   }, [orderedProducts]);
 
-  // Filter products based on search query and status filter
-  const filteredProducts = useMemo(() => {
-    return orderedProducts.filter(product => {
-      // Status filter
-      if (statusFilter !== 'all' && product.status !== statusFilter) {
-        return false;
-      }
-      
-      // Search filter
-      if (searchQuery) {
-        const query = searchQuery.toLowerCase();
-        return (
-          product.product?.name?.toLowerCase().includes(query) ||
-          product.orderId.toLowerCase().includes(query) ||
-          product.status.toLowerCase().includes(query) ||
-          (product.customer && product.customer.toLowerCase().includes(query))
-        );
-      }
-      
-      return true;
+  // Convert orders data to our product items structure
+  const processOrders = useCallback((ordersData) => {
+    const products = [];
+    
+    if (!ordersData || !Array.isArray(ordersData)) return products;
+    
+    ordersData.forEach((ele) => {
+      ele.orderItem.forEach((ele2) => {
+        products.push({
+        ...ele2,
+          status: ele.orderStatus,
+          orderId: ele._id,
+          orderDate: ele.createdAt,
+          customer: ele.user?.name || 'Unknown',
+        });
+      });
     });
-  }, [orderedProducts, searchQuery, statusFilter]);
-
-  // Get current page products
-  const currentProducts = useMemo(() => {
-    return filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
-  }, [filteredProducts, indexOfFirstProduct, indexOfLastProduct]);
-
-  // Calculate total pages
-  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
-
-  // Load orders on sort change
-  useEffect(() => {
-    setLoading(true);
-    dispatch(startGetAllOrders(sort));
     
-    // Simulate loading for better UX
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 800);
+    return products;
+  }, []);
+
+  // Load initial data
+  useEffect(() => {
+    loadOrders(1, true);
+  }, [sort, statusFilter]);
+
+  // Function to load orders with pagination
+  const loadOrders = async (pageNum, isInitialLoad = false) => {
+    try {
+      const result = await dispatch(
+        startGetAllOrders({
+          page: pageNum,
+          limit: 8,
+          sort,
+          status: statusFilter,
+        })
+      );
+      
+      // Process the new orders
+      const newItems = processOrders(result.orders);
+      
+      // Update local items
+      if (isInitialLoad) {
+        setLocalItems(newItems);
+      } else {
+        setLocalItems(prevItems => [...prevItems, ...newItems]);
+      }
+      
+      // Check if we have more pages
+      setHasMoreItems(pageNum < result.pagination.pages);
+      
+    } catch (error) {
+      console.error("Error loading orders:", error);
+    }
+  };
+
+  // Load more items when scrolling
+  const loadMoreItems = useCallback(() => {
+    if (loading || !hasMoreItems) return;
     
-    return () => clearTimeout(timer);
-  }, [dispatch, sort]);
+    const nextPage = page + 1;
+    setPage(nextPage);
+    loadOrders(nextPage);
+  }, [loading, hasMoreItems, page, loadOrders]);
 
-  // Save current page to localStorage
+  // Reset state when filters change
   useEffect(() => {
-    localStorage.setItem("currentPage", pageNo);
-    return () => {
-      localStorage.removeItem('currentPage');
-    };
-  }, [pageNo]);
+    setPage(1);
+    setLocalItems([]);
+    setHasMoreItems(true);
+  }, [statusFilter, sort]);
 
-  // Reset to page 1 when filters change
-  useEffect(() => {
-    setPageNo(1);
-  }, [searchQuery, statusFilter]);
+  // Intersection Observer for infinite scroll
+  const observer = useRef();
+  const lastOrderElementRef = useCallback(node => {
+    if (loading) return;
+    if (observer.current) observer.current.disconnect();
+    
+    observer.current = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && hasMoreItems) {
+        loadMoreItems();
+      }
+    }, { threshold: 0.8 });
+    
+    if (node) observer.current.observe(node);
+  }, [loading, hasMoreItems, loadMoreItems]);
 
   // Handlers
   const handleClearFilters = () => {
@@ -162,14 +188,15 @@ const ViewOrders = () => {
   };
 
   const handleRefresh = () => {
-    setLoading(true);
-    dispatch(startGetAllOrders(sort));
-    setTimeout(() => setLoading(false), 800);
+    setPage(1);
+    setLocalItems([]);
+    setHasMoreItems(true);
+    loadOrders(1, true);
   };
 
   // Status style helpers
   const getStatusColor = (status) => {
-    switch (status.toLowerCase()) {
+    switch (status?.toLowerCase()) {
       case 'delivered':
         return theme.palette.success.main;
       case 'shipped':
@@ -184,7 +211,7 @@ const ViewOrders = () => {
   };
 
   const getStatusIcon = (status) => {
-    switch (status.toLowerCase()) {
+    switch (status?.toLowerCase()) {
       case 'delivered':
         return <DoneIcon fontSize="small" />;
       case 'shipped':
@@ -198,8 +225,8 @@ const ViewOrders = () => {
     }
   };
 
-  // Render loading state
-  if (loading) {
+  // Render loading state for initial load
+  if (loading && page === 1 && localItems.length === 0) {
     return (
       <Box sx={{ 
         display: 'flex', 
@@ -212,6 +239,24 @@ const ViewOrders = () => {
         <Typography variant="h6" color="text.secondary">
           Loading Orders...
         </Typography>
+      </Box>
+    );
+  }
+
+  // Render error state
+  if (error && !loading && localItems.length === 0) {
+    return (
+      <Box sx={{ p: 3 }}>
+        <Alert 
+          severity="error" 
+          action={
+            <Button color="inherit" size="small" onClick={handleRefresh}>
+              Retry
+            </Button>
+          }
+        >
+          Error loading orders: {error}
+        </Alert>
       </Box>
     );
   }
@@ -265,8 +310,8 @@ const ViewOrders = () => {
             >
               <MenuItem value={-1}>Newest First</MenuItem>
               <MenuItem value={1}>Oldest First</MenuItem>
-            </Select>
-          </FormControl>
+          </Select>
+        </FormControl>
         </Box>
       </Box>
       
@@ -291,7 +336,7 @@ const ViewOrders = () => {
                 <Typography>All Orders</Typography>
                 <Chip 
                   size="small" 
-                  label={orderedProducts.length} 
+                  label={pagination.total || orderedProducts.length} 
                   color="primary"
                   sx={{ height: 20, fontSize: '0.75rem' }}
                 />
@@ -539,7 +584,12 @@ const ViewOrders = () => {
       >
         <Box sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Typography variant="h6" fontWeight={600}>
-            {filteredProducts.length} {statusFilter === 'all' ? 'Orders' : `${statusFilter} Orders`}
+            {orderedProducts.length} {statusFilter === 'all' ? 'Orders' : `${statusFilter} Orders`}
+            {pagination.total > 0 && orderedProducts.length < pagination.total && !searchQuery && (
+              <Typography component="span" variant="body2" color="text.secondary" sx={{ ml: 1 }}>
+                (Showing {orderedProducts.length} of {pagination.total})
+              </Typography>
+            )}
           </Typography>
           {(searchQuery || statusFilter !== 'all') && (
             <Button 
@@ -569,10 +619,26 @@ const ViewOrders = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {currentProducts.length > 0 ? (
-                currentProducts.map((item) => (
-                  <ViewOrderItem key={`${item.orderId}-${item._id}`} item={item} />
-                ))
+              {orderedProducts.length > 0 ? (
+                orderedProducts.map((item, index) => {
+                  // Add ref to last item for infinite scroll
+                  if (orderedProducts.length === index + 1) {
+                    return (
+                      <ViewOrderItem 
+                        key={`${item.orderId}-${item._id}`}
+                        ref={lastOrderElementRef} 
+                        item={item} 
+                      />
+                    );
+                  } else {
+                    return (
+                      <ViewOrderItem 
+                        key={`${item.orderId}-${item._id}`} 
+                        item={item} 
+                      />
+                    );
+                  }
+                })
               ) : (
                 <TableRow>
                   <TableCell colSpan={8} align="center" sx={{ py: 5 }}>
@@ -592,10 +658,10 @@ const ViewOrders = () => {
               )}
             </TableBody>
           </Table>
-        </TableContainer>
+      </TableContainer>
         
-        {/* Pagination */}
-        {filteredProducts.length > 0 && (
+        {/* Loading indicator for infinite scroll */}
+        {loading && page > 1 && (
           <Box sx={{ 
             display: 'flex', 
             justifyContent: 'center', 
@@ -603,15 +669,23 @@ const ViewOrders = () => {
             borderTop: 1, 
             borderColor: 'divider' 
           }}>
-            <Pagination 
-              count={totalPages} 
-              page={pageNo} 
-              onChange={(e, value) => setPageNo(value)} 
-              color="primary"
-              showFirstButton
-              showLastButton
-              size="large"
-            />
+            <CircularProgress size={30} thickness={4} />
+          </Box>
+        )}
+        
+        {/* End of list message */}
+        {!hasMoreItems && orderedProducts.length > 0 && !loading && (
+          <Box sx={{ 
+            display: 'flex', 
+            justifyContent: 'center', 
+            p: 2, 
+            borderTop: 1, 
+            borderColor: 'divider',
+            bgcolor: alpha(theme.palette.primary.main, 0.03)
+          }}>
+            <Typography variant="body2" color="text.secondary">
+              You've reached the end of the list
+            </Typography>
           </Box>
         )}
       </Card>

@@ -188,7 +188,7 @@ const ShowAddress = () => {
     }
   };
 
-  useEffect(() => {
+    useEffect(() => {
     const storesAddForm = localStorage.getItem('addressForm');
     if (storesAddForm === 'true') {
       setAddressForm(true);
@@ -305,7 +305,7 @@ const ShowAddress = () => {
                     sx={{ textTransform: 'none', fontWeight: 500 }}
                   >
                     Retry
-                  </Button>
+                        </Button>
                 }
               >
                 {error}
@@ -569,7 +569,7 @@ const ShowAddress = () => {
                                 Edit
                               </Button>
                             </CardActions>
-                          </Card>
+                            </Card>
                         </Fade>
                       </Grid>
                     ))}

@@ -100,19 +100,19 @@ const SellProducts = () => {
 
   const handleCart = (id, pricing, func) => {
     const body = {
-      mode: 'sell'
+        mode: 'sell'
     };
-    if (!localStorage.getItem("token")) {
-      navigate("/login", { state: { msg: "You need to Login first" } });
-    } else {
+      if (!localStorage.getItem("token")) {
+        navigate("/login", { state: { msg: "You need to Login first" } });
+      } else {
       if (func === 'create') {
         setShow(true);
         setProductId(id);
         setPrice(pricing);
-      } else {
+        } else {
         dispatch(startRemoveCart(id, body));
       }
-    }
+  }
   };
   
   const handleClose = () => {
@@ -121,8 +121,8 @@ const SellProducts = () => {
 
   const handleProceed = (condition) => {
     const body = {
-      mode: 'sell',
-      condition,
+        mode: 'sell',
+        condition,
       price: condition === 'Fair' ? (price * 50) / 100 : price
     };
     handleClose();
@@ -133,15 +133,15 @@ const SellProducts = () => {
     setSearch("");
   };
 
-  useEffect(() => {
+useEffect(() => {
     if (categoryId && search) {
       if (sort) {
         dispatch(startGetProduct(search, categoryId, sort, currentPage));
       } else {
         dispatch(startGetProduct(search, categoryId, null, currentPage));
       }
-    }
-    else if (search) {
+  }
+  else if (search) {
       if (sort) {
         dispatch(startGetProduct(search, null, sort, currentPage));
       } else {
@@ -153,8 +153,8 @@ const SellProducts = () => {
       } else {
         dispatch(startGetProduct(null, categoryId, null, currentPage));
       }
-    }
-    else {
+  }
+  else {
       if (sort) {
         dispatch(startGetProduct(null, null, sort, currentPage));
       } else {
@@ -166,8 +166,8 @@ const SellProducts = () => {
   useEffect(() => {
     localStorage.setItem("currentPage", currentPage);
     return () => {
-      localStorage.removeItem('currentPage');
-    };
+        localStorage.removeItem('currentPage');
+      };
   }, [currentPage]);
 
   return (
@@ -229,10 +229,10 @@ const SellProducts = () => {
                   labelId="category-select-label"
                   id="category-select"
                   value={categoryId}
-                  onChange={(e) => {
-                    setCategoryId(e.target.value);
-                    localStorage.setItem("categoryId", e.target.value);
-                  }}
+        onChange={(e) => {
+          setCategoryId(e.target.value);
+          localStorage.setItem("categoryId", e.target.value);
+        }}
                   label="Category"
                   startAdornment={
                     <InputAdornment position="start">
@@ -241,9 +241,9 @@ const SellProducts = () => {
                   }
                 >
                   <MenuItem value="">All Categories</MenuItem>
-                  {categories.map((ele) => (
+        {categories.map((ele) => (
                     <MenuItem key={ele._id} value={ele._id}>
-                      {ele.name}
+            {ele.name}
                     </MenuItem>
                   ))}
                 </Select>
@@ -256,7 +256,7 @@ const SellProducts = () => {
                 variant="outlined"
                 size="small"
                 placeholder="Search books..."
-                value={search}
+        value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 InputProps={{
                   startAdornment: (
@@ -287,7 +287,7 @@ const SellProducts = () => {
                   labelId="sort-select-label"
                   id="sort-select"
                   value={sort}
-                  onChange={handleSort}
+                    onChange={handleSort}
                   label="Sort By"
                   startAdornment={
                     <InputAdornment position="start">
@@ -443,9 +443,9 @@ const SellProducts = () => {
                         }}
                       >
                         Remove from Cart
-                      </Button>
-                    ) : (
-                      <Button
+                        </Button>
+                        ) : (
+                        <Button
                         variant="contained"
                         color="secondary"
                         fullWidth
@@ -463,7 +463,7 @@ const SellProducts = () => {
                         }}
                       >
                         Sell This Book
-                      </Button>
+                        </Button>
                     )}
                   </CardActions>
                 </Card>

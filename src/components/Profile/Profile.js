@@ -40,8 +40,8 @@ const Profile = () => {
       setPhoneNumber(user.phoneNumber);
     }
   }, [user]);
-
-  return (
+  
+    return (
     <Box 
       sx={{ 
         py: 6, 
@@ -51,7 +51,7 @@ const Profile = () => {
       }}
     >
       <Container maxWidth="md">
-        {serverFormErrors.length > 0 && (
+          {serverFormErrors.length > 0 && (
           <Paper 
             elevation={0}
             sx={{ 
@@ -63,7 +63,7 @@ const Profile = () => {
             }}
           >
             <Typography variant="subtitle2" color="error.main" fontWeight={500}>
-              {serverFormErrors.map(ele => (
+                  {serverFormErrors.map(ele => (
                 <Box component="li" key={ele.msg} sx={{ mb: 0.5 }}>
                   {ele.msg}
                 </Box>

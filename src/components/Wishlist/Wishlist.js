@@ -33,15 +33,15 @@ const WishList = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   
-  const wishlist = useSelector(state => {
+    const wishlist = useSelector(state => {
     return state.wishlist.data;
   });
 
-  const products = useSelector(state => {
+    const products = useSelector(state => {
     return state.products.data;
   });
 
-  const handleWishlist = (id) => {
+    const handleWishlist = (id) => {
     const wishlistItem = wishlist.find(ele => ele.product === id);
     dispatch(startRemoveWishlist(wishlistItem._id));
   };
@@ -51,11 +51,11 @@ const WishList = () => {
   };
 
   let wishlistItems = [];
-  wishlist.forEach(ele => {
+    wishlist.forEach(ele => {
     wishlistItems.push(products.find(ele2 => ele2._id === ele.product));
   });
 
-  return (
+    return (
     <Box sx={{ 
       bgcolor: 'background.default', 
       py: 4,
@@ -109,7 +109,7 @@ const WishList = () => {
 
           {wishlistItems.length > 0 ? (
             <Grid container spacing={3}>
-              {wishlistItems.map((item) => (
+            {wishlistItems.map((item) => (
                 <Grid item key={item._id} xs={12} sm={6} md={4} lg={3}>
                   <Card
                     elevation={0}
@@ -244,7 +244,7 @@ const WishList = () => {
                         Remove
                       </Button>
                     </CardActions>
-                  </Card>
+                    </Card>
                 </Grid>
               ))}
             </Grid>

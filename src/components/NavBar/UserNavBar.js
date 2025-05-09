@@ -6,7 +6,6 @@ import { setEmptyAddress } from '../../actions/address-action';
 import { setClearCart } from '../../actions/product-action';
 import { setClearWishlist } from '../../actions/wishlist-action';
 import { toast, Toaster } from 'react-hot-toast';
-import logo from '../../images/logo.png';
 
 // Material UI imports
 import {
@@ -40,6 +39,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import HomeIcon from '@mui/icons-material/Home';
 import CategoryIcon from '@mui/icons-material/Category';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { LocalLibraryOutlined } from '@mui/icons-material';
 
 const UserNavBar = () => {
   const theme = useTheme();
@@ -80,7 +80,7 @@ const UserNavBar = () => {
     setMobileDrawerOpen(!mobileDrawerOpen);
   };
 
-  const handleLogout = () => {
+    const handleLogout = () => {
     localStorage.removeItem('token');
     userDispatch({ type: 'LOGOUT_USER' });
     dispatch(setEmptyAddress());
@@ -119,14 +119,12 @@ const UserNavBar = () => {
           bgcolor: alpha(theme.palette.primary.main, 0.03)
         }}
       >
-        <Avatar
-          src={logo}
+        <LocalLibraryOutlined 
           sx={{ 
-            width: 60, 
-            height: 60, 
-            mb: 1,
-            boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
-          }}
+            fontSize: '2.5rem', 
+            color: 'primary.main',
+            mb: 1
+          }} 
         />
         <Typography variant="h6" sx={{ fontWeight: 600 }}>
           Book Store
@@ -256,7 +254,7 @@ const UserNavBar = () => {
     </Box>
   );
 
-  return (
+    return (
     <>
       <AppBar 
         position="sticky" 
@@ -271,36 +269,36 @@ const UserNavBar = () => {
         <Container maxWidth="xl">
           <Toolbar disableGutters sx={{ minHeight: '70px' }}>
             {/* Logo - visible on all screens */}
-            <Box 
-              component={Link} 
+            <Box
+              component={Link}
               to="/"
-              sx={{ 
-                display: 'flex', 
+              sx={{
+                display: 'flex',
                 alignItems: 'center',
                 textDecoration: 'none',
-                color: 'inherit'
+                color: 'inherit',
+                mr: 2
               }}
             >
-              <Avatar
-                src={logo}
-                alt="Book Store"
+              <LocalLibraryOutlined 
                 sx={{ 
-                  width: 40, 
-                  height: 40,
-                  mr: 1
-                }}
+                  fontSize: '2rem', 
+                  color: 'primary.main',
+                  transition: 'transform 0.2s ease',
+                  '&:hover': {
+                    transform: 'scale(1.05)'
+                  }
+                }} 
               />
               {!isMobile && (
                 <Typography
                   variant="h6"
                   noWrap
                   sx={{
+                    ml: 1.5,
                     fontWeight: 700,
-                    background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
-                    backgroundClip: 'text',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    mr: 2
+                    color: 'text.primary',
+                    textDecoration: 'none'
                   }}
                 >
                   Book Store
@@ -386,7 +384,7 @@ const UserNavBar = () => {
                     <Button
                       onClick={handleAccountMenuClick}
                       aria-controls={accountMenuOpen ? 'account-menu' : undefined}
-                      aria-haspopup="true"
+                        aria-haspopup="true"
                       aria-expanded={accountMenuOpen ? 'true' : undefined}
                       endIcon={<KeyboardArrowDownIcon />}
                       startIcon={<AccountCircleIcon />}
@@ -436,7 +434,7 @@ const UserNavBar = () => {
                     <MenuItem onClick={() => handleAccountMenuClose('selling')}>
                       My Selling Orders
                     </MenuItem>
-                  </Menu>
+                    </Menu>
 
                   {/* Logout Button */}
                   <Button

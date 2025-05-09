@@ -271,7 +271,7 @@ export default function MyOrders() {
                       </Box>
                     ))}
                     
-                    {ele.orderStatus === 'Pending' && (
+                          {ele.orderStatus === 'Pending' && (
                       <Box 
                         sx={{ 
                           p: 2, 
@@ -306,8 +306,8 @@ export default function MyOrders() {
           </CardContent>
         </Card>
       </Container>
-      
-      {show && (
+
+        {show && (
         <Suspense fallback={
           <Box sx={{ 
             display: 'flex', 
@@ -330,7 +330,7 @@ export default function MyOrders() {
             handleClose={handleClose}
           />
         </Suspense>
-      )}
+        )}
     </Box>
   );
 }
