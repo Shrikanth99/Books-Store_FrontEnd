@@ -43,7 +43,8 @@ import {
   BarChart as BarChartIcon,
   Dashboard as DashboardIcon,
   Close as CloseIcon,
-  Person as PersonIcon
+  Person as PersonIcon,
+  KeyboardArrowDown as KeyboardArrowDownIcon
 } from '@mui/icons-material';
 
 const AdminNavBar = () => {
@@ -148,8 +149,7 @@ const AdminNavBar = () => {
           alignItems: 'center',
           p: 2,
           borderBottom: `1px solid ${alpha(theme.palette.divider, 0.1)}`,
-          background: `linear-gradient(to right, ${theme.palette.primary.dark}, ${theme.palette.primary.main})`,
-          color: 'white'
+          bgcolor: alpha(theme.palette.primary.main, 0.03)
         }}
       >
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -160,15 +160,14 @@ const AdminNavBar = () => {
               width: 40, 
               height: 40, 
               mr: 1.5,
-              bgcolor: 'white',
-              boxShadow: '0 4px 8px rgba(0,0,0,0.15)'
+              boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
             }}
           />
           <Typography variant="h6" sx={{ fontWeight: 600 }}>
             Admin Panel
           </Typography>
         </Box>
-        <IconButton onClick={handleToggleMobileDrawer} size="small" sx={{ color: 'white' }}>
+        <IconButton onClick={handleToggleMobileDrawer} size="small" sx={{ color: 'text.secondary' }}>
           <CloseIcon />
         </IconButton>
       </Box>
@@ -327,22 +326,24 @@ const AdminNavBar = () => {
           position="sticky" 
           elevation={0}
           sx={{
-            background: `linear-gradient(to right, ${theme.palette.primary.dark}, ${theme.palette.primary.main})`,
-            boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+            bgcolor: 'background.paper',
+            borderBottom: `1px solid ${alpha(theme.palette.divider, 0.08)}`,
+            boxShadow: '0 2px 10px rgba(0,0,0,0.05)',
+            color: 'text.primary',
             transition: 'transform 0.3s ease'
           }}
         >
           <Container maxWidth="xl">
-            <Toolbar disableGutters sx={{ minHeight: '70px', px: { xs: 1, sm: 2 } }}>
+            <Toolbar disableGutters sx={{ minHeight: '70px' }}>
               {/* Mobile menu icon */}
               {isMobile && (
                 <IconButton
                   size="large"
-                  edge="start"
-                  color="inherit"
                   aria-label="menu"
+                  edge="start"
                   onClick={handleToggleMobileDrawer}
-                  sx={{ mr: 2 }}
+                  sx={{ ml: 'auto' }}
+                  color="inherit"
                 >
                   <MenuIcon />
                 </IconButton>
@@ -363,12 +364,10 @@ const AdminNavBar = () => {
                   src={logo}
                   alt="Book Store"
                   sx={{ 
-                    width: 45, 
-                    height: 45,
-                    bgcolor: 'white',
-                    p: 0.5,
+                    width: 40, 
+                    height: 40,
+                    mr: 1,
                     transition: 'transform 0.2s ease',
-                    boxShadow: `0 0 10px ${alpha(theme.palette.common.white, 0.3)}`,
                     '&:hover': {
                       transform: 'scale(1.05)'
                     }
@@ -379,108 +378,109 @@ const AdminNavBar = () => {
                     variant="h6"
                     noWrap
                     sx={{
-                      ml: 1,
                       fontWeight: 700,
-                      letterSpacing: '.05rem',
-                      color: 'white',
+                      background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
+                      backgroundClip: 'text',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      mr: 2
                     }}
                   >
-                    ADMIN PANEL
+                    Admin Panel
                   </Typography>
                 )}
               </Box>
-              
-              {/* Desktop navigation links */}
+
+              {/* Desktop navigation */}
               {!isMobile && (
-                <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center', gap: 1 }}>
-                  {navItems.map((item) => (
+                <>
+                  <Box sx={{ flexGrow: 1, display: 'flex', gap: 0.5 }}>
+                    {navItems.map((item) => (
+                      <Button
+                        key={item.text}
+                        component={Link}
+                        to={item.path}
+                        startIcon={item.icon}
+                        sx={{
+                          my: 2, 
+                          px: 2,
+                          textTransform: 'none',
+                          fontWeight: isActive(item.path) ? 600 : 500,
+                          color: isActive(item.path) ? theme.palette.primary.main : alpha(theme.palette.text.primary, 0.85),
+                          position: 'relative',
+                          '&::after': isActive(item.path) ? {
+                            content: '""',
+                            position: 'absolute',
+                            bottom: 0,
+                            left: '50%',
+                            width: '30%',
+                            height: '3px',
+                            backgroundColor: theme.palette.primary.main,
+                            transform: 'translateX(-50%)',
+                            borderRadius: '4px 4px 0 0'
+                          } : {},
+                          '&:hover': {
+                            backgroundColor: 'transparent',
+                            color: theme.palette.primary.main,
+                          }
+                        }}
+                      >
+                        {item.text}
+                      </Button>
+                    ))}
+                  </Box>
+
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                    {/* Admin Menu */}
+                    <Tooltip title="Admin settings">
+                      <Button
+                        onClick={handleProfileMenuOpen}
+                        aria-controls={profileMenuOpen ? 'admin-menu' : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={profileMenuOpen ? 'true' : undefined}
+                        endIcon={<KeyboardArrowDownIcon />}
+                        startIcon={<PersonIcon />}
+                        sx={{
+                          textTransform: 'none',
+                          fontWeight: 500,
+                          color: alpha(theme.palette.text.primary, 0.85),
+                          '&:hover': {
+                            backgroundColor: 'transparent',
+                            color: theme.palette.primary.main,
+                          }
+                        }}
+                      >
+                        Admin
+                      </Button>
+                    </Tooltip>
+
+                    {/* Logout Button */}
                     <Button
-                      key={item.text}
-                      component={Link}
-                      to={item.path}
-                      startIcon={item.icon}
+                      variant="outlined"
+                      color="error"
+                      onClick={handleLogout}
+                      disabled={isLoading}
+                      startIcon={isLoading ? <CircularProgress size={16} color="inherit" /> : <LogoutIcon />}
                       sx={{
-                        my: 2, 
-                        px: 2,
-                        color: 'white',
+                        ml: 1,
+                        border: `1px solid ${alpha(theme.palette.error.main, 0.5)}`,
                         textTransform: 'none',
-                        fontWeight: isActive(item.path) ? 600 : 500,
-                        position: 'relative',
-                        '&::after': isActive(item.path) ? {
-                          content: '""',
-                          position: 'absolute',
-                          bottom: 0,
-                          left: '50%',
-                          width: '30%',
-                          height: '3px',
-                          backgroundColor: 'white',
-                          transform: 'translateX(-50%)',
-                          borderRadius: '4px 4px 0 0'
-                        } : {},
+                        fontWeight: 500,
+                        borderRadius: 2,
                         '&:hover': {
-                          backgroundColor: alpha(theme.palette.common.white, 0.1),
+                          backgroundColor: alpha(theme.palette.error.main, 0.05),
+                          borderColor: theme.palette.error.main
+                        },
+                        '&.Mui-disabled': {
+                          borderColor: alpha(theme.palette.error.main, 0.2),
                         }
                       }}
                     >
-                      {item.text}
+                      {isLoading ? 'Logging out...' : 'Logout'}
                     </Button>
-                  ))}
-                </Box>
+                  </Box>
+                </>
               )}
-              
-              {/* Right side controls */}
-              <Box sx={{ display: 'flex', ml: 'auto' }}>
-                {/* Profile Icon & Menu (Desktop) */}
-                {!isMobile && (
-                  <>
-                    <Tooltip title="Admin account">
-                      <IconButton
-                        onClick={handleProfileMenuOpen}
-                        size="large"
-                        edge="end"
-                        color="inherit"
-                        sx={{ ml: 1 }}
-                      >
-                        <Avatar sx={{ 
-                          width: 38, 
-                          height: 38,
-                          bgcolor: alpha(theme.palette.common.white, 0.15),
-                          '&:hover': { bgcolor: alpha(theme.palette.common.white, 0.25) }
-                        }}>
-                          <PersonIcon />
-                        </Avatar>
-                      </IconButton>
-                    </Tooltip>
-                    {profileMenu}
-                  </>
-                )}
-                
-                {/* Logout Button (Desktop) */}
-                {!isMobile && (
-                  <Button
-                    variant="contained"
-                    color="error"
-                    onClick={handleLogout}
-                    disabled={isLoading}
-                    startIcon={isLoading ? <CircularProgress size={16} color="inherit" /> : <LogoutIcon />}
-                    sx={{
-                      ml: 2,
-                      textTransform: 'none',
-                      fontWeight: 500,
-                      borderRadius: 8,
-                      bgcolor: alpha(theme.palette.error.main, 0.9),
-                      '&:hover': {
-                        bgcolor: theme.palette.error.main,
-                      },
-                      '&.Mui-disabled': {
-                        bgcolor: alpha(theme.palette.error.main, 0.6),
-                      }
-                    }}
-                  >
-                    {isLoading ? 'Logging out...' : 'Logout'}
-                  </Button>
-                )}
-              </Box>
             </Toolbar>
           </Container>
         </AppBar>
