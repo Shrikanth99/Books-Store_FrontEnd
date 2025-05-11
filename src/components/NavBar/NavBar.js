@@ -62,7 +62,7 @@ const NavBar = () => {
   
   const pages = [
     { title: 'Home', path: '/' },
-    { title: 'Products', path: '/products' },
+    { title: 'Books', path: '/products' },
     { title: 'Categories', path: '/categories' },
     { title: 'About', path: '/about' }
   ];
@@ -272,6 +272,20 @@ const NavBar = () => {
                     }
                   }}
                 />
+                              <Typography
+                variant="h6"
+                noWrap
+                component="div"
+                sx={{
+                  ml: 1.5,
+                  fontWeight: 700,
+                  color: 'text.primary',
+                  textDecoration: 'none',
+                  display: { xs: 'none', lg: 'flex' }
+                }}
+              >
+                Book Store
+              </Typography>
               </Link>
             </Box>
 
@@ -330,7 +344,7 @@ const NavBar = () => {
               alignItems="center"
             >
               {/* Search Button */}
-              <Tooltip title="Search">
+              {/* <Tooltip title="Search">
                 <IconButton 
                   aria-label="search" 
                   sx={{ 
@@ -342,10 +356,10 @@ const NavBar = () => {
                 >
                   <SearchIcon />
                 </IconButton>
-              </Tooltip>
+              </Tooltip> */}
 
               {/* Cart Button */}
-              <Tooltip title="Shopping Bag">
+              {/* <Tooltip title="Shopping Bag">
                 <IconButton 
                   aria-label="shopping cart" 
                   sx={{ 
@@ -359,7 +373,7 @@ const NavBar = () => {
                     <ShoppingBagOutlinedIcon />
                   </Badge>
                 </IconButton>
-              </Tooltip>
+              </Tooltip> */}
 
               {/* Desktop Auth Buttons or User Menu */}
               <Box sx={{ display: { xs: 'none', sm: 'flex' } }}>

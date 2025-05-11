@@ -22,6 +22,7 @@ import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined
 import VerifiedOutlinedIcon from '@mui/icons-material/VerifiedOutlined';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
+import { Link } from 'react-router-dom';
 
 // Team members data
 const teamMembers = [
@@ -104,25 +105,33 @@ const About = () => {
                 WebkitTextFillColor: 'transparent',
               }}
             >
-              Our Story
+              Welcome to Book Store
             </Typography>
             
             <Typography variant="body1" sx={{ mb: 3, color: 'text.secondary', lineHeight: 1.8 }}>
-              Founded in 2010, Book Store began with a simple mission: to share the joy of reading with everyone. 
-              What started as a small corner shop with a few hundred books has grown into one of India's most loved 
-              online bookstores, offering thousands of titles across genres.
+              Book Store is a comprehensive online platform that revolutionizes the way readers discover, buy, and sell books. 
+              Our platform connects book enthusiasts, sellers, and readers in a seamless ecosystem where knowledge flows freely 
+              and books find their perfect homes.
             </Typography>
             
+            <Typography variant="body1" sx={{ mb: 3, color: 'text.secondary', lineHeight: 1.8 }}>
+              What sets us apart is our unique marketplace model that empowers both individual sellers and established bookstores. 
+              Whether you're looking to expand your personal library, sell your pre-loved books, or discover rare editions, 
+              our platform provides the tools and community to make it happen.
+            </Typography>
+
             <Typography variant="body1" sx={{ mb: 4, color: 'text.secondary', lineHeight: 1.8 }}>
-              Our journey has been guided by our passion for literature and our commitment to making quality books 
-              accessible to readers everywhere. We believe that books have the power to transform lives, spark imagination, 
-              and foster understanding between people of all backgrounds.
+              With features like secure transactions, real-time notifications, and a robust review system, we ensure a trustworthy 
+              and engaging experience for everyone. Our commitment to quality, combined with a user-friendly interface, makes 
+              Book Store the preferred destination for book lovers across India.
             </Typography>
             
             <Button 
               variant="contained" 
               color="primary"
               size={isMobile ? "medium" : "large"}
+              component={Link}
+              to="/products"
               endIcon={<ArrowRightAltIcon />}
               sx={{ 
                 borderRadius: 8,
@@ -138,15 +147,15 @@ const About = () => {
                 transition: 'all 0.2s ease-in-out',
               }}
             >
-              Contact Us
+             Explore Books
             </Button>
           </Grid>
           
           <Grid item xs={12} md={6}>
             <Box
               component="img"
-              src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2341&q=80"
-              alt="Book Store interior with bookshelves"
+              src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2341&q=80"
+              alt="Modern library with digital and physical books"
               sx={{
                 width: '100%',
                 height: { xs: '300px', md: '400px' },
@@ -180,11 +189,32 @@ const About = () => {
               }
             }}
           >
-            Our Values
+            Our Platform Features
           </Typography>
 
           <Grid container spacing={3}>
-            {companyValues.map((value, index) => (
+            {[
+              {
+                icon: <LocalLibraryOutlinedIcon fontSize="large" />,
+                title: 'Diverse Collection',
+                description: 'Access a vast collection of books across genres, from bestsellers to rare editions, all in one place.'
+              },
+              {
+                icon: <SupportAgentOutlinedIcon fontSize="large" />,
+                title: 'Seller Support',
+                description: 'Empowering individual sellers and bookstores with tools to list, manage, and grow their business.'
+              },
+              {
+                icon: <LocalShippingOutlinedIcon fontSize="large" />,
+                title: 'Secure Transactions',
+                description: 'Safe and reliable payment processing with real-time order tracking and delivery updates.'
+              },
+              {
+                icon: <VerifiedOutlinedIcon fontSize="large" />,
+                title: 'Quality Assurance',
+                description: 'Rigorous quality checks and a robust review system to ensure the best experience for buyers and sellers.'
+              }
+            ].map((value, index) => (
               <Grid item xs={12} sm={6} md={3} key={index}>
                 <Paper
                   elevation={0}
@@ -233,89 +263,6 @@ const About = () => {
           </Grid>
         </Box>
 
-        {/* Team Section */}
-        <Box sx={{ mb: { xs: 6, md: 10 } }}>
-          <Typography 
-            variant={isMobile ? "h5" : "h4"} 
-            component="h2"
-            align="center"
-            sx={{ 
-              fontWeight: 700,
-              mb: { xs: 4, md: 6 },
-              position: 'relative',
-              '&::after': {
-                content: '""',
-                position: 'absolute',
-                width: '60px',
-                height: '4px',
-                bottom: '-12px',
-                left: 'calc(50% - 30px)',
-                backgroundColor: theme.palette.primary.main,
-                borderRadius: 2
-              }
-            }}
-          >
-            Our Team
-          </Typography>
-
-          <Grid container spacing={3}>
-            {teamMembers.map((member, index) => (
-              <Grid item xs={12} sm={6} md={3} key={index}>
-                <Card 
-                  elevation={0}
-                  sx={{ 
-                    borderRadius: 3,
-                    overflow: 'hidden',
-                    height: '100%',
-                    transition: 'all 0.3s ease',
-                    border: `1px solid ${alpha(theme.palette.divider, 0.1)}`,
-                    '&:hover': {
-                      transform: 'translateY(-5px)',
-                      boxShadow: theme.shadows[4],
-                      '& .member-image': {
-                        transform: 'scale(1.05)'
-                      }
-                    }
-                  }}
-                >
-                  <Box sx={{ p: 3, textAlign: 'center' }}>
-                    <Avatar
-                      src={member.image}
-                      alt={member.name}
-                      className="member-image"
-                      sx={{
-                        width: 100,
-                        height: 100,
-                        mx: 'auto',
-                        mb: 2,
-                        border: `4px solid ${alpha(theme.palette.primary.main, 0.1)}`,
-                        transition: 'transform 0.5s ease'
-                      }}
-                    />
-                    <Typography 
-                      variant="h6" 
-                      component="h3" 
-                      sx={{ fontWeight: 600 }}
-                    >
-                      {member.name}
-                    </Typography>
-                    <Typography 
-                      variant="subtitle2" 
-                      color="primary" 
-                      sx={{ mb: 2 }}
-                    >
-                      {member.role}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {member.description}
-                    </Typography>
-                  </Box>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-        </Box>
-
         {/* Statistics Section */}
         <Box 
           sx={{ 
@@ -335,15 +282,15 @@ const About = () => {
               mb: { xs: 4, md: 5 },
             }}
           >
-            Our Journey in Numbers
+            Platform Impact
           </Typography>
 
           <Grid container spacing={3} justifyContent="center">
             {[
-              { number: '100,000+', label: 'Happy Customers' },
-              { number: '50,000+', label: 'Books Delivered' },
-              { number: '1,000+', label: 'Authors' },
-              { number: '20+', label: 'Cities Served' }
+              { number: '50,000+', label: 'Active Users' },
+              { number: '100,000+', label: 'Books Listed' },
+              { number: '5,000+', label: 'Active Sellers' },
+              { number: '25+', label: 'Categories' }
             ].map((stat, index) => (
               <Grid item xs={6} md={3} key={index}>
                 <Box 
@@ -391,7 +338,7 @@ const About = () => {
               color: 'text.primary'
             }}
           >
-            Get in Touch
+            Join Our Community
           </Typography>
           
           <Typography 
@@ -403,7 +350,8 @@ const About = () => {
               color: 'text.secondary'
             }}
           >
-            Have questions or feedback? We'd love to hear from you. Reach out to our team and we'll get back to you soon.
+            Whether you're a book lover, seller, or both, we invite you to be part of our growing community. 
+            Start your journey with Book Store today and discover a world of possibilities.
           </Typography>
           
           <Button
@@ -425,7 +373,7 @@ const About = () => {
               transition: 'all 0.2s ease-in-out',
             }}
           >
-            Contact Us
+            Get Started
           </Button>
         </Paper>
       </Container>
