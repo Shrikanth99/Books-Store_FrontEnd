@@ -36,6 +36,7 @@ import Notification from "./components/Notification/Notification.js";
 import MySelling from "./components/My-Account/MySelling.js";
 import Footer from "./components/Footer/Footer.js";
 import About from "./components/About";
+import NotFound from "./components/NotFound.js";
 
 export const UserContext = createContext();
 const App = () => {
@@ -121,7 +122,8 @@ const App = () => {
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/sellProduct" element={<SellProduct />} />
         <Route path="/notifications" element={<Notification/>} />
-        {/* <Route path='/addresses' element={<AddressForm/>} /> */}
+        {/* Catch all route for 404 */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
      
      <footer className="bottom" >
