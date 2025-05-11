@@ -44,10 +44,11 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import MobileStepper from "@mui/material/MobileStepper";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
-import SwipeableViews from "react-swipeable-views";
-import { autoPlay } from "react-swipeable-views-utils";
-
-const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, Pagination, Navigation } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
 
 const ProductPage = () => {
   const theme = useTheme();
@@ -135,18 +136,6 @@ const ProductPage = () => {
     }
   };
 
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  };
-
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
-  const handleStepChange = (step) => {
-    setActiveStep(step);
-  };
-
   useEffect(() => {
     dispatch(startGetProductReview(id));
   }, [dispatch, id]);
@@ -177,81 +166,51 @@ const ProductPage = () => {
             >
               <Box sx={{ maxWidth: '100%', flexGrow: 1 }}>
                 {product?.image && (
-                  <>
-                    <AutoPlaySwipeableViews
-                      axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-                      index={activeStep}
-                      onChangeIndex={handleStepChange}
-                      enableMouseEvents
-                      interval={5000}
-                    >
-                      {product.image.map((step, index) => (
+                  <Swiper
+                    modules={[Autoplay, Pagination, Navigation]}
+                    spaceBetween={0}
+                    slidesPerView={1}
+                    navigation
+                    pagination={{ clickable: true }}
+                    autoplay={{
+                      delay: 5000,
+                      disableOnInteraction: false
+                    }}
+                    sx={{
+                      '& .swiper-pagination-bullet-active': {
+                        backgroundColor: theme.palette.primary.main
+                      },
+                      '& .swiper-button-next, & .swiper-button-prev': {
+                        color: theme.palette.primary.main
+                      }
+                    }}
+                  >
+                    {product.image.map((image) => (
+                      <SwiperSlide key={image._id}>
                         <Box
-                          key={step._id}
                           sx={{
                             display: 'flex',
                             justifyContent: 'center',
                             bgcolor: 'background.paper',
-                            p: 2
+                            p: 2,
+                            height: '400px'
                           }}
                         >
                           <Box
                             component="img"
+                            src={image.url}
+                            alt={product.title}
                             sx={{
-                              height: 350,
+                              height: '100%',
+                              width: 'auto',
                               maxWidth: '100%',
-                              objectFit: 'contain',
-                              display: 'block',
+                              objectFit: 'contain'
                             }}
-                            src={step.url}
-                            alt={`Product Image ${index + 1}`}
                           />
                         </Box>
-                      ))}
-                    </AutoPlaySwipeableViews>
-                    <MobileStepper
-                      steps={product.image.length}
-                      position="static"
-                      activeStep={activeStep}
-                      sx={{ 
-                        bgcolor: 'background.paper',
-                        '& .MuiMobileStepper-dot': {
-                          width: 8,
-                          height: 8,
-                          mx: 0.5
-                        },
-                        '& .MuiMobileStepper-dotActive': {
-                          bgcolor: 'primary.main'
-                        }
-                      }}
-                      nextButton={
-                        <Button
-                          size="small"
-                          onClick={handleNext}
-                          disabled={activeStep === product.image.length - 1}
-                        >
-                          {theme.direction === 'rtl' ? (
-                            <KeyboardArrowLeft />
-                          ) : (
-                            <KeyboardArrowRight />
-                          )}
-                        </Button>
-                      }
-                      backButton={
-                        <Button 
-                          size="small" 
-                          onClick={handleBack} 
-                          disabled={activeStep === 0}
-                        >
-                          {theme.direction === 'rtl' ? (
-                            <KeyboardArrowRight />
-                          ) : (
-                            <KeyboardArrowLeft />
-                          )}
-                        </Button>
-                      }
-                    />
-                  </>
+                      </SwiperSlide>
+                    ))}
+                  </Swiper>
                 )}
               </Box>
             </Paper>
