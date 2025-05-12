@@ -31,9 +31,9 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 // Image imports
-import img1 from '../images/79_inr.jpg';
-import img2 from '../images/83_inr.jpg';
-import img3 from '../images/85_inr.jpg';
+import img1 from '../images/Slide-Img-1.jpeg';
+import img2 from '../images/Slide-Img-2.jpg';
+import img3 from '../images/Slide-Img-3.jpeg';
 
 const Home = () => {
   const theme = useTheme();
